@@ -3,6 +3,18 @@
 Semua perubahan penting pada RoutineZie akan didokumentasikan di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/), versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.3.0] — 2026-09-29
+
+### Added
+- **Fase 8: T8.2 Progres** — pelacakan kemajuan terpadu:
+  - **Catatan mingguan** pada grafik berat badan (konteks kualitatif tanpa penilaian).
+  - **Tes kemampuan berkala** (siklus 4/8 minggu) dengan pelacakan tren antar tes (push-up, sit-up, squat, plank, dll).
+  - **Grid stempel riwayat latihan** 7 hari berurutan (Senin–Minggu) per minggu.
+  - **Milestone otomatis** sebagai stempel pencapaian tanpa hukuman (tidur 5x ≤ 22.00, latihan 5x seminggu, turun 2 kg).
+  - **Skor tidur mingguan** 0–100 menggabungkan keteraturan tidur ≤ 22.00 dan rating kualitas.
+  - **Pola alasan override** (riwayat substitusi teragregasi) dan ekspor ringkasan mingguan ke format Markdown (.md).
+- Skema Dexie versi 5 (`abilityTests`, `weeklyNotes`, `milestones`).
+
 ## [1.2.0] — 2026-09-29
 
 ### Added

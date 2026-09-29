@@ -1,4 +1,4 @@
-import { db, WorkoutLog, WeightLog, SleepLog, MealCheck, AppSettings, ChatHistoryEntry, ScheduleOverride, WaterLog, HungerLog } from './index';
+import { db, WorkoutLog, WeightLog, SleepLog, MealCheck, AppSettings, ChatHistoryEntry, ScheduleOverride, WaterLog, HungerLog, AbilityTest, WeeklyNote, Milestone } from './index';
 
 export class RoutineRepository {
   // --- Workout ---
@@ -198,6 +198,67 @@ export class RoutineRepository {
     return all.slice(0, limit);
   }
 
+  // --- T8.2: Tes Kemampuan Berkala ---
+  static async saveAbilityTest(
+    dateISO: string,
+    cycle: '4-week' | '8-week',
+    results: { nama: string; nilai: number; satuan: string }[],
+    note?: string
+  ): Promise<AbilityTest> {
+    const id = `ability_${dateISO}_${Math.random().toString(36).slice(2, 8)}`;
+    const entry: AbilityTest = { id, dateISO, cycle, results, note, schemaVersion: 1 };
+    await db.abilityTests.put(entry);
+    return entry;
+  }
+
+  static async getAbilityTests(limit = 10): Promise<AbilityTest[]> {
+    const all = await db.abilityTests.reverse().sortBy('dateISO');
+    return all.slice(0, limit);
+  }
+
+  static async getLatestAbilityTest(): Promise<AbilityTest | undefined> {
+    const all = await db.abilityTests.reverse().sortBy('dateISO');
+    return all[0];
+  }
+
+  // --- T8.2: Catatan Mingguan ---
+  static async getWeeklyNote(weekStartISO: string): Promise<WeeklyNote | undefined> {
+    return db.weeklyNotes.get(`wnote_${weekStartISO}`);
+  }
+
+  static async setWeeklyNote(weekStartISO: string, note: string): Promise<void> {
+    const trimmed = note.trim();
+    if (!trimmed) {
+      await db.weeklyNotes.delete(`wnote_${weekStartISO}`);
+      return;
+    }
+    await db.weeklyNotes.put({
+      id: `wnote_${weekStartISO}`,
+      weekStartISO,
+      note: trimmed,
+      schemaVersion: 1,
+    });
+  }
+
+  static async getAllWeeklyNotes(): Promise<WeeklyNote[]> {
+    return db.weeklyNotes.toArray();
+  }
+
+  // --- T8.2: Milestone ---
+  static async getMilestones(): Promise<Milestone[]> {
+    const all = await db.milestones.reverse().sortBy('achievedAt');
+    return all;
+  }
+
+  static async hasMilestone(kode: string): Promise<boolean> {
+    const hit = await db.milestones.where('kode').equals(kode).first();
+    return !!hit;
+  }
+
+  static async awardMilestone(kode: string, label: string, achievedAt: string): Promise<void> {
+    await db.milestones.put({ id: `ms_${kode}`, kode, label, achievedAt, schemaVersion: 1 });
+  }
+
   // --- Export All Data ---
   static async exportAllData(): Promise<string> {
     const [workouts, weights, sleeps, meals, settings, chatHistory, water, hunger] = await Promise.all([
@@ -268,4 +329,4 @@ export class RoutineRepository {
   }
 }
 
-export type { WaterLog, HungerLog };
+export type { WaterLog, HungerLog, AbilityTest, WeeklyNote, Milestone };

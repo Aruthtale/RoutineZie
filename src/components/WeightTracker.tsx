@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { RoutineRepository } from '@/lib/db/repository';
 import { WeightLog } from '@/lib/db';
 import InkChart, { InkChartPoint } from './InkChart';
+import WeeklyNoteEditor from './WeeklyNoteEditor';
 import { Scale, Plus, AlertTriangle, Info, Calendar } from 'lucide-react';
 
 export default function WeightTracker() {
@@ -96,6 +97,9 @@ export default function WeightTracker() {
 
       {/* InkChart Component */}
       <InkChart data={chartData} unit="kg" height={190} />
+
+      {/* T8.2b — Catatan mingguan untuk konteks grafik */}
+      <WeeklyNoteEditor dateISO={inputDate} />
 
       {/* Status Feedback (Design 6.5 netral) */}
       {statusText && (

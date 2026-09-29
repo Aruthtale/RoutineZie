@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { RoutineRepository } from '@/lib/db/repository';
 import { SleepLog, WorkoutLog } from '@/lib/db';
+import { computeSleepWeekStats, getWeekDates, getWeekStart, getWeekLabel } from '@/lib/progress/weeklyStats';
 import { Moon, Award, Plus, Calendar, Clock, CheckCircle2 } from 'lucide-react';
 
 export default function SleepConsistencyTracker() {
@@ -59,6 +60,11 @@ export default function SleepConsistencyTracker() {
   const currentWeekWorkouts = workoutLogs.filter((w) => w.dateISO >= iso7DaysAgo);
   const uniqueWorkoutDays = new Set(currentWeekWorkouts.map((w) => w.dateISO)).size;
 
+  // T8.2e — Skor tidur mingguan (Senin–Minggu minggu berjalan).
+  const weekStartISO = getWeekStart(inputDate);
+  const mingguBerjalan = getWeekDates(weekStartISO);
+  const sleepWeek = computeSleepWeekStats(sleepLogs, mingguBerjalan);
+
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -96,6 +102,45 @@ export default function SleepConsistencyTracker() {
             {last30Logs.length > 0 ? `${passed30} dari ${last30Logs.length} malam tercatat` : 'Belum ada data'}
           </p>
         </div>
+      </div>
+
+      {/* T8.2e — Skor tidur mingguan */}
+      <div className="neo-box p-3.5 bg-[#ffffff] space-y-1.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-black uppercase tracking-wider text-[#09090b]/70 flex items-center gap-1">
+            <Moon className="w-3.5 h-3.5" /> SKOR TIDUR MINGGUAN
+          </span>
+          <span className="text-[10px] font-mono font-bold text-[#09090b]/50 uppercase">
+            {getWeekLabel(weekStartISO)}
+          </span>
+        </div>
+        {sleepWeek.jumlahHari === 0 ? (
+          <p className="text-[11px] text-[#09090b]/60 italic">
+            Belum ada catatan tidur minggu ini.
+          </p>
+        ) : (
+          <>
+            <div className="flex items-baseline gap-2">
+              <span className="text-2xl font-mono font-black text-[#09090b]">
+                {sleepWeek.skor}
+              </span>
+              <span className="text-[11px] font-black text-[#09090b]/60">/ 100</span>
+            </div>
+            <div className="w-full bg-[#09090b]/10 h-2 border border-[#09090b] overflow-hidden">
+              <div
+                className="bg-[#09090b] h-full transition-all duration-300"
+                style={{ width: `${sleepWeek.skor}%` }}
+              />
+            </div>
+            <p className="text-[11px] text-[#09090b]/70 font-medium">
+              {sleepWeek.hariSebelum22} dari {sleepWeek.jumlahHari} malam tercatat tidur ≤ 22.00
+              {sleepWeek.rataKualitas > 0
+                ? ` · rata-rata kualitas ${sleepWeek.rataKualitas}/5`
+                : ''}
+              .
+            </p>
+          </>
+        )}
       </div>
 
       {/* Weekly Workout Consistency Banner (Neutral, no penalty streak) */}

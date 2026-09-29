@@ -68,6 +68,57 @@ export interface HungerLog {
   schemaVersion: 1;
 }
 
+/**
+ * T8.2 — Tes kemampuan berkala (mis. tiap 4 minggu). Pengguna melakukan
+ * beberapa latihan benchmark (push-up, plank, lari 12 menit, dll) dan
+ * mencatat hasilnya; tren antar tes jadi laporan kemajuan tanpa penilaian.
+ */
+export interface AbilityTest {
+  id: string; // "ability_<dateISO>_<sha>"
+  dateISO: string;
+  /** "4-week" | "8-week" — sesuai rencana tes di skill.md. */
+  cycle: '4-week' | '8-week';
+  /** Hasil per latihan benchmark: nama → nilai + satuan. */
+  results: {
+    nama: string;
+    /** Angka bebas: repetisi, detik, meter, menit. */
+    nilai: number;
+    /** Satuan untuk tampilan ("kali", "detik", "menit"). */
+    satuan: string;
+  }[];
+  /** Catatan bebas pengguna (opsional). */
+  note?: string;
+  schemaVersion: 1;
+}
+
+/**
+ * T8.2 — Catatan mingguan pada grafik berat badan: bukan hanya angka, tapi
+ * konteks (mis. "minggu ujian, tidur kurang") untuk interpretasi naik/turun.
+ */
+export interface WeeklyNote {
+  id: string; // "wnote_<dateISO>"
+  /** Tanggal pertama minggu (Senin). */
+  weekStartISO: string;
+  note: string;
+  schemaVersion: 1;
+}
+
+/**
+ * T8.2 — Milestone: stempel pencapaian spesifik (mis. "Tidur ≤22.00 selama
+ * 5 hari" atau "Berat turun 2kg sejak awal"). Diberikan otomatis saat
+ * kondisi terpenuhi; tidak menghukum yang belum tercapai.
+ */
+export interface Milestone {
+  id: string;
+  /** Kode milestone untuk dedup (mis. "sleep_5x_before22"). */
+  kode: string;
+  /** Label tampilan. */
+  label: string;
+  /** Kapan tercapai. */
+  achievedAt: string;
+  schemaVersion: 1;
+}
+
 export interface AppSettings {
   id: 'current_settings';
   theme: 'auto' | 'light' | 'dark';
@@ -118,6 +169,9 @@ export class RoutineDatabase extends Dexie {
   mealChecks!: Table<MealCheck, string>;
   waterLogs!: Table<WaterLog, string>;
   hungerLogs!: Table<HungerLog, string>;
+  abilityTests!: Table<AbilityTest, string>;
+  weeklyNotes!: Table<WeeklyNote, string>;
+  milestones!: Table<Milestone, string>;
   settings!: Table<AppSettings, string>;
   chatHistory!: Table<ChatHistoryEntry, string>;
   scheduleOverrides!: Table<ScheduleOverride, string>;
@@ -156,6 +210,21 @@ export class RoutineDatabase extends Dexie {
       // Fase 8 — pelacak air & log lapar (T8.1)
       waterLogs: 'id, dateISO, glasses',
       hungerLogs: 'id, dateISO, timestamp',
+    });
+    this.version(5).stores({
+      workoutLogs: 'id, dateISO, hari, workoutNama',
+      weightLogs: 'id, dateISO, kg',
+      sleepLogs: 'id, dateISO, sleptBefore22',
+      mealChecks: 'id, dateISO, waktu, done',
+      settings: 'id',
+      chatHistory: 'id, dateISO, createdAt',
+      scheduleOverrides: 'id, dateISO, reason, expiresAfterDate',
+      waterLogs: 'id, dateISO, glasses',
+      hungerLogs: 'id, dateISO, timestamp',
+      // Fase 8 T8.2 — tes kemampuan, catatan mingguan, milestone
+      abilityTests: 'id, dateISO, cycle',
+      weeklyNotes: 'id, weekStartISO',
+      milestones: 'id, kode',
     });
   }
 }
