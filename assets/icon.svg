@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Background: white paper -->
+  <rect width="1024" height="1024" fill="#ffffff"/>
+  <!-- Outer thick frame -->
+  <rect x="48" y="48" width="928" height="928" fill="none" stroke="#09090b" stroke-width="24"/>
+  <!-- Hard offset shadow inside -->
+  <rect x="72" y="72" width="880" height="880" fill="none" stroke="#09090b" stroke-width="8" opacity="0.25"/>
+  <!-- Speed lines (manga focus) top-right -->
+  <g stroke="#09090b" stroke-width="18" stroke-linecap="round">
+    <line x1="742" y1="210" x2="880" y2="140"/>
+    <line x1="700" y1="300" x2="860" y2="262"/>
+    <line x1="672" y1="392" x2="840" y2="380"/>
+    <line x1="612" y1="470" x2="786" y2="492"/>
+  </g>
+  <!-- Clock body: rounded only exception per design (balloon allowed) -->
+  <circle cx="512" cy="560" r="288" fill="#ffffff" stroke="#09090b" stroke-width="24"/>
+  <!-- Hard shadow offset for clock -->
+  <circle cx="536" cy="584" r="288" fill="none" stroke="#09090b" stroke-width="10" opacity="0.25"/>
+  <!-- Tick marks 12/3/6/9 -->
+  <g stroke="#09090b" stroke-width="20" stroke-linecap="round">
+    <line x1="512" y1="320" x2="512" y2="368"/>
+    <line x1="752" y1="560" x2="704" y2="560"/>
+    <line x1="512" y1="800" x2="512" y2="752"/>
+    <line x1="272" y1="560" x2="320" y2="560"/>
+  </g>
+  <!-- Hour hand -->
+  <line x1="512" y1="560" x2="512" y2="392" stroke="#09090b" stroke-width="30" stroke-linecap="round"/>
+  <!-- Minute hand -->
+  <line x1="512" y1="560" x2="664" y2="488" stroke="#09090b" stroke-width="26" stroke-linecap="round"/>
+  <!-- Center hub -->
+  <circle cx="512" cy="560" r="36" fill="#09090b"/>
+  <!-- Lightning bolt accent (energy) bottom-left -->
+  <path d="M 210 700 L 156 836 L 224 836 L 190 952 L 340 788 L 268 788 L 322 700 Z" fill="#09090b"/>
+  <!-- Onomatopoeia SFX stamp: "ZU!" rotated -->
+  <g transform="rotate(-8 512 200)">
+    <text x="512" y="196" font-family="Impact, 'Arial Black', sans-serif" font-size="120" font-weight="900" fill="#09090b" text-anchor="middle" letter-spacing="4">ZU!</text>
+  </g>
+</svg>

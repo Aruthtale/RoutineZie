@@ -1,0 +1,60 @@
+import { describe, it, expect } from 'vitest';
+import { parseWaktu, getPhaseFromTime, getNowAndNext, getScheduleForDay, normalizeWorkoutData } from './parser';
+
+describe('Schedule Parser Utilities', () => {
+  it('should correctly parse range time strings', () => {
+    const slot = parseWaktu('05.25-06.10');
+    expect(slot).not.toBeNull();
+    expect(slot?.startMinutes).toBe(5 * 60 + 25); // 325
+    expect(slot?.endMinutes).toBe(6 * 60 + 10);   // 370
+  });
+
+  it('should correctly parse time strings with extra text', () => {
+    const slot = parseWaktu('Bagian 1: Pagi (06.30-08.00)');
+    expect(slot).not.toBeNull();
+    expect(slot?.startMinutes).toBe(6 * 60 + 30); // 390
+    expect(slot?.endMinutes).toBe(8 * 60 + 0);    // 480
+  });
+
+  it('should determine phases correctly', () => {
+    expect(getPhaseFromTime(360)).toBe('pagi');   // 06:00
+    expect(getPhaseFromTime(780)).toBe('siang');  // 13:00
+    expect(getPhaseFromTime(1080)).toBe('sore');  // 18:00
+    expect(getPhaseFromTime(1320)).toBe('malam'); // 22:00
+  });
+
+  it('should identify now and next items correctly', () => {
+    const mockJadwal = [
+      { waktu: '05.00-05.20', kegiatan: 'Bangun & Solat' },
+      { waktu: '05.25-06.10', kegiatan: 'Workout' },
+      { waktu: '06.15-06.45', kegiatan: 'Mandi & Sarapan' },
+    ];
+
+    // Time: 05:30 (330 minutes)
+    const result = getNowAndNext(mockJadwal, 330);
+    expect(result.nowItem?.kegiatan).toBe('Workout');
+    expect(result.nextItem?.kegiatan).toBe('Mandi & Sarapan');
+  });
+
+  it('should load schedule and normalize workout for day correctly', () => {
+    const senin = getScheduleForDay('Senin');
+    expect(senin).not.toBeNull();
+    expect(senin?.hari).toBe('Senin');
+    expect(senin?.jadwal.length).toBeGreaterThan(0);
+    expect(senin?.normalizedWorkout?.nama).toBe('Push + Core');
+    expect(senin?.normalizedWorkout?.latihan[0].tipe).toBe('reps');
+
+    const selasa = getScheduleForDay('Selasa');
+    expect(selasa?.normalizedWorkout?.nama).toBe('Easy Run');
+    expect(selasa?.normalizedWorkout?.latihan[0].nama).toBe('Jalan');
+    expect(selasa?.normalizedWorkout?.latihan[0].tipe).toBe('durasi');
+
+    const sabtu = getScheduleForDay('Sabtu');
+    expect(sabtu?.normalizedWorkout?.nama).toBe('Run + Calisthenics');
+    expect(sabtu?.normalizedWorkout?.latihan.length).toBeGreaterThan(3); // Flattened Bagian 1 + 2
+
+    const minggu = getScheduleForDay('Minggu');
+    expect(minggu).not.toBeNull();
+    expect(minggu?.workout.nama).toBe('Full Rest');
+  });
+});

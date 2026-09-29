@@ -1,0 +1,2020 @@
+{
+  "judul": "Jadwal Mingguan - PKL + Workout + Nutrisi",
+  "sumber": "PDF Senin_Routine_Zenn (Senin) dan jadwal percakapan (Selasa-Minggu)",
+  "catatan_penyusunan": "Selasa-Jumat memakai kerangka jadwal harian yang sama dengan Senin (slot workout 05.25-06.10) dengan workout masing-masing hari. Pola makan Selasa-Jumat mengikuti pola makan Senin. Jadwal Sabtu-Minggu detail waktunya disusun dari deskripsi percakapan.",
+  "profil": {
+    "usia": 17,
+    "jenis_kelamin": "Laki-laki",
+    "tinggi_cm": 160,
+    "berat_kg": 42,
+    "kemampuan_saat_ini": {
+      "push_up": 20,
+      "sit_up": 20,
+      "squat": 20,
+      "plank": "1 menit 30 detik"
+    },
+    "peralatan": "Tanpa alat khusus; tersedia 2 barbel @ 2 kg",
+    "pkl": {
+      "hari": [
+        "Senin",
+        "Selasa",
+        "Rabu",
+        "Kamis",
+        "Jumat"
+      ],
+      "jam": "08.00-17.00",
+      "libur": [
+        "Sabtu",
+        "Minggu"
+      ]
+    },
+    "target_tidur": {
+      "ideal": "21.00-21.30",
+      "batas_maksimal": "22.00",
+      "bangun": "05.00",
+      "rekomendasi_remaja": "8-10 jam"
+    },
+    "target_utama": "Energi, kebugaran, dan membangun tubuh secara bertahap"
+  },
+  "aturan_tidur": {
+    "bangun": "05.00",
+    "mulai_wind_down": "20.30",
+    "target_tidur": "21.00-21.30",
+    "batas_maksimal_tidur": "22.00",
+    "catatan": "Usahakan total tidur mendekati rekomendasi remaja 8-10 jam. Jika tidur malam kurang, jangan menjadikan bangun 05.00 sebagai alasan terus mengurangi tidur.",
+    "aturan": "Tidak ada aktivitas yang sengaja membuat tidur lewat 22.00."
+  },
+  "catatan_latihan": [
+    "Pemanasan 5 menit sebelum set pertama.",
+    "Istirahat sekitar 60-120 detik antar-set; jika napas belum pulih, ambil waktu lebih lama.",
+    "Kualitas gerakan lebih penting daripada mengejar angka repetisi.",
+    "Jika muncul nyeri tajam pada sendi atau pusing, hentikan latihan dan lakukan recovery.",
+    "Progression: ketika semua set terasa mudah dengan teknik baik, tambah 1-2 repetisi dahulu sebelum membuat variasi lebih sulit."
+  ],
+  "catatan_nutrisi_pertumbuhan": [
+    "Jangan sengaja mengurangi porsi makan atau melakukan cardio berlebihan.",
+    "Utamakan makanan biasa: nasi, kentang/oat, telur, ayam, ikan, tempe, tahu, sayur, buah, susu/yogurt, kacang, selai kacang.",
+    "Protein tidak harus dari suplemen; variasi makanan lebih penting.",
+    "Kalsium dan vitamin D penting untuk kesehatan tulang.",
+    "Tinggi badan tidak bisa dijamin naik oleh latihan tertentu; tidur, nutrisi, aktivitas fisik, dan pubertas mendukung perkembangan tubuh.",
+    "Jika berat badan turun tanpa sebab, sulit naik, sering lemas, atau ada kekhawatiran pertumbuhan, bicarakan dengan orang tua/wali dan tenaga kesehatan."
+  ],
+  "ringkasan_mingguan": [
+    {
+      "hari": "Senin",
+      "workout": "Push + Core",
+      "pkl": "08.00-17.00"
+    },
+    {
+      "hari": "Selasa",
+      "workout": "Easy Run",
+      "pkl": "08.00-17.00"
+    },
+    {
+      "hari": "Rabu",
+      "workout": "Legs",
+      "pkl": "08.00-17.00"
+    },
+    {
+      "hari": "Kamis",
+      "workout": "Recovery + Mobility",
+      "pkl": "08.00-17.00"
+    },
+    {
+      "hari": "Jumat",
+      "workout": "Full Body",
+      "pkl": "08.00-17.00"
+    },
+    {
+      "hari": "Sabtu",
+      "workout": "Run + Calisthenics",
+      "pkl": "Libur"
+    },
+    {
+      "hari": "Minggu",
+      "workout": "Full Rest",
+      "pkl": "Libur"
+    }
+  ],
+  "hari": [
+    {
+      "hari": "Senin",
+      "tipe_hari": "PKL",
+      "fokus": "Push + Core",
+      "pkl": "08.00-17.00",
+      "jadwal": [
+        {
+          "waktu": "05.00",
+          "kegiatan": "Bangun",
+          "detail": "Minum air, cuci muka, rapikan tempat tidur. Hindari langsung membuka HP terlalu lama."
+        },
+        {
+          "waktu": "05.00-05.25",
+          "kegiatan": "Subuh + persiapan",
+          "detail": "Sholat Subuh, doa, lalu siapkan tubuh untuk latihan."
+        },
+        {
+          "waktu": "05.25-06.10",
+          "kegiatan": "PUSH + CORE",
+          "detail": "Workout Senin. Detail latihan ada di bagian workout."
+        },
+        {
+          "waktu": "06.10-06.30",
+          "kegiatan": "Cooldown",
+          "detail": "Jalan ringan, atur napas, minum air."
+        },
+        {
+          "waktu": "06.30-07.00",
+          "kegiatan": "Mandi",
+          "detail": "Mandi dan bersiap untuk PKL."
+        },
+        {
+          "waktu": "07.00-07.25",
+          "kegiatan": "Sarapan",
+          "detail": "Makan utama: karbohidrat + protein + sayur/buah + sumber kalsium."
+        },
+        {
+          "waktu": "07.25-08.00",
+          "kegiatan": "Persiapan & berangkat",
+          "detail": "Pastikan bekal/snack, air minum, dan perlengkapan PKL."
+        },
+        {
+          "waktu": "08.00-12.00",
+          "kegiatan": "PKL",
+          "detail": "Fokus pada pekerjaan. Minum secara berkala."
+        },
+        {
+          "waktu": "12.00-13.00",
+          "kegiatan": "Istirahat",
+          "detail": "Makan siang + ibadah + istirahat."
+        },
+        {
+          "waktu": "13.00-17.00",
+          "kegiatan": "PKL",
+          "detail": "Lanjut PKL. Jika lapar, gunakan snack yang sudah disiapkan."
+        },
+        {
+          "waktu": "17.00-18.00",
+          "kegiatan": "Pulang + recovery",
+          "detail": "Perjalanan pulang. Jangan langsung memaksakan workout tambahan."
+        },
+        {
+          "waktu": "18.00-19.00",
+          "kegiatan": "Mandi + ibadah + makan",
+          "detail": "Recovery dan makan malam."
+        },
+        {
+          "waktu": "19.00-20.00",
+          "kegiatan": "Belajar / project",
+          "detail": "Satu fokus utama saja. Stop jika tubuh sudah terlalu lelah."
+        },
+        {
+          "waktu": "20.00-20.30",
+          "kegiatan": "Free time",
+          "detail": "Santai/gaming secukupnya."
+        },
+        {
+          "waktu": "20.30-21.00",
+          "kegiatan": "Persiapan besok",
+          "detail": "Tas, pakaian, bekal, jadwal, lalu mulai menurunkan aktivitas."
+        },
+        {
+          "waktu": "21.00-22.00",
+          "kegiatan": "Wind-down -> tidur",
+          "detail": "Target tidur 21.00-21.30. 22.00 adalah batas maksimal."
+        }
+      ],
+      "workout": {
+        "nama": "Push + Core",
+        "durasi": "05.25-06.10",
+        "pemanasan": "5 menit sebelum set pertama: arm circles, shoulder rolls, marching ringan, dan beberapa squat ringan.",
+        "istirahat_antar_set": "60-120 detik",
+        "latihan": [
+          {
+            "latihan": "Push-up",
+            "set": 3,
+            "repetisi_atau_waktu": "8-12",
+            "catatan": "Jangan sampai failure. Sisakan ±2-3 repetisi.",
+            "otot_target": "Dada, bahu depan, triceps, core",
+            "cara_melakukan": [
+              "Tangan selebar bahu sedikit lebih lebar, badan lurus dari kepala sampai tumit.",
+              "Turunkan dada perlahan sampai siku ±90°.",
+              "Dorong kembali ke atas tanpa mengunci siku secara kasar."
+            ],
+            "tips_form": "Kencangkan perut dan bokong; siku ±45° dari badan; napas masuk saat turun, hembus saat naik.",
+            "kesalahan_umum": "Pinggul turun/naik, kepala menjulur, turun setengah gerakan.",
+            "versi_lebih_mudah": "Push-up lutut atau tangan bertumpu di kursi/meja.",
+            "versi_lebih_sulit": "Turun 3 detik (tempo lambat), kaki ditinggikan, atau jeda 1 detik di bawah."
+          },
+          {
+            "latihan": "Pike push-up",
+            "set": 3,
+            "repetisi_atau_waktu": "6-10",
+            "catatan": "Gerakkan perlahan dan kontrol bahu.",
+            "otot_target": "Bahu (deltoid), triceps, dada atas",
+            "cara_melakukan": [
+              "Posisi V terbalik: pinggul tinggi, kaki agak dekat tangan.",
+              "Tekuk siku, turunkan kepala ke arah lantai di antara tangan.",
+              "Dorong kembali ke posisi awal."
+            ],
+            "tips_form": "Punggung lurus, gerakan lambat, pandangan ke arah kaki/lantai depan.",
+            "kesalahan_umum": "Kepala jatuh ke depan tanpa kontrol, siku terlalu melebar, kaki terlalu jauh sehingga jadi push-up biasa.",
+            "versi_lebih_mudah": "Kurangi kedalaman gerakan atau lakukan dengan pinggul lebih tinggi.",
+            "versi_lebih_sulit": "Kaki ditinggikan di kursi (setelah semua set 3x10 terasa mudah)."
+          },
+          {
+            "latihan": "Diamond push-up",
+            "set": 2,
+            "repetisi_atau_waktu": "6-10",
+            "catatan": "Jika terlalu berat, lebarkan sedikit posisi tangan.",
+            "otot_target": "Triceps, dada bagian dalam",
+            "cara_melakukan": [
+              "Kedua tangan dekatkan di bawah dada membentuk berlian (jempol & telunjuk bertemu).",
+              "Turunkan dada ke arah tangan, siku tetap dekat badan.",
+              "Dorong ke atas."
+            ],
+            "tips_form": "Jika pergelangan sakit, lebarkan tangan sedikit; badan tetap lurus.",
+            "kesalahan_umum": "Siku melebar keluar, pinggul jatuh, pergelangan terlalu dipaksa.",
+            "versi_lebih_mudah": "Tangan lebih lebar (narrow push-up) atau di lutut.",
+            "versi_lebih_sulit": "Tempo lambat 3 detik saat turun."
+          },
+          {
+            "latihan": "Dead bug",
+            "set": 3,
+            "repetisi_atau_waktu": "8-10 / sisi",
+            "catatan": "Pengganti sit-up. Punggung bawah tetap terkontrol.",
+            "otot_target": "Core dalam (transversus abdominis), perut, stabilitas punggung bawah",
+            "cara_melakukan": [
+              "Telentang, lengan lurus ke atas, lutut ditekuk 90° di atas pinggul.",
+              "Turunkan lengan kanan dan kaki kiri perlahan mendekati lantai.",
+              "Kembali ke awal, ganti sisi."
+            ],
+            "tips_form": "Punggung bawah tetap menempel lantai; hembus napas saat menurunkan.",
+            "kesalahan_umum": "Punggung bawah melengkung, gerakan terlalu cepat.",
+            "versi_lebih_mudah": "Gerakkan kaki saja atau lengan saja.",
+            "versi_lebih_sulit": "Pegang barbel 2 kg di tangan atau perlambat gerakan."
+          },
+          {
+            "latihan": "Plank",
+            "set": 3,
+            "repetisi_atau_waktu": "30-45 detik",
+            "catatan": "Kencangkan core, jangan menahan napas.",
+            "otot_target": "Seluruh core, bahu, bokong",
+            "cara_melakukan": [
+              "Bertumpu pada lengan bawah dan ujung kaki.",
+              "Badan lurus dari kepala sampai tumit.",
+              "Tahan sambil bernapas normal."
+            ],
+            "tips_form": "Kencangkan perut & bokong; siku tepat di bawah bahu; leher netral.",
+            "kesalahan_umum": "Pinggul terlalu naik/turun, menahan napas.",
+            "versi_lebih_mudah": "Plank di lutut atau durasi lebih pendek.",
+            "versi_lebih_sulit": "Tambah 5-10 detik per minggu, atau plank dengan angkat satu kaki bergantian."
+          }
+        ],
+        "intensitas": "Sedang (RPE 6-7 dari 10)",
+        "otot_utama": "Dada, bahu, triceps, core",
+        "tujuan": "Membangun kekuatan tubuh atas dan core dengan teknik bersih.",
+        "target_progres": "Naikkan 1-2 repetisi per set sebelum ganti variasi (target: push-up 3x12).",
+        "tanda_berhenti": "Nyeri tajam sendi, pusing, mual, atau teknik sudah hancur.",
+        "alat": "Matras/alas lantai.",
+        "estimasi_kalori_terbakar_kkal": {
+          "min": 90,
+          "maks": 140
+        },
+        "catatan_kalori_olahraga": "Perkiraan kasar (±30%), dihitung dari berat 42 kg dan durasi latihan; jauh lebih kecil daripada asupan makan harian, jadi makan cukup tetap prioritas."
+      },
+      "pola_makan": [
+        {
+          "waktu": "07.00",
+          "menu": "Nasi + 2 telur + tempe + sayur + susu / buah",
+          "tujuan": "Sarapan padat energi dan protein.",
+          "rincian_porsi": "Nasi 1 piring (±200 g) ±260 kkal; 2 telur ±150; tempe 2 potong ±100; sayur ±40; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 600,
+            "maks": 720
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 38
+          }
+        },
+        {
+          "waktu": "10.00",
+          "menu": "Pisang + roti + susu / yogurt",
+          "tujuan": "Snack agar energi tidak drop saat PKL.",
+          "rincian_porsi": "Pisang 1 ±90-100 kkal; roti tawar 2 lembar ±140-160; susu/yogurt 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 320,
+            "maks": 410
+          },
+          "estimasi_protein_g": {
+            "min": 10,
+            "maks": 15
+          }
+        },
+        {
+          "waktu": "12.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur + buah",
+          "tujuan": "Makan utama seimbang.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam 1 potong sedang ±200-250; tahu/tempe ±80-100; sayur ±40-50; buah ±50-70",
+          "estimasi_kalori_kkal": {
+            "min": 630,
+            "maks": 730
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 40
+          }
+        },
+        {
+          "waktu": "15.30-16.00",
+          "menu": "Roti + selai kacang + susu / pisang + kacang",
+          "tujuan": "Snack sore; sesuaikan rasa lapar.",
+          "rincian_porsi": "Roti 2 lembar ±140-160; selai kacang 2 sdm ±180-200; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 440,
+            "maks": 510
+          },
+          "estimasi_protein_g": {
+            "min": 14,
+            "maks": 20
+          }
+        },
+        {
+          "waktu": "18.30-19.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur",
+          "tujuan": "Recovery dan makan malam.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam/ikan/telur ±150-220; tahu/tempe ±80-100; sayur ±40-50",
+          "estimasi_kalori_kkal": {
+            "min": 530,
+            "maks": 630
+          },
+          "estimasi_protein_g": {
+            "min": 28,
+            "maks": 36
+          }
+        },
+        {
+          "waktu": "Jika lapar",
+          "menu": "Susu, buah, roti, yogurt, atau snack bergizi",
+          "tujuan": "Jangan sengaja menahan lapar.",
+          "rincian_porsi": "Tidak dihitung dalam total; ±100-200 kkal per snack kecil",
+          "estimasi_kalori_kkal": {
+            "min": 100,
+            "maks": 200
+          },
+          "estimasi_protein_g": {
+            "min": 3,
+            "maks": 8
+          }
+        }
+      ],
+      "ringkasan_energi": {
+        "total_makan_utama_kkal": {
+          "min": 2520,
+          "maks": 3000
+        },
+        "total_protein_g": {
+          "min": 112,
+          "maks": 149
+        },
+        "kalori_olahraga_kkal": {
+          "min": 90,
+          "maks": 140
+        },
+        "catatan": "Ambil sisi bawah jika sudah kenyang; ambil sisi atas atau tambah snack jika berat badan tidak naik."
+      },
+      "catatan_khusus": [
+        "Awal minggu PKL: jangan skip sarapan; bawa bekal snack agar tidak lapar di jam 10 dan 15.30.",
+        "Sisakan 2-3 repetisi (tidak sampai failure) supaya badan tetap segar untuk PKL.",
+        "Jika badan sangat lelah, kurangi 1 set per latihan, bukan skip tidur.",
+        "Minum air 1 gelas setelah bangun dan cukupi sepanjang hari (±2-2,5 liter, sesuaikan)."
+      ],
+      "catatan": "Makan cukup -> latihan terkontrol -> PKL -> recovery -> tidur cukup. Tujuan utama bukan menjadi lelah, tetapi membangun kebiasaan yang bisa dijalankan berbulan-bulan."
+    },
+    {
+      "hari": "Selasa",
+      "tipe_hari": "PKL",
+      "fokus": "Easy Run",
+      "pkl": "08.00-17.00",
+      "jadwal": [
+        {
+          "waktu": "05.00",
+          "kegiatan": "Bangun",
+          "detail": "Minum air, cuci muka, rapikan tempat tidur. Hindari langsung membuka HP terlalu lama."
+        },
+        {
+          "waktu": "05.00-05.25",
+          "kegiatan": "Subuh + persiapan",
+          "detail": "Sholat Subuh, doa, lalu siapkan tubuh untuk latihan."
+        },
+        {
+          "waktu": "05.25-06.10",
+          "kegiatan": "EASY RUN",
+          "detail": "Lari santai. Di jadwal awal: 05.30-06.05."
+        },
+        {
+          "waktu": "06.10-06.30",
+          "kegiatan": "Cooldown",
+          "detail": "Jalan ringan, atur napas, minum air."
+        },
+        {
+          "waktu": "06.30-07.00",
+          "kegiatan": "Mandi",
+          "detail": "Mandi dan bersiap untuk PKL."
+        },
+        {
+          "waktu": "07.00-07.25",
+          "kegiatan": "Sarapan",
+          "detail": "Makan utama: karbohidrat + protein + sayur/buah + sumber kalsium."
+        },
+        {
+          "waktu": "07.25-08.00",
+          "kegiatan": "Persiapan & berangkat",
+          "detail": "Pastikan bekal/snack, air minum, dan perlengkapan PKL."
+        },
+        {
+          "waktu": "08.00-12.00",
+          "kegiatan": "PKL",
+          "detail": "Fokus pada pekerjaan. Minum secara berkala."
+        },
+        {
+          "waktu": "12.00-13.00",
+          "kegiatan": "Istirahat",
+          "detail": "Makan siang + ibadah + istirahat."
+        },
+        {
+          "waktu": "13.00-17.00",
+          "kegiatan": "PKL",
+          "detail": "Lanjut PKL. Jika lapar, gunakan snack yang sudah disiapkan."
+        },
+        {
+          "waktu": "17.00-18.00",
+          "kegiatan": "Pulang + recovery",
+          "detail": "Perjalanan pulang. Jangan langsung memaksakan workout tambahan."
+        },
+        {
+          "waktu": "18.00-19.00",
+          "kegiatan": "Mandi + ibadah + makan",
+          "detail": "Recovery dan makan malam."
+        },
+        {
+          "waktu": "19.00-20.00",
+          "kegiatan": "Belajar / project",
+          "detail": "Satu fokus utama saja. Stop jika tubuh sudah terlalu lelah."
+        },
+        {
+          "waktu": "20.00-20.30",
+          "kegiatan": "Free time",
+          "detail": "Santai/gaming secukupnya."
+        },
+        {
+          "waktu": "20.30-21.00",
+          "kegiatan": "Persiapan besok",
+          "detail": "Tas, pakaian, bekal, jadwal, lalu mulai menurunkan aktivitas."
+        },
+        {
+          "waktu": "21.00-22.00",
+          "kegiatan": "Wind-down -> tidur",
+          "detail": "Target tidur 21.00-21.30. 22.00 adalah batas maksimal."
+        }
+      ],
+      "workout": {
+        "nama": "Easy Run",
+        "durasi": "05.30-06.05",
+        "pemanasan": null,
+        "istirahat_antar_set": null,
+        "latihan": [
+          {
+            "latihan": "Jalan",
+            "set": null,
+            "repetisi_atau_waktu": "5 menit",
+            "catatan": null,
+            "otot_target": "Pemanasan seluruh tubuh, kaki",
+            "cara_melakukan": [
+              "Jalan cepat santai untuk menaikkan detak jantung perlahan."
+            ],
+            "tips_form": "Ayun lengan natural, napas teratur.",
+            "kesalahan_umum": "Langsung berlari tanpa pemanasan.",
+            "versi_lebih_mudah": "Jalan lebih santai.",
+            "versi_lebih_sulit": "Jalan cepat."
+          },
+          {
+            "latihan": "Jogging",
+            "set": null,
+            "repetisi_atau_waktu": "20-25 menit",
+            "catatan": "Tidak perlu sprint.",
+            "otot_target": "Kaki, bokong, kardio (jantung & paru)",
+            "cara_melakukan": [
+              "Lari ringan dengan langkah pendek.",
+              "Gunakan talk test: masih bisa berbicara dalam kalimat pendek.",
+              "Jika sesak, selingi jalan 1-2 menit."
+            ],
+            "tips_form": "Sepatu nyaman, permukaan rata, minum sebelum lari, jangan sprint.",
+            "kesalahan_umum": "Terlalu cepat di awal, napas tidak teratur, lari dalam keadaan belum minum.",
+            "versi_lebih_mudah": "Jogging 1 menit + jalan 1 menit bergantian.",
+            "versi_lebih_sulit": "Tambah durasi 2-3 menit per minggu (bukan kecepatan dulu)."
+          },
+          {
+            "latihan": "Cooldown",
+            "set": null,
+            "repetisi_atau_waktu": "5 menit",
+            "catatan": null,
+            "otot_target": "Menurunkan detak jantung",
+            "cara_melakukan": [
+              "Jalan santai, tarik napas dalam, lalu stretching ringan betis dan paha."
+            ],
+            "tips_form": "Jangan langsung duduk diam setelah lari.",
+            "kesalahan_umum": "Langsung berhenti mendadak.",
+            "versi_lebih_mudah": "-",
+            "versi_lebih_sulit": "-"
+          }
+        ],
+        "intensitas": "Ringan-sedang (RPE 4-6), masih bisa ngobrol",
+        "otot_utama": "Kaki, kardio",
+        "tujuan": "Stamina dan energi, bukan membakar kalori.",
+        "target_progres": "Tambah 2-3 menit jogging per minggu; kecepatan bukan prioritas.",
+        "tanda_berhenti": "Sesak berat, nyeri betis/lutut, pusing.",
+        "alat": "Sepatu nyaman, botol air.",
+        "estimasi_kalori_terbakar_kkal": {
+          "min": 130,
+          "maks": 190
+        },
+        "catatan_kalori_olahraga": "Perkiraan kasar (±30%), dihitung dari berat 42 kg dan durasi latihan; jauh lebih kecil daripada asupan makan harian, jadi makan cukup tetap prioritas."
+      },
+      "pola_makan": [
+        {
+          "waktu": "07.00",
+          "menu": "Nasi + 2 telur + tempe + sayur + susu / buah",
+          "tujuan": "Sarapan padat energi dan protein.",
+          "rincian_porsi": "Nasi 1 piring (±200 g) ±260 kkal; 2 telur ±150; tempe 2 potong ±100; sayur ±40; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 600,
+            "maks": 720
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 38
+          }
+        },
+        {
+          "waktu": "10.00",
+          "menu": "Pisang + roti + susu / yogurt",
+          "tujuan": "Snack agar energi tidak drop saat PKL.",
+          "rincian_porsi": "Pisang 1 ±90-100 kkal; roti tawar 2 lembar ±140-160; susu/yogurt 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 320,
+            "maks": 410
+          },
+          "estimasi_protein_g": {
+            "min": 10,
+            "maks": 15
+          }
+        },
+        {
+          "waktu": "12.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur + buah",
+          "tujuan": "Makan utama seimbang.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam 1 potong sedang ±200-250; tahu/tempe ±80-100; sayur ±40-50; buah ±50-70",
+          "estimasi_kalori_kkal": {
+            "min": 630,
+            "maks": 730
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 40
+          }
+        },
+        {
+          "waktu": "15.30-16.00",
+          "menu": "Roti + selai kacang + susu / pisang + kacang",
+          "tujuan": "Snack sore; sesuaikan rasa lapar.",
+          "rincian_porsi": "Roti 2 lembar ±140-160; selai kacang 2 sdm ±180-200; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 440,
+            "maks": 510
+          },
+          "estimasi_protein_g": {
+            "min": 14,
+            "maks": 20
+          }
+        },
+        {
+          "waktu": "18.30-19.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur",
+          "tujuan": "Recovery dan makan malam.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam/ikan/telur ±150-220; tahu/tempe ±80-100; sayur ±40-50",
+          "estimasi_kalori_kkal": {
+            "min": 530,
+            "maks": 630
+          },
+          "estimasi_protein_g": {
+            "min": 28,
+            "maks": 36
+          }
+        },
+        {
+          "waktu": "Setelah lari (opsional)",
+          "menu": "Pisang + air putih",
+          "tujuan": "Mengganti energi setelah lari.",
+          "rincian_porsi": "Pisang 1 ±90-100 kkal",
+          "estimasi_kalori_kkal": {
+            "min": 90,
+            "maks": 100
+          },
+          "estimasi_protein_g": {
+            "min": 1,
+            "maks": 2
+          }
+        },
+        {
+          "waktu": "Jika lapar",
+          "menu": "Susu, buah, roti, yogurt, atau snack bergizi",
+          "tujuan": "Jangan sengaja menahan lapar.",
+          "rincian_porsi": "Tidak dihitung dalam total; ±100-200 kkal per snack kecil",
+          "estimasi_kalori_kkal": {
+            "min": 100,
+            "maks": 200
+          },
+          "estimasi_protein_g": {
+            "min": 3,
+            "maks": 8
+          }
+        }
+      ],
+      "ringkasan_energi": {
+        "total_makan_utama_kkal": {
+          "min": 2610,
+          "maks": 3100
+        },
+        "total_protein_g": {
+          "min": 113,
+          "maks": 151
+        },
+        "kalori_olahraga_kkal": {
+          "min": 130,
+          "maks": 190
+        },
+        "catatan": "Ambil sisi bawah jika sudah kenyang; ambil sisi atas atau tambah snack jika berat badan tidak naik."
+      },
+      "catatan_khusus": [
+        "Ini hari kardio ringan; kalau napas berat, selingi jalan.",
+        "Bahu & dada masih pemulihan dari Senin, jadi tidak ada latihan dorong hari ini.",
+        "Minum air sebelum lari dan bawa pisang/snack untuk sesudahnya.",
+        "Pastikan sepatu nyaman; hentikan jika nyeri tajam di lutut atau tulang kering."
+      ],
+      "catatan": "Tujuannya meningkatkan stamina dan energi, bukan membakar kalori sebanyak mungkin."
+    },
+    {
+      "hari": "Rabu",
+      "tipe_hari": "PKL",
+      "fokus": "Legs",
+      "pkl": "08.00-17.00",
+      "jadwal": [
+        {
+          "waktu": "05.00",
+          "kegiatan": "Bangun",
+          "detail": "Minum air, cuci muka, rapikan tempat tidur. Hindari langsung membuka HP terlalu lama."
+        },
+        {
+          "waktu": "05.00-05.25",
+          "kegiatan": "Subuh + persiapan",
+          "detail": "Sholat Subuh, doa, lalu siapkan tubuh untuk latihan."
+        },
+        {
+          "waktu": "05.25-06.10",
+          "kegiatan": "LEGS",
+          "detail": "Workout kaki. Di jadwal awal: 05.30-06.10."
+        },
+        {
+          "waktu": "06.10-06.30",
+          "kegiatan": "Cooldown",
+          "detail": "Jalan ringan, atur napas, minum air."
+        },
+        {
+          "waktu": "06.30-07.00",
+          "kegiatan": "Mandi",
+          "detail": "Mandi dan bersiap untuk PKL."
+        },
+        {
+          "waktu": "07.00-07.25",
+          "kegiatan": "Sarapan",
+          "detail": "Makan utama: karbohidrat + protein + sayur/buah + sumber kalsium."
+        },
+        {
+          "waktu": "07.25-08.00",
+          "kegiatan": "Persiapan & berangkat",
+          "detail": "Pastikan bekal/snack, air minum, dan perlengkapan PKL."
+        },
+        {
+          "waktu": "08.00-12.00",
+          "kegiatan": "PKL",
+          "detail": "Fokus pada pekerjaan. Minum secara berkala."
+        },
+        {
+          "waktu": "12.00-13.00",
+          "kegiatan": "Istirahat",
+          "detail": "Makan siang + ibadah + istirahat."
+        },
+        {
+          "waktu": "13.00-17.00",
+          "kegiatan": "PKL",
+          "detail": "Lanjut PKL. Jika lapar, gunakan snack yang sudah disiapkan."
+        },
+        {
+          "waktu": "17.00-18.00",
+          "kegiatan": "Pulang + recovery",
+          "detail": "Perjalanan pulang. Jangan langsung memaksakan workout tambahan."
+        },
+        {
+          "waktu": "18.00-19.00",
+          "kegiatan": "Mandi + ibadah + makan",
+          "detail": "Recovery dan makan malam."
+        },
+        {
+          "waktu": "19.00-20.00",
+          "kegiatan": "Belajar / project",
+          "detail": "Satu fokus utama saja. Stop jika tubuh sudah terlalu lelah."
+        },
+        {
+          "waktu": "20.00-20.30",
+          "kegiatan": "Free time",
+          "detail": "Santai/gaming secukupnya."
+        },
+        {
+          "waktu": "20.30-21.00",
+          "kegiatan": "Persiapan besok",
+          "detail": "Tas, pakaian, bekal, jadwal, lalu mulai menurunkan aktivitas."
+        },
+        {
+          "waktu": "21.00-22.00",
+          "kegiatan": "Wind-down -> tidur",
+          "detail": "Target tidur 21.00-21.30. 22.00 adalah batas maksimal."
+        }
+      ],
+      "workout": {
+        "nama": "Legs",
+        "durasi": "05.30-06.10",
+        "pemanasan": "5 menit sebelum set pertama: arm circles, shoulder rolls, marching ringan, dan beberapa squat ringan.",
+        "istirahat_antar_set": "60-120 detik",
+        "latihan": [
+          {
+            "latihan": "Squat",
+            "set": 3,
+            "repetisi_atau_waktu": "12-15",
+            "catatan": null,
+            "otot_target": "Paha depan, bokong, paha belakang, core",
+            "cara_melakukan": [
+              "Kaki selebar bahu, ujung kaki sedikit keluar.",
+              "Dorong pinggul ke belakang lalu turun sampai paha sejajar (atau senyaman mungkin).",
+              "Dorong lantai dengan tumit untuk berdiri."
+            ],
+            "tips_form": "Dada tegak, lutut searah jari kaki, berat di tumit-tengah telapak.",
+            "kesalahan_umum": "Lutut menekuk ke dalam, tumit terangkat, punggung membungkuk.",
+            "versi_lebih_mudah": "Squat ke kursi (duduk lalu berdiri).",
+            "versi_lebih_sulit": "Goblet squat memegang barbel 2 kg di dada, atau tempo turun 3 detik."
+          },
+          {
+            "latihan": "Reverse lunge",
+            "set": 3,
+            "repetisi_atau_waktu": "8-10 / kaki",
+            "catatan": null,
+            "otot_target": "Paha depan, bokong, keseimbangan",
+            "cara_melakukan": [
+              "Berdiri tegak, langkahkan satu kaki ke belakang.",
+              "Turunkan lutut belakang mendekati lantai (lutut depan ±90°).",
+              "Dorong dengan kaki depan untuk kembali; ganti kaki."
+            ],
+            "tips_form": "Badan tegak, lutut depan stabil dan tidak melewati jari kaki terlalu jauh.",
+            "kesalahan_umum": "Langkah terlalu pendek, badan condong ke depan, kehilangan keseimbangan.",
+            "versi_lebih_mudah": "Berpegangan pada dinding/kursi atau turun setengah.",
+            "versi_lebih_sulit": "Pegang barbel 2 kg di tiap tangan."
+          },
+          {
+            "latihan": "Bulgarian split squat",
+            "set": 2,
+            "repetisi_atau_waktu": "6-10 / kaki",
+            "catatan": null,
+            "otot_target": "Paha depan, bokong, keseimbangan satu kaki",
+            "cara_melakukan": [
+              "Letakkan kaki belakang di kursi/sofa yang stabil.",
+              "Turunkan tubuh dengan menekuk lutut depan.",
+              "Dorong tumit kaki depan untuk naik."
+            ],
+            "tips_form": "Jarak kaki depan cukup jauh agar lutut nyaman; badan tegak; pastikan kursi tidak bergeser.",
+            "kesalahan_umum": "Kaki depan terlalu dekat kursi, lutut masuk ke dalam.",
+            "versi_lebih_mudah": "Kurangi kedalaman atau berpegangan pada dinding.",
+            "versi_lebih_sulit": "Pegang barbel 2 kg atau turun lebih lambat."
+          },
+          {
+            "latihan": "Calf raise",
+            "set": 3,
+            "repetisi_atau_waktu": "15-20",
+            "catatan": null,
+            "otot_target": "Betis (gastrocnemius & soleus)",
+            "cara_melakukan": [
+              "Berdiri tegak, berpegangan jika perlu.",
+              "Naik ke ujung jari selama 1 detik.",
+              "Turun perlahan."
+            ],
+            "tips_form": "Gerakan penuh; boleh di tepi anak tangga agar rentang gerak lebih besar.",
+            "kesalahan_umum": "Memantul cepat, tumit turun terlalu singkat.",
+            "versi_lebih_mudah": "Berpegangan dinding.",
+            "versi_lebih_sulit": "Satu kaki bergantian atau pegang barbel 2 kg."
+          },
+          {
+            "latihan": "Plank",
+            "set": 2,
+            "repetisi_atau_waktu": "30-45 detik",
+            "catatan": null,
+            "otot_target": "Seluruh core, bahu, bokong",
+            "cara_melakukan": [
+              "Bertumpu pada lengan bawah dan ujung kaki.",
+              "Badan lurus dari kepala sampai tumit.",
+              "Tahan sambil bernapas normal."
+            ],
+            "tips_form": "Kencangkan perut & bokong; siku tepat di bawah bahu; leher netral.",
+            "kesalahan_umum": "Pinggul terlalu naik/turun, menahan napas.",
+            "versi_lebih_mudah": "Plank di lutut atau durasi lebih pendek.",
+            "versi_lebih_sulit": "Tambah 5-10 detik per minggu, atau plank dengan angkat satu kaki bergantian."
+          }
+        ],
+        "intensitas": "Sedang (RPE 6-7)",
+        "otot_utama": "Paha, bokong, betis, core",
+        "tujuan": "Membangun kekuatan dan massa otot kaki.",
+        "target_progres": "Naikkan repetisi dulu; setelah 3x15 mudah, pegang barbel 2 kg.",
+        "tanda_berhenti": "Nyeri lutut tajam, kram hebat, kehilangan keseimbangan.",
+        "alat": "Kursi/sofa stabil (untuk Bulgarian split squat), opsional barbel 2 kg.",
+        "estimasi_kalori_terbakar_kkal": {
+          "min": 100,
+          "maks": 150
+        },
+        "catatan_kalori_olahraga": "Perkiraan kasar (±30%), dihitung dari berat 42 kg dan durasi latihan; jauh lebih kecil daripada asupan makan harian, jadi makan cukup tetap prioritas."
+      },
+      "pola_makan": [
+        {
+          "waktu": "07.00",
+          "menu": "Nasi + 2 telur + tempe + sayur + susu / buah",
+          "tujuan": "Sarapan padat energi dan protein.",
+          "rincian_porsi": "Nasi 1 piring (±200 g) ±260 kkal; 2 telur ±150; tempe 2 potong ±100; sayur ±40; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 600,
+            "maks": 720
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 38
+          }
+        },
+        {
+          "waktu": "10.00",
+          "menu": "Pisang + roti + susu / yogurt",
+          "tujuan": "Snack agar energi tidak drop saat PKL.",
+          "rincian_porsi": "Pisang 1 ±90-100 kkal; roti tawar 2 lembar ±140-160; susu/yogurt 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 320,
+            "maks": 410
+          },
+          "estimasi_protein_g": {
+            "min": 10,
+            "maks": 15
+          }
+        },
+        {
+          "waktu": "12.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur + buah",
+          "tujuan": "Makan utama seimbang.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam 1 potong sedang ±200-250; tahu/tempe ±80-100; sayur ±40-50; buah ±50-70",
+          "estimasi_kalori_kkal": {
+            "min": 630,
+            "maks": 730
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 40
+          }
+        },
+        {
+          "waktu": "15.30-16.00",
+          "menu": "Roti + selai kacang + susu / pisang + kacang",
+          "tujuan": "Snack sore; sesuaikan rasa lapar.",
+          "rincian_porsi": "Roti 2 lembar ±140-160; selai kacang 2 sdm ±180-200; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 440,
+            "maks": 510
+          },
+          "estimasi_protein_g": {
+            "min": 14,
+            "maks": 20
+          }
+        },
+        {
+          "waktu": "18.30-19.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur",
+          "tujuan": "Recovery dan makan malam.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam/ikan/telur ±150-220; tahu/tempe ±80-100; sayur ±40-50",
+          "estimasi_kalori_kkal": {
+            "min": 530,
+            "maks": 630
+          },
+          "estimasi_protein_g": {
+            "min": 28,
+            "maks": 36
+          }
+        },
+        {
+          "waktu": "Jika lapar",
+          "menu": "Susu, buah, roti, yogurt, atau snack bergizi",
+          "tujuan": "Jangan sengaja menahan lapar.",
+          "rincian_porsi": "Tidak dihitung dalam total; ±100-200 kkal per snack kecil",
+          "estimasi_kalori_kkal": {
+            "min": 100,
+            "maks": 200
+          },
+          "estimasi_protein_g": {
+            "min": 3,
+            "maks": 8
+          }
+        }
+      ],
+      "ringkasan_energi": {
+        "total_makan_utama_kkal": {
+          "min": 2520,
+          "maks": 3000
+        },
+        "total_protein_g": {
+          "min": 112,
+          "maks": 149
+        },
+        "kalori_olahraga_kkal": {
+          "min": 100,
+          "maks": 150
+        },
+        "catatan": "Ambil sisi bawah jika sudah kenyang; ambil sisi atas atau tambah snack jika berat badan tidak naik."
+      },
+      "catatan_khusus": [
+        "Latihan kaki paling melelahkan minggu ini; pegal (DOMS) besok itu normal, nyeri tajam tidak.",
+        "Pastikan makan siang & malam cukup protein dan nasi untuk pemulihan.",
+        "Untuk Bulgarian split squat, pakai kursi stabil dan lakukan perlahan.",
+        "Lutut harus searah jari kaki; kurangi kedalaman jika lutut tidak nyaman."
+      ],
+      "catatan": "Kualitas gerakan lebih penting daripada mengejar angka repetisi."
+    },
+    {
+      "hari": "Kamis",
+      "tipe_hari": "PKL",
+      "fokus": "Recovery + Mobility",
+      "pkl": "08.00-17.00",
+      "jadwal": [
+        {
+          "waktu": "05.00",
+          "kegiatan": "Bangun",
+          "detail": "Minum air, cuci muka, rapikan tempat tidur. Hindari langsung membuka HP terlalu lama."
+        },
+        {
+          "waktu": "05.00-05.25",
+          "kegiatan": "Subuh + persiapan",
+          "detail": "Sholat Subuh, doa, lalu siapkan tubuh untuk latihan."
+        },
+        {
+          "waktu": "05.25-06.10",
+          "kegiatan": "RECOVERY + MOBILITY",
+          "detail": "Recovery ringan. Di jadwal awal: 05.30-05.50. Tidak ada workout berat."
+        },
+        {
+          "waktu": "06.10-06.30",
+          "kegiatan": "Cooldown",
+          "detail": "Jalan ringan, atur napas, minum air."
+        },
+        {
+          "waktu": "06.30-07.00",
+          "kegiatan": "Mandi",
+          "detail": "Mandi dan bersiap untuk PKL."
+        },
+        {
+          "waktu": "07.00-07.25",
+          "kegiatan": "Sarapan",
+          "detail": "Makan utama: karbohidrat + protein + sayur/buah + sumber kalsium."
+        },
+        {
+          "waktu": "07.25-08.00",
+          "kegiatan": "Persiapan & berangkat",
+          "detail": "Pastikan bekal/snack, air minum, dan perlengkapan PKL."
+        },
+        {
+          "waktu": "08.00-12.00",
+          "kegiatan": "PKL",
+          "detail": "Fokus pada pekerjaan. Minum secara berkala."
+        },
+        {
+          "waktu": "12.00-13.00",
+          "kegiatan": "Istirahat",
+          "detail": "Makan siang + ibadah + istirahat."
+        },
+        {
+          "waktu": "13.00-17.00",
+          "kegiatan": "PKL",
+          "detail": "Lanjut PKL. Jika lapar, gunakan snack yang sudah disiapkan."
+        },
+        {
+          "waktu": "17.00-18.00",
+          "kegiatan": "Pulang + recovery",
+          "detail": "Perjalanan pulang. Jangan langsung memaksakan workout tambahan."
+        },
+        {
+          "waktu": "18.00-19.00",
+          "kegiatan": "Mandi + ibadah + makan",
+          "detail": "Recovery dan makan malam."
+        },
+        {
+          "waktu": "19.00-20.00",
+          "kegiatan": "Belajar / project",
+          "detail": "Satu fokus utama saja. Stop jika tubuh sudah terlalu lelah."
+        },
+        {
+          "waktu": "20.00-20.30",
+          "kegiatan": "Free time",
+          "detail": "Santai/gaming secukupnya."
+        },
+        {
+          "waktu": "20.30-21.00",
+          "kegiatan": "Persiapan besok",
+          "detail": "Tas, pakaian, bekal, jadwal, lalu mulai menurunkan aktivitas."
+        },
+        {
+          "waktu": "21.00-22.00",
+          "kegiatan": "Wind-down -> tidur",
+          "detail": "Target tidur 21.00-21.30. 22.00 adalah batas maksimal."
+        }
+      ],
+      "workout": {
+        "nama": "Recovery + Mobility",
+        "durasi": "05.30-05.50",
+        "pemanasan": null,
+        "istirahat_antar_set": null,
+        "latihan": [
+          {
+            "latihan": "Stretching",
+            "set": null,
+            "repetisi_atau_waktu": "Ringan",
+            "catatan": null,
+            "otot_target": "Otot yang terasa kaku (bahu, dada, paha, betis)",
+            "cara_melakukan": [
+              "Tahan 20-30 detik per peregangan, tanpa memantul.",
+              "Contoh: stretch dada di pintu, paha depan berdiri, betis di dinding, hamstring duduk."
+            ],
+            "tips_form": "Rasakan tarikan ringan, bukan nyeri; napas rileks.",
+            "kesalahan_umum": "Memaksa sampai sakit.",
+            "versi_lebih_mudah": "-",
+            "versi_lebih_sulit": "-"
+          },
+          {
+            "latihan": "Mobility",
+            "set": null,
+            "repetisi_atau_waktu": "Ringan",
+            "catatan": null,
+            "otot_target": "Sendi bahu, pinggul, tulang belakang, pergelangan kaki",
+            "cara_melakukan": [
+              "Arm circles, cat-cow, hip circles, ankle circles masing-masing 8-10 kali."
+            ],
+            "tips_form": "Gerak lambat dan penuh rentang gerak.",
+            "kesalahan_umum": "Terlalu cepat.",
+            "versi_lebih_mudah": "-",
+            "versi_lebih_sulit": "-"
+          },
+          {
+            "latihan": "Jalan ringan",
+            "set": null,
+            "repetisi_atau_waktu": "Santai",
+            "catatan": null,
+            "otot_target": "Kaki, sirkulasi darah",
+            "cara_melakukan": [
+              "Jalan santai 5-10 menit untuk membantu pemulihan."
+            ],
+            "tips_form": "Tempo santai.",
+            "kesalahan_umum": "Berubah jadi lari intens.",
+            "versi_lebih_mudah": "-",
+            "versi_lebih_sulit": "-"
+          }
+        ],
+        "intensitas": "Sangat ringan (RPE 2-3)",
+        "otot_utama": "Seluruh tubuh (pemulihan)",
+        "tujuan": "Pemulihan aktif agar Jumat & Sabtu tetap bertenaga.",
+        "target_progres": "Tidak ada target performa; fokus rasa segar dan tidur.",
+        "tanda_berhenti": "Nyeri tajam saat peregangan.",
+        "alat": "Matras.",
+        "estimasi_kalori_terbakar_kkal": {
+          "min": 30,
+          "maks": 60
+        },
+        "catatan_kalori_olahraga": "Perkiraan kasar (±30%), dihitung dari berat 42 kg dan durasi latihan; jauh lebih kecil daripada asupan makan harian, jadi makan cukup tetap prioritas."
+      },
+      "pola_makan": [
+        {
+          "waktu": "07.00",
+          "menu": "Nasi + 2 telur + tempe + sayur + susu / buah",
+          "tujuan": "Sarapan padat energi dan protein.",
+          "rincian_porsi": "Nasi 1 piring (±200 g) ±260 kkal; 2 telur ±150; tempe 2 potong ±100; sayur ±40; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 600,
+            "maks": 720
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 38
+          }
+        },
+        {
+          "waktu": "10.00",
+          "menu": "Pisang + roti + susu / yogurt",
+          "tujuan": "Snack agar energi tidak drop saat PKL.",
+          "rincian_porsi": "Pisang 1 ±90-100 kkal; roti tawar 2 lembar ±140-160; susu/yogurt 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 320,
+            "maks": 410
+          },
+          "estimasi_protein_g": {
+            "min": 10,
+            "maks": 15
+          }
+        },
+        {
+          "waktu": "12.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur + buah",
+          "tujuan": "Makan utama seimbang.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam 1 potong sedang ±200-250; tahu/tempe ±80-100; sayur ±40-50; buah ±50-70",
+          "estimasi_kalori_kkal": {
+            "min": 630,
+            "maks": 730
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 40
+          }
+        },
+        {
+          "waktu": "15.30-16.00",
+          "menu": "Roti + selai kacang + susu / pisang + kacang",
+          "tujuan": "Snack sore; sesuaikan rasa lapar.",
+          "rincian_porsi": "Roti 2 lembar ±140-160; selai kacang 2 sdm ±180-200; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 440,
+            "maks": 510
+          },
+          "estimasi_protein_g": {
+            "min": 14,
+            "maks": 20
+          }
+        },
+        {
+          "waktu": "18.30-19.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur",
+          "tujuan": "Recovery dan makan malam.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam/ikan/telur ±150-220; tahu/tempe ±80-100; sayur ±40-50",
+          "estimasi_kalori_kkal": {
+            "min": 530,
+            "maks": 630
+          },
+          "estimasi_protein_g": {
+            "min": 28,
+            "maks": 36
+          }
+        },
+        {
+          "waktu": "Jika lapar",
+          "menu": "Susu, buah, roti, yogurt, atau snack bergizi",
+          "tujuan": "Jangan sengaja menahan lapar.",
+          "rincian_porsi": "Tidak dihitung dalam total; ±100-200 kkal per snack kecil",
+          "estimasi_kalori_kkal": {
+            "min": 100,
+            "maks": 200
+          },
+          "estimasi_protein_g": {
+            "min": 3,
+            "maks": 8
+          }
+        }
+      ],
+      "ringkasan_energi": {
+        "total_makan_utama_kkal": {
+          "min": 2520,
+          "maks": 3000
+        },
+        "total_protein_g": {
+          "min": 112,
+          "maks": 149
+        },
+        "kalori_olahraga_kkal": {
+          "min": 30,
+          "maks": 60
+        },
+        "catatan": "Ambil sisi bawah jika sudah kenyang; ambil sisi atas atau tambah snack jika berat badan tidak naik."
+      },
+      "catatan_khusus": [
+        "Hari pemulihan aktif: tidak ada workout berat karena masih PKL.",
+        "Jika kaki masih pegal dari Rabu, prioritaskan stretching betis, paha, dan pinggul.",
+        "Kesempatan mengecek: tidur sudah cukup? makan sudah teratur minggu ini?",
+        "Malam boleh lebih santai; tetap tidur 21.00-21.30."
+      ],
+      "catatan": "Tidak ada workout berat karena kamu masih harus PKL. Malam hari boleh lebih santai."
+    },
+    {
+      "hari": "Jumat",
+      "tipe_hari": "PKL",
+      "fokus": "Full Body",
+      "pkl": "08.00-17.00",
+      "jadwal": [
+        {
+          "waktu": "05.00",
+          "kegiatan": "Bangun",
+          "detail": "Minum air, cuci muka, rapikan tempat tidur. Hindari langsung membuka HP terlalu lama."
+        },
+        {
+          "waktu": "05.00-05.25",
+          "kegiatan": "Subuh + persiapan",
+          "detail": "Sholat Subuh, doa, lalu siapkan tubuh untuk latihan."
+        },
+        {
+          "waktu": "05.25-06.10",
+          "kegiatan": "FULL BODY",
+          "detail": "Workout seluruh tubuh. Di jadwal awal: 05.30-06.10."
+        },
+        {
+          "waktu": "06.10-06.30",
+          "kegiatan": "Cooldown",
+          "detail": "Jalan ringan, atur napas, minum air."
+        },
+        {
+          "waktu": "06.30-07.00",
+          "kegiatan": "Mandi",
+          "detail": "Mandi dan bersiap untuk PKL."
+        },
+        {
+          "waktu": "07.00-07.25",
+          "kegiatan": "Sarapan",
+          "detail": "Makan utama: karbohidrat + protein + sayur/buah + sumber kalsium."
+        },
+        {
+          "waktu": "07.25-08.00",
+          "kegiatan": "Persiapan & berangkat",
+          "detail": "Pastikan bekal/snack, air minum, dan perlengkapan PKL."
+        },
+        {
+          "waktu": "08.00-12.00",
+          "kegiatan": "PKL",
+          "detail": "Fokus pada pekerjaan. Minum secara berkala."
+        },
+        {
+          "waktu": "12.00-13.00",
+          "kegiatan": "Istirahat",
+          "detail": "Makan siang + ibadah + istirahat."
+        },
+        {
+          "waktu": "13.00-17.00",
+          "kegiatan": "PKL",
+          "detail": "Lanjut PKL. Jika lapar, gunakan snack yang sudah disiapkan."
+        },
+        {
+          "waktu": "17.00-18.00",
+          "kegiatan": "Pulang + recovery",
+          "detail": "Perjalanan pulang. Jangan langsung memaksakan workout tambahan."
+        },
+        {
+          "waktu": "18.00-19.00",
+          "kegiatan": "Mandi + ibadah + makan",
+          "detail": "Recovery dan makan malam."
+        },
+        {
+          "waktu": "19.00-20.00",
+          "kegiatan": "Belajar / project",
+          "detail": "Satu fokus utama saja. Stop jika tubuh sudah terlalu lelah."
+        },
+        {
+          "waktu": "20.00-20.30",
+          "kegiatan": "Free time",
+          "detail": "Santai/gaming secukupnya."
+        },
+        {
+          "waktu": "20.30-21.00",
+          "kegiatan": "Persiapan besok",
+          "detail": "Tas, pakaian, bekal, jadwal, lalu mulai menurunkan aktivitas."
+        },
+        {
+          "waktu": "21.00-22.00",
+          "kegiatan": "Wind-down -> tidur",
+          "detail": "Target tidur 21.00-21.30. 22.00 adalah batas maksimal."
+        }
+      ],
+      "workout": {
+        "nama": "Full Body",
+        "durasi": "05.30-06.10",
+        "pemanasan": "5 menit sebelum set pertama: arm circles, shoulder rolls, marching ringan, dan beberapa squat ringan.",
+        "istirahat_antar_set": "60-120 detik",
+        "latihan": [
+          {
+            "latihan": "Push-up",
+            "set": 3,
+            "repetisi_atau_waktu": "8-12",
+            "catatan": null,
+            "otot_target": "Dada, bahu depan, triceps, core",
+            "cara_melakukan": [
+              "Tangan selebar bahu sedikit lebih lebar, badan lurus dari kepala sampai tumit.",
+              "Turunkan dada perlahan sampai siku ±90°.",
+              "Dorong kembali ke atas tanpa mengunci siku secara kasar."
+            ],
+            "tips_form": "Kencangkan perut dan bokong; siku ±45° dari badan; napas masuk saat turun, hembus saat naik.",
+            "kesalahan_umum": "Pinggul turun/naik, kepala menjulur, turun setengah gerakan.",
+            "versi_lebih_mudah": "Push-up lutut atau tangan bertumpu di kursi/meja.",
+            "versi_lebih_sulit": "Turun 3 detik (tempo lambat), kaki ditinggikan, atau jeda 1 detik di bawah."
+          },
+          {
+            "latihan": "Squat",
+            "set": 3,
+            "repetisi_atau_waktu": "12-15",
+            "catatan": null,
+            "otot_target": "Paha depan, bokong, paha belakang, core",
+            "cara_melakukan": [
+              "Kaki selebar bahu, ujung kaki sedikit keluar.",
+              "Dorong pinggul ke belakang lalu turun sampai paha sejajar (atau senyaman mungkin).",
+              "Dorong lantai dengan tumit untuk berdiri."
+            ],
+            "tips_form": "Dada tegak, lutut searah jari kaki, berat di tumit-tengah telapak.",
+            "kesalahan_umum": "Lutut menekuk ke dalam, tumit terangkat, punggung membungkuk.",
+            "versi_lebih_mudah": "Squat ke kursi (duduk lalu berdiri).",
+            "versi_lebih_sulit": "Goblet squat memegang barbel 2 kg di dada, atau tempo turun 3 detik."
+          },
+          {
+            "latihan": "Reverse lunge",
+            "set": 2,
+            "repetisi_atau_waktu": "8 / kaki",
+            "catatan": null,
+            "otot_target": "Paha depan, bokong, keseimbangan",
+            "cara_melakukan": [
+              "Berdiri tegak, langkahkan satu kaki ke belakang.",
+              "Turunkan lutut belakang mendekati lantai (lutut depan ±90°).",
+              "Dorong dengan kaki depan untuk kembali; ganti kaki."
+            ],
+            "tips_form": "Badan tegak, lutut depan stabil dan tidak melewati jari kaki terlalu jauh.",
+            "kesalahan_umum": "Langkah terlalu pendek, badan condong ke depan, kehilangan keseimbangan.",
+            "versi_lebih_mudah": "Berpegangan pada dinding/kursi atau turun setengah.",
+            "versi_lebih_sulit": "Pegang barbel 2 kg di tiap tangan."
+          },
+          {
+            "latihan": "Pike push-up",
+            "set": 2,
+            "repetisi_atau_waktu": "6-8",
+            "catatan": null,
+            "otot_target": "Bahu (deltoid), triceps, dada atas",
+            "cara_melakukan": [
+              "Posisi V terbalik: pinggul tinggi, kaki agak dekat tangan.",
+              "Tekuk siku, turunkan kepala ke arah lantai di antara tangan.",
+              "Dorong kembali ke posisi awal."
+            ],
+            "tips_form": "Punggung lurus, gerakan lambat, pandangan ke arah kaki/lantai depan.",
+            "kesalahan_umum": "Kepala jatuh ke depan tanpa kontrol, siku terlalu melebar, kaki terlalu jauh sehingga jadi push-up biasa.",
+            "versi_lebih_mudah": "Kurangi kedalaman gerakan atau lakukan dengan pinggul lebih tinggi.",
+            "versi_lebih_sulit": "Kaki ditinggikan di kursi (setelah semua set 3x10 terasa mudah)."
+          },
+          {
+            "latihan": "Dead bug",
+            "set": 2,
+            "repetisi_atau_waktu": "8 / sisi",
+            "catatan": null,
+            "otot_target": "Core dalam (transversus abdominis), perut, stabilitas punggung bawah",
+            "cara_melakukan": [
+              "Telentang, lengan lurus ke atas, lutut ditekuk 90° di atas pinggul.",
+              "Turunkan lengan kanan dan kaki kiri perlahan mendekati lantai.",
+              "Kembali ke awal, ganti sisi."
+            ],
+            "tips_form": "Punggung bawah tetap menempel lantai; hembus napas saat menurunkan.",
+            "kesalahan_umum": "Punggung bawah melengkung, gerakan terlalu cepat.",
+            "versi_lebih_mudah": "Gerakkan kaki saja atau lengan saja.",
+            "versi_lebih_sulit": "Pegang barbel 2 kg di tangan atau perlambat gerakan."
+          },
+          {
+            "latihan": "Plank",
+            "set": 2,
+            "repetisi_atau_waktu": "30-45 detik",
+            "catatan": null,
+            "otot_target": "Seluruh core, bahu, bokong",
+            "cara_melakukan": [
+              "Bertumpu pada lengan bawah dan ujung kaki.",
+              "Badan lurus dari kepala sampai tumit.",
+              "Tahan sambil bernapas normal."
+            ],
+            "tips_form": "Kencangkan perut & bokong; siku tepat di bawah bahu; leher netral.",
+            "kesalahan_umum": "Pinggul terlalu naik/turun, menahan napas.",
+            "versi_lebih_mudah": "Plank di lutut atau durasi lebih pendek.",
+            "versi_lebih_sulit": "Tambah 5-10 detik per minggu, atau plank dengan angkat satu kaki bergantian."
+          }
+        ],
+        "intensitas": "Sedang (RPE 6-7)",
+        "otot_utama": "Seluruh tubuh",
+        "tujuan": "Menggabungkan pola dorong, kaki, dan core dalam volume ringan.",
+        "target_progres": "Semua set rapi dengan sisa 2-3 repetisi sebelum menambah.",
+        "tanda_berhenti": "Nyeri tajam sendi, pusing.",
+        "alat": "Matras.",
+        "estimasi_kalori_terbakar_kkal": {
+          "min": 100,
+          "maks": 150
+        },
+        "catatan_kalori_olahraga": "Perkiraan kasar (±30%), dihitung dari berat 42 kg dan durasi latihan; jauh lebih kecil daripada asupan makan harian, jadi makan cukup tetap prioritas."
+      },
+      "pola_makan": [
+        {
+          "waktu": "07.00",
+          "menu": "Nasi + 2 telur + tempe + sayur + susu / buah",
+          "tujuan": "Sarapan padat energi dan protein.",
+          "rincian_porsi": "Nasi 1 piring (±200 g) ±260 kkal; 2 telur ±150; tempe 2 potong ±100; sayur ±40; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 600,
+            "maks": 720
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 38
+          }
+        },
+        {
+          "waktu": "10.00",
+          "menu": "Pisang + roti + susu / yogurt",
+          "tujuan": "Snack agar energi tidak drop saat PKL.",
+          "rincian_porsi": "Pisang 1 ±90-100 kkal; roti tawar 2 lembar ±140-160; susu/yogurt 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 320,
+            "maks": 410
+          },
+          "estimasi_protein_g": {
+            "min": 10,
+            "maks": 15
+          }
+        },
+        {
+          "waktu": "12.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur + buah",
+          "tujuan": "Makan utama seimbang.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam 1 potong sedang ±200-250; tahu/tempe ±80-100; sayur ±40-50; buah ±50-70",
+          "estimasi_kalori_kkal": {
+            "min": 630,
+            "maks": 730
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 40
+          }
+        },
+        {
+          "waktu": "15.30-16.00",
+          "menu": "Roti + selai kacang + susu / pisang + kacang",
+          "tujuan": "Snack sore; sesuaikan rasa lapar.",
+          "rincian_porsi": "Roti 2 lembar ±140-160; selai kacang 2 sdm ±180-200; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 440,
+            "maks": 510
+          },
+          "estimasi_protein_g": {
+            "min": 14,
+            "maks": 20
+          }
+        },
+        {
+          "waktu": "18.30-19.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur",
+          "tujuan": "Recovery dan makan malam.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam/ikan/telur ±150-220; tahu/tempe ±80-100; sayur ±40-50",
+          "estimasi_kalori_kkal": {
+            "min": 530,
+            "maks": 630
+          },
+          "estimasi_protein_g": {
+            "min": 28,
+            "maks": 36
+          }
+        },
+        {
+          "waktu": "Jika lapar",
+          "menu": "Susu, buah, roti, yogurt, atau snack bergizi",
+          "tujuan": "Jangan sengaja menahan lapar.",
+          "rincian_porsi": "Tidak dihitung dalam total; ±100-200 kkal per snack kecil",
+          "estimasi_kalori_kkal": {
+            "min": 100,
+            "maks": 200
+          },
+          "estimasi_protein_g": {
+            "min": 3,
+            "maks": 8
+          }
+        }
+      ],
+      "ringkasan_energi": {
+        "total_makan_utama_kkal": {
+          "min": 2520,
+          "maks": 3000
+        },
+        "total_protein_g": {
+          "min": 112,
+          "maks": 149
+        },
+        "kalori_olahraga_kkal": {
+          "min": 100,
+          "maks": 150
+        },
+        "catatan": "Ambil sisi bawah jika sudah kenyang; ambil sisi atas atau tambah snack jika berat badan tidak naik."
+      },
+      "catatan_khusus": [
+        "Full body dengan volume ringan; jangan menambah beban karena besok latihan utama.",
+        "Bandingkan repetisi dengan Senin; jika lebih mudah, naikkan 1-2 repetisi.",
+        "Malam Jumat tetap tidur sesuai jadwal agar Sabtu pagi tidak lemas.",
+        "Persiapkan sepatu dan pakaian olahraga untuk Sabtu."
+      ],
+      "catatan": "Jaga tidur dan makan; besok libur PKL dan ada latihan utama."
+    },
+    {
+      "hari": "Sabtu",
+      "tipe_hari": "Libur PKL",
+      "fokus": "Run + Calisthenics (hari latihan utama)",
+      "pkl": "Libur",
+      "jadwal": [
+        {
+          "waktu": "05.00",
+          "kegiatan": "Bangun",
+          "detail": "Minum air, cuci muka."
+        },
+        {
+          "waktu": "05.00-05.30",
+          "kegiatan": "Subuh + persiapan",
+          "detail": "Sholat Subuh, lalu pemanasan."
+        },
+        {
+          "waktu": "05.30-06.15",
+          "kegiatan": "Workout utama",
+          "detail": "Bagian 1 Running (jalan 5 menit, jogging 20-30 menit, cooldown 5 menit), istirahat ±10 menit, lalu Bagian 2 Calisthenics."
+        },
+        {
+          "waktu": "Setelah workout",
+          "kegiatan": "SARAPAN BESAR",
+          "detail": "Jangan sampai olahraga pagi membuat kekurangan energi karena targetnya menambah massa tubuh."
+        },
+        {
+          "waktu": "Siang-sore",
+          "kegiatan": "Free time / project",
+          "detail": "Tidak ada PKL. Gaming / project / santai."
+        },
+        {
+          "waktu": "Malam",
+          "kegiatan": "Persiapan minggu depan & wind-down",
+          "detail": "Tetap tidur 21.00-21.30; batas maksimal 22.00."
+        }
+      ],
+      "workout": {
+        "nama": "Run + Calisthenics",
+        "durasi": "05.30-06.15",
+        "pemanasan": null,
+        "istirahat_antar_set": "Istirahat ±10 menit antara Bagian 1 dan 2",
+        "bagian": [
+          {
+            "bagian": "Bagian 1 - Running",
+            "latihan": [
+              {
+                "latihan": "Jalan",
+                "set": null,
+                "repetisi_atau_waktu": "5 menit",
+                "catatan": null,
+                "otot_target": "Pemanasan seluruh tubuh, kaki",
+                "cara_melakukan": [
+                  "Jalan cepat santai untuk menaikkan detak jantung perlahan."
+                ],
+                "tips_form": "Ayun lengan natural, napas teratur.",
+                "kesalahan_umum": "Langsung berlari tanpa pemanasan.",
+                "versi_lebih_mudah": "Jalan lebih santai.",
+                "versi_lebih_sulit": "Jalan cepat."
+              },
+              {
+                "latihan": "Jogging",
+                "set": null,
+                "repetisi_atau_waktu": "20-30 menit",
+                "catatan": null,
+                "otot_target": "Kaki, bokong, kardio (jantung & paru)",
+                "cara_melakukan": [
+                  "Lari ringan dengan langkah pendek.",
+                  "Gunakan talk test: masih bisa berbicara dalam kalimat pendek.",
+                  "Jika sesak, selingi jalan 1-2 menit."
+                ],
+                "tips_form": "Sepatu nyaman, permukaan rata, minum sebelum lari, jangan sprint.",
+                "kesalahan_umum": "Terlalu cepat di awal, napas tidak teratur, lari dalam keadaan belum minum.",
+                "versi_lebih_mudah": "Jogging 1 menit + jalan 1 menit bergantian.",
+                "versi_lebih_sulit": "Tambah durasi 2-3 menit per minggu (bukan kecepatan dulu)."
+              },
+              {
+                "latihan": "Cooldown",
+                "set": null,
+                "repetisi_atau_waktu": "5 menit",
+                "catatan": null,
+                "otot_target": "Menurunkan detak jantung",
+                "cara_melakukan": [
+                  "Jalan santai, tarik napas dalam, lalu stretching ringan betis dan paha."
+                ],
+                "tips_form": "Jangan langsung duduk diam setelah lari.",
+                "kesalahan_umum": "Langsung berhenti mendadak.",
+                "versi_lebih_mudah": "-",
+                "versi_lebih_sulit": "-"
+              }
+            ]
+          },
+          {
+            "bagian": "Bagian 2 - Calisthenics",
+            "latihan": [
+              {
+                "latihan": "Push-up",
+                "set": 3,
+                "repetisi_atau_waktu": "10",
+                "catatan": null,
+                "otot_target": "Dada, bahu depan, triceps, core",
+                "cara_melakukan": [
+                  "Tangan selebar bahu sedikit lebih lebar, badan lurus dari kepala sampai tumit.",
+                  "Turunkan dada perlahan sampai siku ±90°.",
+                  "Dorong kembali ke atas tanpa mengunci siku secara kasar."
+                ],
+                "tips_form": "Kencangkan perut dan bokong; siku ±45° dari badan; napas masuk saat turun, hembus saat naik.",
+                "kesalahan_umum": "Pinggul turun/naik, kepala menjulur, turun setengah gerakan.",
+                "versi_lebih_mudah": "Push-up lutut atau tangan bertumpu di kursi/meja.",
+                "versi_lebih_sulit": "Turun 3 detik (tempo lambat), kaki ditinggikan, atau jeda 1 detik di bawah."
+              },
+              {
+                "latihan": "Squat",
+                "set": 3,
+                "repetisi_atau_waktu": "15",
+                "catatan": null,
+                "otot_target": "Paha depan, bokong, paha belakang, core",
+                "cara_melakukan": [
+                  "Kaki selebar bahu, ujung kaki sedikit keluar.",
+                  "Dorong pinggul ke belakang lalu turun sampai paha sejajar (atau senyaman mungkin).",
+                  "Dorong lantai dengan tumit untuk berdiri."
+                ],
+                "tips_form": "Dada tegak, lutut searah jari kaki, berat di tumit-tengah telapak.",
+                "kesalahan_umum": "Lutut menekuk ke dalam, tumit terangkat, punggung membungkuk.",
+                "versi_lebih_mudah": "Squat ke kursi (duduk lalu berdiri).",
+                "versi_lebih_sulit": "Goblet squat memegang barbel 2 kg di dada, atau tempo turun 3 detik."
+              },
+              {
+                "latihan": "Reverse lunge",
+                "set": 2,
+                "repetisi_atau_waktu": "10 / kaki",
+                "catatan": null,
+                "otot_target": "Paha depan, bokong, keseimbangan",
+                "cara_melakukan": [
+                  "Berdiri tegak, langkahkan satu kaki ke belakang.",
+                  "Turunkan lutut belakang mendekati lantai (lutut depan ±90°).",
+                  "Dorong dengan kaki depan untuk kembali; ganti kaki."
+                ],
+                "tips_form": "Badan tegak, lutut depan stabil dan tidak melewati jari kaki terlalu jauh.",
+                "kesalahan_umum": "Langkah terlalu pendek, badan condong ke depan, kehilangan keseimbangan.",
+                "versi_lebih_mudah": "Berpegangan pada dinding/kursi atau turun setengah.",
+                "versi_lebih_sulit": "Pegang barbel 2 kg di tiap tangan."
+              },
+              {
+                "latihan": "Pike push-up",
+                "set": 2,
+                "repetisi_atau_waktu": "8",
+                "catatan": null,
+                "otot_target": "Bahu (deltoid), triceps, dada atas",
+                "cara_melakukan": [
+                  "Posisi V terbalik: pinggul tinggi, kaki agak dekat tangan.",
+                  "Tekuk siku, turunkan kepala ke arah lantai di antara tangan.",
+                  "Dorong kembali ke posisi awal."
+                ],
+                "tips_form": "Punggung lurus, gerakan lambat, pandangan ke arah kaki/lantai depan.",
+                "kesalahan_umum": "Kepala jatuh ke depan tanpa kontrol, siku terlalu melebar, kaki terlalu jauh sehingga jadi push-up biasa.",
+                "versi_lebih_mudah": "Kurangi kedalaman gerakan atau lakukan dengan pinggul lebih tinggi.",
+                "versi_lebih_sulit": "Kaki ditinggikan di kursi (setelah semua set 3x10 terasa mudah)."
+              },
+              {
+                "latihan": "Dead bug",
+                "set": 3,
+                "repetisi_atau_waktu": "10 / sisi",
+                "catatan": null,
+                "otot_target": "Core dalam (transversus abdominis), perut, stabilitas punggung bawah",
+                "cara_melakukan": [
+                  "Telentang, lengan lurus ke atas, lutut ditekuk 90° di atas pinggul.",
+                  "Turunkan lengan kanan dan kaki kiri perlahan mendekati lantai.",
+                  "Kembali ke awal, ganti sisi."
+                ],
+                "tips_form": "Punggung bawah tetap menempel lantai; hembus napas saat menurunkan.",
+                "kesalahan_umum": "Punggung bawah melengkung, gerakan terlalu cepat.",
+                "versi_lebih_mudah": "Gerakkan kaki saja atau lengan saja.",
+                "versi_lebih_sulit": "Pegang barbel 2 kg di tangan atau perlambat gerakan."
+              },
+              {
+                "latihan": "Plank",
+                "set": 2,
+                "repetisi_atau_waktu": "45 detik",
+                "catatan": null,
+                "otot_target": "Seluruh core, bahu, bokong",
+                "cara_melakukan": [
+                  "Bertumpu pada lengan bawah dan ujung kaki.",
+                  "Badan lurus dari kepala sampai tumit.",
+                  "Tahan sambil bernapas normal."
+                ],
+                "tips_form": "Kencangkan perut & bokong; siku tepat di bawah bahu; leher netral.",
+                "kesalahan_umum": "Pinggul terlalu naik/turun, menahan napas.",
+                "versi_lebih_mudah": "Plank di lutut atau durasi lebih pendek.",
+                "versi_lebih_sulit": "Tambah 5-10 detik per minggu, atau plank dengan angkat satu kaki bergantian."
+              }
+            ]
+          }
+        ],
+        "catatan": "Tidak perlu sampai gagal/failure.",
+        "intensitas": "Sedang (RPE 5-7)",
+        "otot_utama": "Kaki, kardio, tubuh atas, core",
+        "tujuan": "Latihan utama pekan ini (lari + calisthenics).",
+        "target_progres": "Tambah 1-2 rep per set atau 2 menit jogging bertahap.",
+        "tanda_berhenti": "Pusing, sesak berat, nyeri tajam. Jangan latihan sampai failure.",
+        "alat": "Sepatu, matras, botol air.",
+        "estimasi_kalori_terbakar_kkal": {
+          "min": 220,
+          "maks": 310
+        },
+        "catatan_kalori_olahraga": "Perkiraan kasar (±30%), dihitung dari berat 42 kg dan durasi latihan; jauh lebih kecil daripada asupan makan harian, jadi makan cukup tetap prioritas."
+      },
+      "pola_makan": [
+        {
+          "waktu": "06.30-07.30 (setelah workout)",
+          "menu": "SARAPAN BESAR: nasi + 3 telur/ayam + tempe + sayur + susu + buah",
+          "tujuan": "Mengganti energi setelah latihan utama dan mendukung penambahan massa.",
+          "rincian_porsi": "Nasi 1,5 piring ±390 kkal; 3 telur ±225; tempe ±100; sayur ±50; susu ±135; buah ±60",
+          "estimasi_kalori_kkal": {
+            "min": 800,
+            "maks": 950
+          },
+          "estimasi_protein_g": {
+            "min": 38,
+            "maks": 48
+          }
+        },
+        {
+          "waktu": "Siang (12.00-13.00)",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur + buah",
+          "tujuan": "Makan utama seimbang.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam 1 potong sedang ±200-250; tahu/tempe ±80-100; sayur ±40-50; buah ±50-70",
+          "estimasi_kalori_kkal": {
+            "min": 630,
+            "maks": 730
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 40
+          }
+        },
+        {
+          "waktu": "Sore (15.30-16.00)",
+          "menu": "Roti + selai kacang + susu / pisang + kacang",
+          "tujuan": "Snack sore; sesuaikan rasa lapar.",
+          "rincian_porsi": "Roti 2 lembar ±140-160; selai kacang 2 sdm ±180-200; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 440,
+            "maks": 510
+          },
+          "estimasi_protein_g": {
+            "min": 14,
+            "maks": 20
+          }
+        },
+        {
+          "waktu": "Malam (18.30-19.00)",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur",
+          "tujuan": "Recovery dan makan malam.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam/ikan/telur ±150-220; tahu/tempe ±80-100; sayur ±40-50",
+          "estimasi_kalori_kkal": {
+            "min": 530,
+            "maks": 630
+          },
+          "estimasi_protein_g": {
+            "min": 28,
+            "maks": 36
+          }
+        },
+        {
+          "waktu": "Jika lapar",
+          "menu": "Susu, buah, roti, yogurt, atau snack bergizi",
+          "tujuan": "Jangan sengaja menahan lapar.",
+          "rincian_porsi": "Tidak dihitung dalam total; ±100-200 kkal per snack kecil",
+          "estimasi_kalori_kkal": {
+            "min": 100,
+            "maks": 200
+          },
+          "estimasi_protein_g": {
+            "min": 3,
+            "maks": 8
+          }
+        }
+      ],
+      "ringkasan_energi": {
+        "total_makan_utama_kkal": {
+          "min": 2400,
+          "maks": 2820
+        },
+        "total_protein_g": {
+          "min": 110,
+          "maks": 144
+        },
+        "kalori_olahraga_kkal": {
+          "min": 220,
+          "maks": 310
+        },
+        "catatan": "Ambil sisi bawah jika sudah kenyang; ambil sisi atas atau tambah snack jika berat badan tidak naik."
+      },
+      "catatan_khusus": [
+        "Hari latihan utama, tapi tetap tidak sampai failure.",
+        "Sarapan besar wajib setelah latihan; ini bagian dari target menambah massa tubuh.",
+        "Jangan begadang Jumat malam; batas tidur tetap 22.00.",
+        "Sisa hari bebas (free time / project); tidak perlu latihan tambahan."
+      ],
+      "catatan": "Karena tidak ada PKL, hari ini boleh sedikit lebih santai dan durasi latihan sedikit lebih panjang."
+    },
+    {
+      "hari": "Minggu",
+      "tipe_hari": "Libur PKL",
+      "fokus": "Full Rest",
+      "pkl": "Libur",
+      "jadwal": [
+        {
+          "waktu": "05.00",
+          "kegiatan": "Bangun",
+          "detail": "Bangun tetap 05.00 agar ritme tidur terjaga; Subuh."
+        },
+        {
+          "waktu": "Pagi-sore",
+          "kegiatan": "Aktivitas bebas",
+          "detail": "Jalan santai, stretching ringan, main, gaming, project, quality time, meal prep, tidur cukup."
+        },
+        {
+          "waktu": "Sore-malam",
+          "kegiatan": "Persiapan minggu depan",
+          "detail": "Siapkan pakaian, bekal, tas, jadwal PKL."
+        },
+        {
+          "waktu": "21.00-22.00",
+          "kegiatan": "Wind-down -> tidur",
+          "detail": "Target tidur 21.00-21.30; batas maksimal 22.00."
+        }
+      ],
+      "workout": {
+        "nama": "Full Rest",
+        "durasi": null,
+        "pemanasan": null,
+        "istirahat_antar_set": null,
+        "latihan": [],
+        "catatan": "Tidak ada kewajiban workout. Boleh jalan santai atau stretching ringan.",
+        "intensitas": "Istirahat",
+        "otot_utama": "-",
+        "tujuan": "Pemulihan total dan persiapan minggu depan.",
+        "target_progres": "-",
+        "tanda_berhenti": "-",
+        "alat": "-",
+        "estimasi_kalori_terbakar_kkal": {
+          "min": 0,
+          "maks": 100
+        },
+        "catatan_kalori_olahraga": "Perkiraan kasar (±30%), dihitung dari berat 42 kg dan durasi latihan; jauh lebih kecil daripada asupan makan harian, jadi makan cukup tetap prioritas."
+      },
+      "pola_makan": [
+        {
+          "waktu": "Pagi (07.00-08.00)",
+          "menu": "Nasi + 2 telur + tempe + sayur + susu / buah",
+          "tujuan": "Sarapan padat energi dan protein.",
+          "rincian_porsi": "Nasi 1 piring (±200 g) ±260 kkal; 2 telur ±150; tempe 2 potong ±100; sayur ±40; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 600,
+            "maks": 720
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 38
+          }
+        },
+        {
+          "waktu": "Snack pagi (10.00)",
+          "menu": "Pisang + roti + susu / yogurt",
+          "tujuan": "Snack agar energi tidak drop saat PKL.",
+          "rincian_porsi": "Pisang 1 ±90-100 kkal; roti tawar 2 lembar ±140-160; susu/yogurt 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 320,
+            "maks": 410
+          },
+          "estimasi_protein_g": {
+            "min": 10,
+            "maks": 15
+          }
+        },
+        {
+          "waktu": "Siang (12.00-13.00)",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur + buah",
+          "tujuan": "Makan utama seimbang.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam 1 potong sedang ±200-250; tahu/tempe ±80-100; sayur ±40-50; buah ±50-70",
+          "estimasi_kalori_kkal": {
+            "min": 630,
+            "maks": 730
+          },
+          "estimasi_protein_g": {
+            "min": 30,
+            "maks": 40
+          }
+        },
+        {
+          "waktu": "15.30-16.00",
+          "menu": "Roti + selai kacang + susu / pisang + kacang",
+          "tujuan": "Snack sore; sesuaikan rasa lapar.",
+          "rincian_porsi": "Roti 2 lembar ±140-160; selai kacang 2 sdm ±180-200; susu 1 gelas ±120-150",
+          "estimasi_kalori_kkal": {
+            "min": 440,
+            "maks": 510
+          },
+          "estimasi_protein_g": {
+            "min": 14,
+            "maks": 20
+          }
+        },
+        {
+          "waktu": "18.30-19.00",
+          "menu": "Nasi + ayam/ikan/telur + tahu/tempe + sayur",
+          "tujuan": "Recovery dan makan malam.",
+          "rincian_porsi": "Nasi ±260 kkal; ayam/ikan/telur ±150-220; tahu/tempe ±80-100; sayur ±40-50",
+          "estimasi_kalori_kkal": {
+            "min": 530,
+            "maks": 630
+          },
+          "estimasi_protein_g": {
+            "min": 28,
+            "maks": 36
+          }
+        },
+        {
+          "waktu": "Jika lapar",
+          "menu": "Susu, buah, roti, yogurt, atau snack bergizi",
+          "tujuan": "Jangan sengaja menahan lapar.",
+          "rincian_porsi": "Tidak dihitung dalam total; ±100-200 kkal per snack kecil",
+          "estimasi_kalori_kkal": {
+            "min": 100,
+            "maks": 200
+          },
+          "estimasi_protein_g": {
+            "min": 3,
+            "maks": 8
+          }
+        }
+      ],
+      "ringkasan_energi": {
+        "total_makan_utama_kkal": {
+          "min": 2520,
+          "maks": 3000
+        },
+        "total_protein_g": {
+          "min": 112,
+          "maks": 149
+        },
+        "kalori_olahraga_kkal": {
+          "min": 0,
+          "maks": 100
+        },
+        "catatan": "Ambil sisi bawah jika sudah kenyang; ambil sisi atas atau tambah snack jika berat badan tidak naik."
+      },
+      "catatan_khusus": [
+        "Full rest: tidak ada kewajiban workout, tapi bukan berarti seharian rebahan.",
+        "Timbang berat badan 1x seminggu (pagi, sebelum makan, kondisi sama) untuk memantau progres; tidak perlu tiap hari.",
+        "Meal prep sederhana untuk PKL: siapkan bekal, snack, dan air minum.",
+        "Persiapan minggu depan (pakaian, tas, jadwal) dan tetap tidur 21.00-21.30."
+      ],
+      "catatan": "Bukan berarti seharian rebahan; yang penting tidak ada kewajiban workout."
+    }
+  ],
+  "info_kalori_dan_nutrisi": {
+    "catatan": "Semua angka adalah PERKIRAAN kasar berdasarkan porsi umum makanan Indonesia; berbeda tiap porsi/merek/cara masak (misal digoreng vs direbus).",
+    "estimasi_bmr_kkal": 1340,
+    "dasar_hitung": "Mifflin-St Jeor untuk laki-laki 17 th, 42 kg, 160 cm: 10x42 + 6,25x160 - 5x17 + 5 ≈ 1.340 kkal.",
+    "estimasi_kebutuhan_mempertahankan_berat_kkal": {
+      "min": 2000,
+      "maks": 2300
+    },
+    "target_menambah_berat_kkal": {
+      "min": 2400,
+      "maks": 2800
+    },
+    "target_protein_g": {
+      "min": 80,
+      "maks": 110
+    },
+    "catatan_protein": "Sekitar 1,6-2,4 g/kg berat badan; rencana makan di jadwal ini sudah berada di kisaran atau sedikit di atasnya dari makanan biasa.",
+    "air_minum_liter": {
+      "min": 2,
+      "maks": 2.5
+    },
+    "status_bmi": "BMI ±16,4 (kategori kurus untuk dewasa; untuk usia 17 tahun dinilai dengan kurva pertumbuhan). Ini alasan penambahan asupan dan pemantauan penting.",
+    "pemantauan": [
+      "Timbang berat badan 1x seminggu (Minggu pagi).",
+      "Target wajar: naik ±0,25-0,5 kg per minggu.",
+      "Jika 3-4 minggu tidak naik, tambah 1 snack (mis. roti + selai kacang + susu) atau porsi nasi.",
+      "Jika berat turun, sering lemas/pusing, atau sulit naik berat, konsultasi dengan orang tua/wali dan tenaga kesehatan/ahli gizi."
+    ],
+    "peringatan": "Ini bukan pengganti saran dokter/ahli gizi; dasar perhitungan hanya estimasi. Jangan membatasi makan demi 'membakar kalori'."
+  }
+}

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <!-- Background paper white -->
+  <rect width="1080" height="1920" fill="#ffffff"/>
+  <!-- Screentone dots band (subtle) -->
+  <g fill="#09090b" opacity="0.18">
+    <circle cx="120" cy="240" r="6"/><circle cx="180" cy="240" r="6"/><circle cx="240" cy="240" r="6"/>
+    <circle cx="840" cy="1680" r="6"/><circle cx="900" cy="1680" r="6"/><circle cx="960" cy="1680" r="6"/>
+    <circle cx="120" cy="1740" r="6"/><circle cx="180" cy="1740" r="6"/><circle cx="240" cy="1740" r="6"/>
+  </g>
+  <!-- Centered logo: clock + bolt mark -->
+  <g transform="translate(540 860)">
+    <!-- Outer thick frame -->
+    <rect x="-300" y="-300" width="600" height="600" fill="none" stroke="#09090b" stroke-width="18"/>
+    <!-- Clock body -->
+    <circle cx="0" cy="0" r="196" fill="#ffffff" stroke="#09090b" stroke-width="16"/>
+    <!-- Tick marks -->
+    <g stroke="#09090b" stroke-width="14" stroke-linecap="round">
+      <line x1="0" y1="-164" x2="0" y2="-132"/>
+      <line x1="164" y1="0" x2="132" y2="0"/>
+      <line x1="0" y1="164" x2="0" y2="132"/>
+      <line x1="-164" y1="0" x2="-132" y2="0"/>
+    </g>
+    <!-- Hands -->
+    <line x1="0" y1="0" x2="0" y2="-112" stroke="#09090b" stroke-width="22" stroke-linecap="round"/>
+    <line x1="0" y1="0" x2="104" y2="-52" stroke="#09090b" stroke-width="18" stroke-linecap="round"/>
+    <circle cx="0" cy="0" r="24" fill="#09090b"/>
+    <!-- Speed lines -->
+    <g stroke="#09090b" stroke-width="12" stroke-linecap="round" opacity="0.9">
+      <line x1="238" y1="-160" x2="330" y2="-210"/>
+      <line x1="210" y1="-96" x2="318" y2="-122"/>
+      <line x1="180" y1="-30" x2="292" y2="-26"/>
+    </g>
+  </g>
+  <!-- Wordmark -->
+  <text x="540" y="1280" font-family="Impact, 'Arial Black', sans-serif" font-size="96" font-weight="900" fill="#09090b" text-anchor="middle" letter-spacing="8">ROUTINEZIE</text>
+  <!-- Tagline -->
+  <text x="540" y="1364" font-family="monospace" font-size="34" fill="#09090b" text-anchor="middle" opacity="0.7">MANGA ROUTINE BUILDER</text>
+  <!-- Bottom frame accent -->
+  <rect x="180" y="1540" width="720" height="14" fill="#09090b"/>
+</svg>

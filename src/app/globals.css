@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+/* Manga Neubrutalism Design Tokens (design.md §3.1–3.3) */
+@theme {
+  --font-display: var(--font-anton), Impact, "Arial Black", sans-serif;
+  --font-mono: var(--font-space-mono), ui-monospace, monospace;
+  --font-sans:
+    var(--font-ibm-plex), system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+
+  --color-ink: #09090b;
+  --color-paper: #ffffff;
+  --color-ash: #71717a;
+  --color-canvas: #f4f4f5;
+}
+
+@layer base {
+  :root {
+    --kuro: #09090b;
+    --shiro: #ffffff;
+    --haiiro: #71717a;
+    --border-width: 2px;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: #f4f4f5;
+    color: var(--kuro);
+    font-family:
+      var(--font-sans),
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      sans-serif;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    /* Safe area: status bar & gesture bar (design.md §9) */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* A11y: support system font scale up to 130% without breaking layout */
+  html {
+    font-size: 100%;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--kuro);
+    outline-offset: 2px;
+  }
+
+  /* Angka jam/tabular (design.md §3.2) */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Manga Neubrutalism Helper Utility Classes */
+.neo-box {
+  border: 2px solid var(--kuro);
+  box-shadow: 3px 3px 0px var(--kuro);
+}
+
+.neo-box-sm {
+  border: 2px solid var(--kuro);
+  box-shadow: 2px 2px 0px var(--kuro);
+}
+
+.neo-box-thick {
+  border: 3px solid var(--kuro);
+  box-shadow: 4px 4px 0px var(--kuro);
+}
+
+.neo-btn {
+  border: 2px solid var(--kuro);
+  box-shadow: 3px 3px 0px var(--kuro);
+  font-weight: 700;
+  transition:
+    transform 0.05s ease,
+    box-shadow 0.05s ease;
+  cursor: pointer;
+}
+
+.neo-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--kuro);
+}
+
+.neo-btn-black {
+  background-color: var(--kuro);
+  color: var(--shiro);
+  border: 2px solid var(--kuro);
+  box-shadow: 3px 3px 0px var(--haiiro);
+  font-weight: 700;
+  transition:
+    transform 0.05s ease,
+    box-shadow 0.05s ease;
+  cursor: pointer;
+}
+
+.neo-btn-black:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--haiiro);
+}
+
+/* Screentone patterns (design.md §3.4, CSS murni) */
+.tone-dots {
+  background-image: radial-gradient(var(--kuro) 1px, transparent 1.4px);
+  background-size: 6px 6px;
+}
+
+.tone-dots-lg {
+  background-image: radial-gradient(var(--kuro) 1.6px, transparent 2px);
+  background-size: 9px 9px;
+}
+
+.tone-hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--kuro) 0 1px,
+    transparent 1px 6px
+  );
+}
+
+.tone-speed {
+  background: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    var(--kuro) 0deg 1deg,
+    transparent 1deg 6deg
+  );
+}
+
+/* Reduced motion: respect system preference (design.md §9) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Touch target minimum (design.md §9 / a11y): allow dense rows but keep tap safe */
+button,
+[role="button"],
+a,
+input,
+select,
+summary {
+  touch-action: manipulation;
+}
+

@@ -1,0 +1,12 @@
+# Kredensial & keystore TIDAK boleh masuk git
+keystore.properties
+*.jks
+*.keystore
+
+# Build output
+build/
+.gradle/
+local.properties
+
+# Native build cache
+*.hprof
