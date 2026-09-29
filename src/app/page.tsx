@@ -7,9 +7,11 @@ import WorkoutModeModal from '@/components/WorkoutModeModal';
 import MealChecklist from '@/components/MealChecklist';
 import ProgressView from '@/components/ProgressView';
 import SettingsView from '@/components/SettingsView';
+import NotificationSettingsSection from '@/components/NotificationSettingsSection';
 import WeatherWidget from '@/components/WeatherWidget';
 import Balloon from '@/components/Balloon';
 import { createChatProvider, getChatProviderInfo } from '@/lib/providers/chat/providers';
+import { NotificationService } from '@/lib/notifications';
 import { ChatMsg } from '@/lib/providers/chat/types';
 import jadwalRaw from '@/data/jadwal_mingguan.json';
 
@@ -38,6 +40,20 @@ export default function RoutinePage() {
 
     updateTime();
     const interval = setInterval(updateTime, 30000);
+
+    // Segarkan notifikasi terjadwal saat aplikasi dibuka (AC T1.5: bertahan
+    // setelah restart perangkat — pending di level OS, jadwal di-replenish di sini)
+    (async () => {
+      try {
+        const s = await NotificationService.getSettings();
+        if (s.enabled) {
+          await NotificationService.reschedule((jadwalRaw as any)?.hari ?? [], s);
+        }
+      } catch (e) {
+        console.warn('Gagal menyegarkan notifikasi:', e);
+      }
+    })();
+
     return () => clearInterval(interval);
   }, []);
 
@@ -399,6 +415,7 @@ export default function RoutinePage() {
                 <SettingsIcon className="w-4 h-4 text-[#09090b]" /> PENGATURAN
               </h3>
               <SettingsView />
+              <NotificationSettingsSection />
             </section>
           )}
         </main>

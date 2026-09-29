@@ -3,6 +3,22 @@
 Semua perubahan penting pada RoutineZie akan didokumentasikan di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/), versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.0.2] — 2026-09-29
+
+### Added
+- **T1.5 Notifikasi Lokal** — penjadwalan penuh via `@capacitor/local-notifications`.
+  - Izin kontekstual (muncul saat user mengaktifkan).
+  - Jadwal terjadwal otomatis dari `jadwal_mingguan.json` (hanya item berwaktu).
+  - Persist di level OS → tetap muncul setelah restart perangkat.
+  - Offset menit (0/5/10/15/30 menit sebelum jadwal).
+  - Pilih per-pengingat di UI.
+  - Batas quota Android 12+ ditangani (`MAX_SCHEDULED_AHEAD = 40`), replenishment saat app dibuka.
+  - Panduan optimasi baterai di SettingsView.
+  - 13 unit test baru (total 56 test lulus).
+
+### Fixed
+- UI notifikasi diletakkan di tab Pengaturan di bawah SettingsView.
+
 ## [1.0.1] — 2026-09-29
 
 ### Fixed

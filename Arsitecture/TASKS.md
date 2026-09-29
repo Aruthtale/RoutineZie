@@ -22,7 +22,7 @@ Kerjakan **satu fase pada satu waktu**. Setiap tugas punya kriteria (AC = accept
 - T1.4 Tema mengikuti fase hari + pengaturan tema manual.
   - AC: wind-down = inversi; reduced-motion dihormati.
 - T1.5 **Notifikasi lokal** (izin kontekstual, pengingat bawaan, pengaturan per pengingat).
-  - AC: notifikasi muncul tepat waktu; tetap ada setelah restart perangkat; panduan optimasi baterai tersedia.
+  - AC: notifikasi muncul tepat waktu; tetap ada setelah restart perangkat; panduan optimasi baterai tersedia. ✅ **SELESAI v1.0.2**
 
 ## Fase 2 — Mode Workout
 - T2.1 Sesi workout terpandu: satu latihan per layar, set/repetisi, tombol "SET BERES".
