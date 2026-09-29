@@ -4,7 +4,7 @@ Tujuan: asisten tambahan yang membantu dalam lingkup aplikasi (latihan, jadwal, 
 
 ## 1. Arsitektur
 ```
-UI (Balloon) → ChatProvider (antarmuka) → [Firebase AI Logic | proxy sendiri] → model
+UI (Balloon) → createChatProvider() → [ProxyChatProvider | GeminiChatProvider | MockChatProvider] → model
 ```
 ```ts
 interface ChatProvider {
@@ -12,7 +12,19 @@ interface ChatProvider {
 }
 type ChatMsg = { role: 'user' | 'assistant'; text: string };
 ```
-- **Klien tidak memegang API key mentah.** Opsi: (a) Firebase AI Logic dengan App Check dan batas per pengguna; (b) proxy sendiri (Cloud Run/Functions) yang menyimpan key dan menerapkan rate limit.
+
+Provider dipilih otomatis oleh factory `createChatProvider()` di `src/lib/providers/chat/providers.ts`:
+
+| Prioritas | Env yang dibutuhkan | Kapan dipakai |
+|---|---|---|
+| 1. `ProxyChatProvider` | `NEXT_PUBLIC_CHAT_PROXY_ENDPOINT` | Produksi publik — key aman di server |
+| 2. `GeminiChatProvider` | `NEXT_PUBLIC_GEMINI_API_KEY` (+ opsional `NEXT_PUBLIC_GEMINI_MODEL`) | Aplikasi pribadi / testing — langsung ke Google Gemini REST |
+| 3. `MockChatProvider` | (tidak ada) | Offline / default — jawaban canned dari data lokal |
+
+UI menampilkan label status: "AI • Gemini" / "AI • Proxy" / "Mode Offline • Contoh Jawaban".
+
+- **Model default**: `gemini-2.5-flash` (cepat, murah, cocok chat sehari-hari). Override via `NEXT_PUBLIC_GEMINI_MODEL`.
+- **Klien tidak memegang API key mentah** pada produksi publik — gunakan proxy. Opsi direct-Gemini hanya untuk pemakaian pribadi karena mode static export membawa key di bundle.
 - Uji App Check di webview Capacitor lebih dulu; dukungannya bisa berbeda dari Android native murni.
 - Kuota tier gratis bisa kecil; **chat AI harus opsional**, dengan pesan jelas saat kuota habis/offline dan aplikasi tetap berfungsi.
 

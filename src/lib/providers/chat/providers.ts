@@ -87,48 +87,151 @@ export class ProxyChatProvider implements ChatProvider {
 }
 
 /**
- * FirebaseAIProvider - menggunakan Firebase AI Logic (Gemini API)
- * Pastikan @google/generative-ai terinstall di package.json
+ * GeminiChatProvider - memanggil Google Gemini API langsung (REST, tanpa SDK)
+ *
+ * Dipakai jika NEXT_PUBLIC_GEMINI_API_KEY tersedia di environment.
+ * Catatan: pada mode static export, key ini terbawa di bundle klien.
+ * Untuk produksi publik, gunakan ProxyChatProvider agar key aman di server.
+ *
+ * Catatan autentikasi: API key jenis ini hanya diterima via header
+ * `x-goog-api-key`, BUKAN query parameter `?key=` (mengembalikan 400).
  */
-export class FirebaseAIProvider implements ChatProvider {
-  private client: any; // Will be initialized in constructor
+export class GeminiChatProvider implements ChatProvider {
+  private apiKey: string;
+  private models: string[];      // urutan fallback: model utama dulu
+  private endpoint = 'https://generativelanguage.googleapis.com/v1beta';
 
-  constructor() {
-    // In real implementation, initialize Firebase SDK
-    // This is a stub for now
-    this.client = null;
+  constructor(apiKey: string, model = 'gemini-3.8-flash') {
+    this.apiKey = apiKey;
+    // Model utama + cadangan jika model utama overload (503) / tidak tersedia
+    this.models = [model];
+    for (const fallback of ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-flash-latest']) {
+      if (!this.models.includes(fallback)) this.models.push(fallback);
+    }
+  }
+
+  private buildContextText(context: ChatContext): string {
+    const c = context || ({} as ChatContext);
+    const hari = c.hariIni;
+    const lines: string[] = [];
+    if (hari) {
+      lines.push(`Hari: ${hari.hari ?? '-'} | tipe: ${hari.tipe_hari ?? '-'} | waktu sekarang: ${c.waktuSekarang ?? '-'}`);
+      if (Array.isArray(hari.jadwalSingkat) && hari.jadwalSingkat.length) {
+        lines.push('Jadwal singkat: ' + hari.jadwalSingkat.map(j => `${j.waktu} ${j.kegiatan}`).join('; '));
+      }
+      if (hari.workout?.latihan?.length) {
+        lines.push('Workout hari ini: ' + hari.workout.latihan
+          .map(l => `${l.latihan}${l.set ? ` ${l.set}x` : ''} ${l.repetisi_atau_waktu ?? ''}`.trim())
+          .join('; '));
+      }
+      if (Array.isArray(hari.pola_makan) && hari.pola_makan.length) {
+        lines.push('Pola makan: ' + hari.pola_makan.map(m => `${m.waktu}: ${m.menu}`).join('; '));
+      }
+    }
+    if (c.aturanTidur) {
+      lines.push(`Aturan tidur: bangun ${c.aturanTidur.bangun}, target ${c.aturanTidur.target}, batas ${c.aturanTidur.batas}`);
+    }
+    if (c.usia) lines.push(`Usia pengguna: ${c.usia}`);
+    return lines.join('\n');
   }
 
   async send(input: { messages: ChatMsg[]; context: ChatContext; signal?: AbortSignal }): Promise<string> {
-    // Check if Firebase is available
-    if (!this.client) {
-      return 'Chat AI belum aktif. Hubungi administrator untuk aktivasi.';
-    }
+    // Pangkas riwayat ke 10 pesan terakhir (batas teknis)
+    const history = (input.messages || []).slice(-10);
 
-    try {
-      // Convert context to the expected format for Firebase
-      const contextPayload = {
-        ...input.context,
-        // Add any additional required fields for Firebase
-      };
+    const contents = history.map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.text }],
+    }));
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    const systemText = `${SYSTEM_PROMPT}\n\nKONTEKS PENGGUNA (jangan mengarang data di luar ini):\n${this.buildContextText(input.context)}`;
 
-      return 'Ini adalah respons dari asisten AI. Aku akan membantu dengan hal-hal yang kamu butuhkan.';
-    } catch (error) {
-      console.error('Firebase AI call failed:', error);
-      return 'Maaf, terjadi error saat mengakses layanan AI. Coba lagi atau gunakan mode offline.';
-    }
-  }
-
-  async getQuota(): Promise<ChatQuota | null> {
-    // In real implementation, this would fetch quota from Firebase
-    // For now, return a mock quota
-    return {
-      remaining: 95,
-      limit: 100,
-      resetAt: '2026-09-29T00:00:00Z',
+    const body = {
+      systemInstruction: { parts: [{ text: systemText }] },
+      contents,
+      generationConfig: {
+        maxOutputTokens: 1024,
+        temperature: 0.7,
+        topP: 0.95,
+      },
     };
+
+    let lastErr: Error | null = null;
+    for (const model of this.models) {
+      try {
+        const res = await fetch(
+          `${this.endpoint}/models/${model}:generateContent`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              // WAJIB pakai header; query param ?key= ditolak (400) untuk key jenis ini
+              'x-goog-api-key': this.apiKey,
+            },
+            body: JSON.stringify(body),
+            signal: input.signal,
+          }
+        );
+
+        if (res.status === 429 || res.status === 503) {
+          // overload / rate limit → coba model cadangan
+          lastErr = new Error(`Gemini API ${res.status} (${model})`);
+          continue;
+        }
+
+        if (!res.ok) {
+          let detail = '';
+          try {
+            const err = await res.json();
+            detail = err?.error?.message || '';
+          } catch { /* abaikan */ }
+          throw new Error(`Gemini API ${res.status}: ${detail || res.statusText}`);
+        }
+
+        const data = await res.json();
+        const parts = data?.candidates?.[0]?.content?.parts;
+        if (!parts || !parts.length) {
+          const blocked = data?.promptFeedback?.blockReason;
+          throw new Error(blocked ? `Diblokir: ${blocked}` : 'Respons kosong dari model');
+        }
+
+        return parts.map((p: any) => p.text || '').join('').trim() || 'Maaf, aku tidak bisa membalas sekarang.';
+      } catch (e) {
+        // Abort dari user jangan ditelan
+        if (e instanceof Error && e.name === 'AbortError') throw e;
+        lastErr = e instanceof Error ? e : new Error(String(e));
+        // lanjut ke model cadangan berikutnya
+      }
+    }
+
+    throw lastErr ?? new Error('Semua model Gemini gagal');
   }
+}
+
+/**
+ * Factory: pilih provider otomatis berdasarkan environment.
+ * Prioritas:
+ *   1. ProxyChatProvider  (NEXT_PUBLIC_CHAT_PROXY_ENDPOINT) — paling aman, key di server
+ *   2. GeminiChatProvider (NEXT_PUBLIC_GEMINI_API_KEY)       — langsung ke Gemini
+ *   3. MockChatProvider   (fallback)                         — offline / canned
+ */
+export function createChatProvider(): ChatProvider {
+  if (typeof window === 'undefined') return new MockChatProvider();
+
+  const proxy = process.env.NEXT_PUBLIC_CHAT_PROXY_ENDPOINT;
+  const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+  const geminiModel = process.env.NEXT_PUBLIC_GEMINI_MODEL || 'gemini-3.8-flash';
+
+  if (proxy) return new ProxyChatProvider(proxy);
+  if (geminiKey) return new GeminiChatProvider(geminiKey, geminiModel);
+  return new MockChatProvider();
+}
+
+export function getChatProviderInfo(): { name: string; active: boolean } {
+  if (typeof window === 'undefined') return { name: 'mock', active: false };
+  const proxy = process.env.NEXT_PUBLIC_CHAT_PROXY_ENDPOINT;
+  const geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+  if (proxy) return { name: 'proxy', active: true };
+  if (geminiKey) return { name: 'gemini', active: true };
+  return { name: 'mock', active: false };
 }

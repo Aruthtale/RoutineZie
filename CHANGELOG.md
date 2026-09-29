@@ -3,6 +3,22 @@
 Semua perubahan penting pada RoutineZie akan didokumentasikan di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/), versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.0.1] — 2026-09-29
+
+### Fixed
+- **Asisten AI tidak berfungsi** — `page.tsx` hardcode `MockChatProvider` sehingga selalu membalas dengan jawaban canned. Sekarang memakai factory `createChatProvider()` yang memilih provider otomatis.
+- Autentikasi Gemini: API key hanya diterima via header `x-goog-api-key`; query param `?key=` ditolak (HTTP 400).
+
+### Added
+- `GeminiChatProvider` baru — memanggil Google Gemini REST API langsung (tanpa SDK tambahan).
+- Factory `createChatProvider()` + `getChatProviderInfo()`: prioritas proxy → Gemini → mock.
+- Fallback model otomatis: `gemini-3.8-flash` → `gemini-3.6-flash` → `gemini-3.5-flash` → `gemini-flash-latest` (saat 503/429).
+- Label status di UI: "AI • Gemini" / "AI • Proxy" / "Mode Offline • Contoh Jawaban".
+- Error handling spesifik: kuota habis (429), key tidak valid (401/403), service bermasalah.
+- Riwayat chat (10 pesan terakhir) ikut dikirim ke model untuk percakapan yang kontekstual.
+- Env baru: `NEXT_PUBLIC_GEMINI_API_KEY`, `NEXT_PUBLIC_GEMINI_MODEL`.
+- 5 unit test baru untuk factory & builder konteks (total 43 test).
+
 ## [1.0.0] — 2026-09-29
 
 Rilis perdana. Aplikasi manajemen rutinitas harian & workout untuk Zenn (17 tahun, Bahasa Indonesia) dengan gaya manga neubrutalism.

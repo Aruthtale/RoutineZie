@@ -53,3 +53,8 @@ next-env.d.ts
 *.jks
 *.keystore
 android/keystore.properties
+
+# Output build web hasil `cap sync` (generated, jangan di-commit).
+# Catatan: NEXT_PUBLIC_* env di-inline ke bundle saat build, sehingga folder
+# ini berisi kredensial. Rotasi key jika pernah ter-push keluar.
+android/app/src/main/assets/public/

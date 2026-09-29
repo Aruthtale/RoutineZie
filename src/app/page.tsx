@@ -9,8 +9,7 @@ import ProgressView from '@/components/ProgressView';
 import SettingsView from '@/components/SettingsView';
 import WeatherWidget from '@/components/WeatherWidget';
 import Balloon from '@/components/Balloon';
-import { MockChatProvider } from '@/lib/providers/chat/providers';
-import { SYSTEM_PROMPT } from '@/lib/providers/chat/guardrails';
+import { createChatProvider, getChatProviderInfo } from '@/lib/providers/chat/providers';
 import { ChatMsg } from '@/lib/providers/chat/types';
 import jadwalRaw from '@/data/jadwal_mingguan.json';
 
@@ -60,13 +59,15 @@ export default function RoutinePage() {
   const handleChatSend = async (text: string) => {
     setChatLoading(true);
     
-    const userMsg: ChatMsg = { role: 'user', text };
+    const userMsg: ChatMsg = { role: 'user', text, timestamp: new Date().toISOString() };
+    // Kumpulkan riwayat SEBELUM userMsg agar ikut terkirim (provider pangkas 10 terakhir)
+    const prevMessages = chatMessages;
     setChatMessages(prev => [...prev, userMsg]);
     
     try {
-      const provider = new MockChatProvider();
-      const response = await provider.send({
-        messages: [userMsg],
+      const provider = createChatProvider();
+      const raw = await provider.send({
+        messages: [...prevMessages, userMsg],
         context: {
           hariIni: {
             hari: selectedDay,
@@ -81,11 +82,30 @@ export default function RoutinePage() {
           waktuSekarang: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
         },
       });
+
+      // Normalisasi: provider dapat mengembalikan string atau AsyncIterable (stream)
+      let response: string;
+      if (typeof raw === 'string') {
+        response = raw;
+      } else {
+        const chunks: string[] = [];
+        for await (const chunk of raw) chunks.push(chunk);
+        response = chunks.join('');
+      }
       
       const assistantMsg: ChatMsg = { role: 'assistant', text: response };
       setChatMessages(prev => [...prev, assistantMsg]);
     } catch (e) {
-      const errMsg: ChatMsg = { role: 'assistant', text: 'Maaf, terjadi kesalahan. Coba lagi nanti.' };
+      const errText = e instanceof Error ? e.message : 'terjadi kesalahan';
+      let text = 'Maaf, terjadi kesalahan. Coba lagi nanti.';
+      if (errText.includes('Gemini API 429')) {
+        text = 'Kuota harian AI sudah habis sekarang. Coba lagi besok ya — selain itu aplikasi tetap jalan normal.';
+      } else if (errText.includes('Gemini API 401') || errText.includes('403')) {
+        text = 'API key AI belum valid atau belum diaktifkan. Cek pengaturan atau pakai mode offline.';
+      } else if (errText.startsWith('Gemini API')) {
+        text = `Layanan AI bermasalah: ${errText}. Coba lagi sebentar lagi.`;
+      }
+      const errMsg: ChatMsg = { role: 'assistant', text };
       setChatMessages(prev => [...prev, errMsg]);
     } finally {
       setChatLoading(false);
@@ -329,7 +349,11 @@ export default function RoutinePage() {
                   <Bot className="w-5 h-5 text-[#ffffff]" />
                   <div>
                     <h3 className="text-sm font-black uppercase">Zenn Assistant</h3>
-                    <p className="text-[11px] font-mono text-[#ffffff]/60">AI — Asisten Rutinitasmu</p>
+                    <p className="text-[11px] font-mono text-[#ffffff]/60">
+                      {getChatProviderInfo().active
+                        ? `AI • ${getChatProviderInfo().name === 'gemini' ? 'Gemini' : 'Proxy'} • Asisten Rutinitasmu`
+                        : 'Mode Offline • Contoh Jawaban'}
+                    </p>
                   </div>
                 </div>
                 <p className="text-[11px] font-medium text-[#ffffff]/70 leading-relaxed">
