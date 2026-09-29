@@ -57,6 +57,17 @@ export interface AppSettings {
   reminders: Record<string, { enabled: boolean; time?: string }>;
   location?: { lat: number; lon: number; precision: 'coarse' };
   aiEnabled: boolean;
+  /**
+   * T8.3 — Override profil lokal. Menimpa nilai JSON asal TANPA mengubah file
+   * sumber, agar pengguna bisa update tinggi/berat/kemampuan sendiri.
+   */
+  profileOverride?: {
+    tinggi_cm?: number;
+    berat_kg?: number;
+    kemampuan_saat_ini?: Record<string, number | string>;
+  };
+  /** T8.3 — Override jam PKL (mis. "08.00-16.00"). */
+  pklOverride?: string;
   schemaVersion: 1;
 }
 

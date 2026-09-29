@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getScheduleForDay, getNowAndNext, parseWaktu, type NormalizedWorkout } from '@/lib/schedule/parser';
+import { getScheduleForDay, getNowAndNext, parseWaktu, getPulangMinutes, formatJam, findMentionedExercise, type NormalizedWorkout } from '@/lib/schedule/parser';
 import { Clock, Calendar, ChevronRight, Info, Dumbbell, X, Play, Utensils, ChartBar, Settings as SettingsIcon, Activity, MessageCircle, Send, Bot } from 'lucide-react';
 import WorkoutModeModal from '@/components/WorkoutModeModal';
 import MealChecklist from '@/components/MealChecklist';
@@ -130,6 +130,11 @@ export default function RoutinePage() {
       : `PKL ${dayData?.pkl || '08.00-17.00'}`;
   const isPKL = dayData?.pkl !== 'Libur';
 
+  // T8.5 — hitung mundur ke jam pulang PKL (hanya untuk hari PKL).
+  const pulangMinutes = getPulangMinutes(dayData?.pkl);
+  const isWorkDay = isToday && pulangMinutes !== null;
+  const sisaMenitPulang = isWorkDay ? pulangMinutes! - currentTimeMinutes : null;
+
   const handleChatSend = async (text: string) => {
     setChatLoading(true);
     
@@ -171,6 +176,14 @@ export default function RoutinePage() {
       }
       
       const assistantMsg: ChatMsg = { role: 'assistant', text: response };
+
+      // T8.4 — bila jawaban membahas gerakan dari jadwal hari ini, lampirkan
+      // kartu latihan (bukan teks polos).
+      const mentioned = findMentionedExercise(response, effectiveWorkout?.latihan ?? []);
+      if (mentioned) {
+        assistantMsg.attachment = { exerciseName: mentioned };
+      }
+
       setChatMessages(prev => [...prev, assistantMsg]);
     } catch (e) {
       const errText = e instanceof Error ? e.message : 'terjadi kesalahan';
@@ -407,6 +420,29 @@ export default function RoutinePage() {
                 </section>
               )}
 
+              {/* T8.5 — hitung mundur ke jam pulang PKL */}
+              {sisaMenitPulang !== null && (
+                <section className="neo-box bg-[#09090b] text-[#ffffff] p-3.5 space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-black uppercase tracking-wider text-[#ffffff]/70">
+                      {sisaMenitPulang > 0 ? 'PULANG PKL DALAM' : 'JAM PKL SUDAH LEWAT'}
+                    </span>
+                    <span className="font-mono font-black text-[#ffffff]/80">
+                      {formatJam(pulangMinutes!)}
+                    </span>
+                  </div>
+                  {sisaMenitPulang > 0 ? (
+                    <p className="text-3xl font-black font-mono tracking-tight">
+                      {Math.floor(sisaMenitPulang / 60)}j {sisaMenitPulang % 60}m
+                    </p>
+                  ) : (
+                    <p className="text-sm font-black uppercase">
+                      Waktunya istirahat hari ini 🎉
+                    </p>
+                  )}
+                </section>
+              )}
+
               {effectiveWorkout && (
                 <section className="neo-box bg-[#ffffff] p-4 space-y-3">
                   <div className="flex items-center justify-between">
@@ -588,6 +624,12 @@ export default function RoutinePage() {
                 messages={chatMessages}
                 onSend={handleChatSend}
                 isLoading={chatLoading}
+                exercises={effectiveWorkout?.latihan}
+                onOpenExercise={() => {
+                  // T8.4 — dari kartu di chat, buka Mode Workout langsung.
+                  setActiveTab('schedule');
+                  setIsWorkoutModeOpen(true);
+                }}
               />
 
               {/* System Prompt Info */}

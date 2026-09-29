@@ -22,6 +22,8 @@ export interface WorkoutSessionState {
   logs: ExerciseSessionLog[];
   startedAt: number;
   isFinished: boolean;
+  // T8.6 — rating energi pasca-workout (1–5, opsional). Boleh kosong.
+  energyRating?: 1 | 2 | 3 | 4 | 5;
 }
 
 const WORKOUT_STORAGE_KEY = 'routinezie_active_workout_session';

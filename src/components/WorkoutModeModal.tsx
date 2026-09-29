@@ -23,6 +23,7 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
   const [showCaraModal, setShowCaraModal] = useState<boolean>(false);
   const [restRemainingSec, setRestRemainingSec] = useState<number>(0);
   const [repsInputValue, setRepsInputValue] = useState<string>('');
+  const [energyRating, setEnergyRating] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
 
   const exercises = workoutData.latihan || [];
 
@@ -183,7 +184,7 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
               seconds: s.tipeTarget === 'durasi' && typeof s.actualDone === 'number' ? s.actualDone : undefined,
             })),
           })),
-          energyRating: 4,
+          energyRating: energyRating ?? undefined,
         });
       } catch (err) {
         console.error('Failed to save workout log to database:', err);
@@ -226,6 +227,33 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
               <p className="text-xs font-bold text-[#ffffff]/80 mt-2 leading-relaxed">
                 Tubuhmu berkembang bertahap hari ini. Disiplin adalah kunci!
               </p>
+            </div>
+
+            {/* T8.6 — rating energi pasca-workout. Opsional, boleh dilewati. */}
+            <div className="neo-box bg-[#ffffff] p-5 w-full space-y-3">
+              <h3 className="text-xs font-black uppercase tracking-wider text-[#09090b]">
+                Bagaimana energimu sekarang?
+              </h3>
+              <p className="text-[11px] font-bold text-[#09090b]/60">
+                Opsional — dipakai untuk lihat pola energi mingguan, bukan penilaian.
+              </p>
+              <div className="flex justify-between gap-2" role="radiogroup" aria-label="Rating energi 1 sampai 5">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setEnergyRating(n as 1 | 2 | 3 | 4 | 5)}
+                    role="radio"
+                    aria-checked={energyRating === n}
+                    aria-label={`Energi ${n}`}
+                    className={`neo-box-sm flex-1 h-12 flex items-center justify-center text-sm font-black transition-transform active:scale-95 ${
+                      energyRating === n ? 'bg-[#09090b] text-[#ffffff]' : 'bg-[#ffffff] text-[#09090b] hover:bg-[#09090b]/5'
+                    }`}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
             </div>
             <button onClick={handleFinishWorkout} className="neo-btn-black w-full py-4 text-sm uppercase tracking-wide">
               SIMPAN & KEMBALI

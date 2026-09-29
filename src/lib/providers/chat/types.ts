@@ -1,9 +1,19 @@
 export type ChatRole = 'user' | 'assistant';
 
+/**
+ * T8.4 — Lampiran kartu latihan. Bila asisten membahas sebuah gerakan dari
+ * jadwal, kartu interaktif ditampilkan alih-alih teks polos.
+ */
+export interface ChatExerciseAttachment {
+  /** Nama gerakan yang cocok dengan `NormalizedExercise.nama` di jadwal. */
+  exerciseName: string;
+}
+
 export interface ChatMsg {
   role: ChatRole;
   text: string;
   timestamp?: string;
+  attachment?: ChatExerciseAttachment;
 }
 
 export interface ChatContext {

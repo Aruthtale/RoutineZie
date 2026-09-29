@@ -60,6 +60,49 @@ export interface NowAndNextResult {
   currentPhase: 'pagi' | 'siang' | 'sore' | 'malam';
 }
 
+/**
+ * T8.5 — Ambil jam pulang PKL dari string seperti "08.00-17.00".
+ * Mengembalikan jumlah menit sejak tengah malam (mis. 17.00 → 1020), atau
+ * null jika tidak ada jam (mis. "Libur" atau format tak dikenal).
+ */
+export function getPulangMinutes(pkl: string | undefined): number | null {
+  if (!pkl || /libur/i.test(pkl)) return null;
+  const jam = pkl.split('-')[1]?.trim() ?? '';
+  const m = jam.match(/(\d{1,2})[.:](\d{2})/);
+  if (!m) return null;
+  const jamNum = parseInt(m[1], 10);
+  const menitNum = parseInt(m[2], 10);
+  return jamNum * 60 + menitNum;
+}
+
+/** Format menit menjadi "HH.MM" (mis. 1020 → "17.00"). */
+export function formatJam(totalMinutes: number): string {
+  const h = Math.floor(totalMinutes / 60) % 24;
+  const m = totalMinutes % 60;
+  return `${String(h).padStart(2, '0')}.${String(m).padStart(2, '0')}`;
+}
+
+/**
+ * T8.4 — Cari gerakan yang disebut dalam teks jawaban AI. Cocokkan nama gerakan
+ * (case-insensitive) terhadap daftar latihan hari ini. Mengembalikan nama asli
+ * dari data, atau null bila tidak ada yang cocok.
+ */
+export function findMentionedExercise(
+  text: string,
+  exercises: { nama: string }[]
+): string | null {
+  const lower = text.toLowerCase();
+  // Urutkan dari nama terpanjang agar "push up" tidak kalah oleh "up".
+  const sorted = [...exercises].sort((a, b) => b.nama.length - a.nama.length);
+  for (const ex of sorted) {
+    const nama = ex.nama.trim().toLowerCase();
+    if (nama.length >= 4 && lower.includes(nama)) {
+      return ex.nama;
+    }
+  }
+  return null;
+}
+
 export function getNowAndNext(jadwalList: any[], timeInMinutes: number): NowAndNextResult {
   const currentPhase = getPhaseFromTime(timeInMinutes);
   let nowItem: any | null = null;

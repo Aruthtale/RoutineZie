@@ -2,14 +2,29 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMsg } from '@/lib/providers/chat/types';
+import ExerciseCard from '@/components/ExerciseCard';
 
 interface BalloonProps {
   messages: ChatMsg[];
   onSend: (text: string) => Promise<void>;
   isLoading: boolean;
+  /** T8.4 — daftar latihan untuk deteksi mention + tombol mulai di kartu. */
+  exercises?: import('@/lib/schedule/parser').NormalizedExercise[];
+  onOpenExercise?: (exerciseName: string) => void;
 }
 
-export default function Balloon({ messages, onSend, isLoading }: BalloonProps) {
+/**
+ * T8.4 — Starter prompts: muncul saat belum ada obrolan. Bukan saran generik,
+ * diambil dari konteks nyata (jadwal hari ini) saat dipakai.
+ */
+const STARTER_PROMPTS = [
+  'Apa saja yang harus aku lakukan hari ini?',
+  'Bantuin aku dengan gerakan latihan hari ini',
+  'Ide menu makan tinggi protein untuk aku?',
+  'Aku capek banget hari ini, harus tetap latihan?',
+];
+
+export default function Balloon({ messages, onSend, isLoading, exercises, onOpenExercise }: BalloonProps) {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -52,6 +67,29 @@ export default function Balloon({ messages, onSend, isLoading }: BalloonProps) {
 
       {/* Messages container */}
       <div className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar">
+        {messages.length === 0 && (
+          <div className="text-center py-6 space-y-3 border-2 border-dashed border-[#09090b]/25 p-4">
+            <p className="text-xs font-black uppercase text-[#09090b]/70 tracking-wider">
+              Belum ada obrolan
+            </p>
+            <p className="text-[11px] font-medium text-[#09090b]/60 leading-relaxed">
+              Mulai dengan salah satu pertanyaan di bawah, atau ketik pertanyaanmu sendiri.
+            </p>
+            <div className="flex flex-col gap-2">
+              {STARTER_PROMPTS.map((p, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => onSend(p)}
+                  disabled={isLoading}
+                  className="neo-btn-sm bg-[#ffffff] text-[#09090b] px-3 py-2 text-[11px] font-bold text-left hover:bg-[#09090b] hover:text-[#ffffff] transition-colors disabled:opacity-50"
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         {messages.map((msg, index) => (
           <div
             key={index}
@@ -65,6 +103,22 @@ export default function Balloon({ messages, onSend, isLoading }: BalloonProps) {
               }`}
                         >
               {msg.text}
+
+              {/* T8.4 — kartu latihan jika jawaban membahas gerakan jadwal */}
+              {msg.attachment && exercises && onOpenExercise && (() => {
+                const ex = exercises.find((e) => e.nama === msg.attachment!.exerciseName);
+                if (!ex) return null;
+                return (
+                  <div className="mt-2 -mx-1 -mb-1.5">
+                    <ExerciseCard
+                      exercise={ex}
+                      compact
+                      onStart={() => onOpenExercise(ex.nama)}
+                    />
+                  </div>
+                );
+              })()}
+
               {msg.timestamp && (
                 <div className="text-[11px] opacity-70 mt-1 font-mono text-right">
                   {new Date(msg.timestamp).toLocaleTimeString('id-ID', {
