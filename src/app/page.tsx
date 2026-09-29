@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getScheduleForDay, getNowAndNext, parseWaktu } from '@/lib/schedule/parser';
+import { getScheduleForDay, getNowAndNext, parseWaktu, type NormalizedWorkout } from '@/lib/schedule/parser';
 import { Clock, Calendar, ChevronRight, Info, Dumbbell, X, Play, Utensils, ChartBar, Settings as SettingsIcon, Activity, MessageCircle, Send, Bot } from 'lucide-react';
 import WorkoutModeModal from '@/components/WorkoutModeModal';
 import MealChecklist from '@/components/MealChecklist';
@@ -14,6 +14,16 @@ import { createChatProvider, getChatProviderInfo } from '@/lib/providers/chat/pr
 import { NotificationService } from '@/lib/notifications';
 import { ChatMsg } from '@/lib/providers/chat/types';
 import jadwalRaw from '@/data/jadwal_mingguan.json';
+import {
+  type SubstituteReason,
+  type ScheduleOverride,
+  type Workout,
+  normalizeReplacement,
+  buildReplacement,
+  SUBSTITUTION_RULES,
+} from '@/lib/schedule/substitutions';
+import { dateToISO, DAY_NAMES, getEffectiveDay, applyOverride, clearOverride, getActiveNonExpiringOverrides } from '@/lib/schedule/effectiveDay';
+import { SubstitutionPanel, SubstitutionQuickButtons } from '@/components/SubstitutionPanel';
 
 const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
@@ -27,6 +37,9 @@ export default function RoutinePage() {
   const [activeTab, setActiveTab] = useState<Tab>('schedule');
   const [chatMessages, setChatMessages] = useState<ChatMsg[]>([]);
   const [chatLoading, setChatLoading] = useState<boolean>(false);
+  const [substitutionReason, setSubstitutionReason] = useState<SubstituteReason | null>(null);
+  const [pendingReplacement, setPendingReplacement] = useState<Workout | null>(null);
+  const [overrideApplied, setOverrideApplied] = useState<string | null>(null); // dateISO
 
   useEffect(() => {
     const dayIndex = new Date().getDay();
@@ -63,6 +76,51 @@ export default function RoutinePage() {
     currentTimeMinutes
   );
 
+  // T7.2 — hari efektif: override (jika ada) menjelang default JSON.
+  const todayISO = dateToISO(new Date());
+  const todayName = DAY_NAMES[new Date().getDay()];
+  const isToday = selectedDay === todayName;
+
+  const [activeOverride, setActiveOverride] = useState<ScheduleOverride | null>(null);
+  const [staleNonExpiring, setStaleNonExpiring] = useState<ScheduleOverride | null>(null);
+  useEffect(() => {
+    if (!isToday) {
+      setActiveOverride(null);
+      setStaleNonExpiring(null);
+      return;
+    }
+    let cancelled = false;
+    getEffectiveDay(todayISO)
+      .then((d) => {
+        if (!cancelled) setActiveOverride(d.override);
+      })
+      .catch((e) => console.warn('Gagal memuat override:', e));
+
+    // T7.5 — setiap pagi, pengguna yang punya override "berlaku terus" perlu
+    // ditanya apakah masih relevan. Bukan pengingat, hanya konfirmasi diam-diam
+    // saat aplikasi dibuka.
+    getActiveNonExpiringOverrides()
+      .then((list) => {
+        if (!cancelled) {
+          const hit = list.find((o) => o.dateISO !== todayISO) ?? null;
+          setStaleNonExpiring(hit);
+        }
+      })
+      .catch((e) => console.warn('Gagal memuat override non-expiring:', e));
+    return () => {
+      cancelled = true;
+    };
+  }, [isToday, todayISO]);
+
+  // Workout yang ditampilkan di seluruh layar Hari Ini. Jika ada override,
+  // inilah satu-satunya sumber kebenaran; jangan pakai dayData.normalizedWorkout
+  // untuk hari ini lagi.
+  const effectiveWorkout: NormalizedWorkout | null = isToday
+    ? activeOverride
+      ? normalizeReplacement(activeOverride.replacementWorkout)
+      : dayData?.normalizedWorkout ?? null
+    : dayData?.normalizedWorkout ?? null;
+
   const profil = (jadwalRaw as any)?.profil;
   const polaMakan = dayData?.pola_makan || [];
 
@@ -90,6 +148,9 @@ export default function RoutinePage() {
             tipe_hari: dayData?.tipe || 'biasa',
             fokus: 'Latihan',
             jadwalSingkat: dayData?.jadwal?.slice(0, 3)?.map((j: any) => ({ waktu: j.waktu, kegiatan: j.kegiatan })) || [],
+            // Catatan: context chat memakai bentuk raw (latihan/set/…), bukan
+            // NormalizedWorkout. Override akan ikut di Fase 8/9 saat chat
+            // membaca getEffectiveDay() sendiri.
             workout: dayData?.normalizedWorkout || { nama: '', latihan: [] },
             pola_makan: polaMakan,
           },
@@ -128,6 +189,47 @@ export default function RoutinePage() {
     }
   };
 
+  const handleSubstitutionSelect = (reason: SubstituteReason) => {
+    const raw = (jadwalRaw as any)?.hari?.find((h: any) => h.hari === selectedDay) ?? null;
+    const replacement = buildReplacement(reason, {
+      hari: selectedDay,
+      tipe: dayData?.tipe ?? 'biasa',
+      pkl: raw?.pkl ?? '',
+      workout: raw?.workout ?? null,
+    });
+    setSubstitutionReason(reason);
+    setPendingReplacement(replacement);
+  };
+
+  const handleAcceptReplacement = async () => {
+    if (!pendingReplacement || !substitutionReason) return;
+    await applyOverride({
+      dateISO: todayISO,
+      reason: substitutionReason,
+      source: 'quick_button',
+      // Setiap override dari tombol cepat hanya berlaku untuk hari ini;
+      // besok otomatis kembali normal (DATA_SCHEMA.md 7.3).
+      expiresAfterDate: true,
+      replacementWorkout: pendingReplacement,
+    });
+    setPendingReplacement(null);
+    setSubstitutionReason(null);
+    setOverrideApplied(todayISO);
+    getEffectiveDay(todayISO).then((d) => setActiveOverride(d.override));
+  };
+
+  const handleRejectReplacement = () => {
+    // Tidak ada aksi yang menghakimi — hanya tutup dan tetap pakai jadwal asli.
+    setPendingReplacement(null);
+    setSubstitutionReason(null);
+  };
+
+  const handleCancelOverride = async () => {
+    await clearOverride(todayISO);
+    setActiveOverride(null);
+    setOverrideApplied(null);
+  };
+
   const QUICK_ACTIONS = [
     { label: 'Jelaskan gerakan', action: 'explain' },
     { label: 'Sesuaikan workout', action: 'adjust' },
@@ -136,9 +238,15 @@ export default function RoutinePage() {
   ];
 
   const handleQuickAction = (action: string) => {
+    if (action === 'adjust') {
+      // Fase 7 — penyesuaian latihan sekarang 100% rule-based (bukan AI).
+      // Bawa pengguna ke layar Hari Ini yang berisi tombol cepat substitusi.
+      setSelectedDay(todayName);
+      setActiveTab('schedule');
+      return;
+    }
     const actionMessages: Record<string, string> = {
       explain: 'Jelaskan gerakan ini untuk hari ini!',
-      adjust: 'Aku pegal, sesuaikan workout hari ini',
       menu: 'Menu hari ini dari bahan yang ada',
       summary: 'Rangkum minggu ini',
     };
@@ -204,21 +312,62 @@ export default function RoutinePage() {
           {/* ====================== TAB: JADWAL ====================== */}
           {activeTab === 'schedule' && (
             <>
+              {/* T7.5 — override "berlaku terus" yang belum dikonfirmasi hari ini */}
+              {staleNonExpiring && (
+                <section className="neo-box bg-[#ffffff] p-3.5 space-y-2 border-[3px]">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-[#09090b]">
+                    ⏰ MASIH BERLAKU?
+                  </span>
+                  <p className="text-xs font-medium text-[#09090b]/80 leading-relaxed">
+                    Sejak{' '}
+                    <span className="font-mono font-black">{staleNonExpiring.dateISO}</span> latihan kamu
+                    diganti ({staleNonExpiring.reason.replace(/_/g, ' ')}). Mau lanjut diganti, atau
+                    kembali ke jadwal asli?
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={async () => {
+                        await clearOverride(staleNonExpiring.dateISO);
+                        setStaleNonExpiring(null);
+                        getEffectiveDay(todayISO).then((d) => setActiveOverride(d.override));
+                      }}
+                      className="flex-1 bg-[#09090b] text-[#ffffff] py-2 text-[11px] font-black uppercase border-[3px] border-[#09090b] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                    >
+                      Kembali Normal
+                    </button>
+                    <button
+                      onClick={() => setStaleNonExpiring(null)}
+                      className="flex-1 neo-box bg-[#ffffff] text-[#09090b] py-2 text-[11px] font-black uppercase active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                    >
+                      Lanjut Diganti
+                    </button>
+                  </div>
+                </section>
+              )}
               <div className="flex overflow-x-auto gap-2 pb-1 no-scrollbar -mx-1 px-1">
                 {DAYS.map((day) => {
                   const isSelected = day === selectedDay;
+                  // T7.4 — tandai hari ini jika sedang disubstitusi (strip hari
+                  // adalah satu-satunya tampilan "mingguan" yang ada saat ini).
+                  const isOverridden = day === todayName && !!activeOverride;
                   return (
                     <button
                       key={day}
                       onClick={() => setSelectedDay(day)}
                       aria-pressed={isSelected}
-                      className={`neo-btn-sm min-h-[40px] text-[11px] px-4 py-2 whitespace-nowrap transition-colors font-black ${
+                      className={`neo-btn-sm min-h-[40px] text-[11px] px-4 py-2 whitespace-nowrap transition-colors font-black relative ${
                         isSelected
                           ? 'bg-[#09090b] text-[#ffffff]'
                           : 'bg-[#ffffff] text-[#09090b] hover:bg-[#09090b]/5'
                       }`}
                     >
                       {day}
+                      {isOverridden && (
+                        <span
+                          aria-label="Hari ini diganti"
+                          className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-[#ff5c00] border-2 border-[#ffffff]"
+                        />
+                      )}
                     </button>
                   );
                 })}
@@ -258,7 +407,7 @@ export default function RoutinePage() {
                 </section>
               )}
 
-              {dayData?.normalizedWorkout && (
+              {effectiveWorkout && (
                 <section className="neo-box bg-[#ffffff] p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -270,17 +419,42 @@ export default function RoutinePage() {
                           LATIHAN HARI INI
                         </span>
                         <h3 className="text-base font-black uppercase text-[#09090b]">
-                          {dayData.normalizedWorkout.nama}
+                          {effectiveWorkout.nama}
                         </h3>
                       </div>
                     </div>
-                    {dayData.normalizedWorkout.durasi && (
+                    {effectiveWorkout.durasi && (
                       <span className="neo-box-sm bg-[#ffffff] text-xs font-mono font-black text-[#09090b] px-2 py-1">
-                        {dayData.normalizedWorkout.durasi}
+                        {effectiveWorkout.durasi}
                       </span>
                     )}
                   </div>
-                  {dayData.normalizedWorkout.latihan.length > 0 ? (
+
+                  {/* T7.4 — indikator pengganti */}
+                  {activeOverride && (
+                    <div className="border-2 border-[#09090b] bg-[#09090b]/5 p-2.5 space-y-1.5">
+                      <span className="text-[11px] font-black uppercase text-[#09090b]">
+                        ⚡ DIGANTI ({activeOverride.reason.replace(/_/g, ' ')})
+                      </span>
+                      <p className="text-[11px] font-medium text-[#09090b]/70">
+                        Jadwal asli:{' '}
+                        <span className="font-black line-through">
+                          {dayData?.normalizedWorkout?.nama ?? 'Istirahat'}
+                        </span>
+                        {activeOverride.expiresAfterDate
+                          ? ' — otomatis kembali besok.'
+                          : ' — berlaku terus sampai dibatalkan.'}
+                      </p>
+                      <button
+                        onClick={handleCancelOverride}
+                        className="neo-box-sm bg-[#ffffff] text-[#09090b] px-2.5 py-1 text-[11px] font-black uppercase hover:bg-[#09090b]/10 active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                      >
+                        Batalkan Pengganti
+                      </button>
+                    </div>
+                  )}
+
+                  {effectiveWorkout.latihan.length > 0 ? (
                     <button
                       onClick={() => setIsWorkoutModeOpen(true)}
                       className="neo-btn-black w-full py-3 text-xs uppercase font-black tracking-wide flex items-center justify-center gap-2"
@@ -291,6 +465,22 @@ export default function RoutinePage() {
                     <div className="p-2.5 bg-[#09090b]/5 border-2 border-dashed border-[#09090b] text-center">
                       <p className="text-xs font-bold text-[#09090b]">Hari Istirahat Penuh (Full Rest) — Nikmati waktu santai!</p>
                     </div>
+                  )}
+
+                  {/* T7.3 — tombol cepat & kartu usulan */}
+                  {isToday && !activeOverride && !pendingReplacement && effectiveWorkout.latihan.length > 0 && (
+                    <SubstitutionQuickButtons onSelect={handleSubstitutionSelect} />
+                  )}
+                  {pendingReplacement && substitutionReason && (
+                    <SubstitutionPanel
+                      proposal={{
+                        reason: substitutionReason as Exclude<SubstituteReason, 'lainnya'>,
+                        original: (jadwalRaw as any)?.hari?.find((h: any) => h.hari === selectedDay)?.workout ?? null,
+                        replacement: pendingReplacement,
+                      }}
+                      onAccept={handleAcceptReplacement}
+                      onReject={handleRejectReplacement}
+                    />
                   )}
                 </section>
               )}
@@ -449,10 +639,10 @@ export default function RoutinePage() {
         )}
 
         {/* Workout Mode Modal */}
-        {isWorkoutModeOpen && dayData?.normalizedWorkout && (
+        {isWorkoutModeOpen && effectiveWorkout && (
           <WorkoutModeModal
             dayName={selectedDay}
-            workoutData={dayData.normalizedWorkout}
+            workoutData={effectiveWorkout}
             onClose={() => setIsWorkoutModeOpen(false)}
           />
         )}

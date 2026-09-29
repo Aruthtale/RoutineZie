@@ -1,4 +1,4 @@
-import { db, WorkoutLog, WeightLog, SleepLog, MealCheck, AppSettings, ChatHistoryEntry } from './index';
+import { db, WorkoutLog, WeightLog, SleepLog, MealCheck, AppSettings, ChatHistoryEntry, ScheduleOverride } from './index';
 
 export class RoutineRepository {
   // --- Workout ---
@@ -110,6 +110,24 @@ export class RoutineRepository {
 
   static async clearChatHistory(): Promise<void> {
     await db.chatHistory.clear();
+  }
+
+  // --- Schedule Overrides (Fase 7) ---
+  static async saveOverride(override: ScheduleOverride): Promise<string> {
+    await db.scheduleOverrides.put(override);
+    return override.id;
+  }
+
+  static async getOverrideForDate(dateISO: string): Promise<ScheduleOverride | undefined> {
+    return await db.scheduleOverrides.where('dateISO').equals(dateISO).first();
+  }
+
+  static async removeOverride(dateISO: string): Promise<void> {
+    await db.scheduleOverrides.where('dateISO').equals(dateISO).delete();
+  }
+
+  static async listOverrides(): Promise<ScheduleOverride[]> {
+    return await db.scheduleOverrides.orderBy('dateISO').reverse().toArray();
   }
 
   // --- Settings ---

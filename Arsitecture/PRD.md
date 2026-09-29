@@ -29,6 +29,8 @@ Rutinitas padat dan terikat waktu; mudah terlewat tanpa pengingat kontekstual. P
 4. **Offline dulu**: fitur inti tanpa internet.
 5. **Tenang, bukan menghakimi**: tanpa bahasa gagal/bersalah.
 6. **Data milik pengguna**: minim pengiriman data ke pihak ketiga; transparan bila ada.
+7. **Jadwal fleksibel, bukan kaku**: hari yang tidak ideal (sakit, cedera, capek, hujan) punya jalan keluar yang aman, bukan dipaksa ikuti jadwal atau dilewati tanpa pengganti.
+8. **AI memilih, tidak mengarang**: untuk hal berdampak keselamatan (pengganti latihan), AI hanya memilih dari opsi yang sudah divalidasi manusia, tidak menyusun sendiri saat runtime.
 
 ## 7. Fitur
 ### MVP (Fase 1–3)
@@ -44,10 +46,16 @@ Rutinitas padat dan terikat waktu; mudah terlewat tanpa pengingat kontekstual. P
 ### Fase lanjut (4–6)
 - Cuaca + saran alternatif indoor
 - Chat AI dengan konteks jadwal + guardrail
-- Tes kemampuan 4 mingguan, saran progresi
 - Jam Subuh dinamis (offline, mis. library perhitungan jadwal sholat)
-- Ekspor ringkasan mingguan (PDF/gambar)
 - Sinkron/backup (Firebase), ekspor Google Calendar, Health Connect
+
+### Fase lanjut (7–9)
+- **Substitusi jadwal harian** (rule-based + via chat AI): mengganti workout hari ini saat sakit/cedera/capek/hujan, tanpa menimpa jadwal default (lihat `DATA_SCHEMA.md` bagian 7)
+- Ekspansi tab Makan (alternatif menu, daftar belanja, pelacak air), Progres (tes kemampuan 4 mingguan, grid stempel riwayat, milestone, ekspor ringkasan), Pengaturan (edit profil/jadwal, kontrol notifikasi lengkap), Chat (starter prompts, kartu latihan)
+
+### Fase lanjut (10, opsional)
+- Audit komposisi visual mendalam + ikon kustom
+- Elemen 3D bergaya tinta (three.js), sangat terbatas
 
 ## 8. Metrik keberhasilan (pribadi, tanpa penilaian menghukum)
 - Konsistensi mingguan: ≥ 5 dari 7 hari kegiatan inti terpenuhi

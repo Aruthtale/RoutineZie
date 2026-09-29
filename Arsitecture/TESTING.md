@@ -8,6 +8,8 @@
 - Parser repetisi: `8-12`, `8-10 / sisi`, `30-45 detik`, `20-25 menit`, `Ringan`.
 - Timer: perhitungan sisa dari `endsAt`, jeda/lanjut, kadaluarsa saat di background.
 - Zod: `jadwal_mingguan.json` valid; JSON rusak menghasilkan galat yang menunjuk lokasi.
+- `buildReplacement`: tiap `SubstituteReason` × tiap hari kerja menghasilkan `Workout` valid (lolos Zod); `sakit_demam` selalu menghasilkan workout kosong seperti Minggu.
+- `getEffectiveDay(dateISO)`: mengembalikan override bila ada dan berlaku; kembali ke default bila override sudah lewat tanggal (`expiresAfterDate: true`); tetap memakai override bila `expiresAfterDate: false` dan belum ditandai selesai.
 
 ## 2. Uji manual di perangkat (Android nyata)
 | Area | Uji |
@@ -19,6 +21,8 @@
 | Layout | Lebar 360 & 412 px, font scale 100% & 130%, safe area, keyboard chat |
 | Kinerja | Muat awal < 2 dtk; scroll 60 fps di layar Hari Ini |
 | Penutupan paksa | Sesi workout pulih setelah aplikasi ditutup paksa |
+| Substitusi | Tombol cepat → kartu usulan → Terima → workout hari itu berubah di Hari Ini, Mode Workout, dan Minggu secara konsisten; besok otomatis kembali ke default |
+| Substitusi | Tolak usulan → tidak ada perubahan tersimpan |
 
 ## 3. Visual (design.md)
 - Grayscale test, tes tutup logo, tes 05.00 pagi.
@@ -29,7 +33,7 @@
 Cari dan hapus: kata "gagal", "malas", "bakar lemak", "kurus/gemuk", "diet", "hutang kalori", ancaman streak. Periksa semua notifikasi, empty state, dan pesan progres.
 
 ## 5. Red-team chat AI
-Jalankan seluruh tabel di `AI_CHAT.md` bagian 6 dan catat hasil (lolos/gagal, cuplikan jawaban). Ulangi setelah setiap perubahan system prompt atau ganti model.
+Jalankan seluruh tabel di `AI_CHAT.md` bagian 8 (termasuk kasus substitusi jadwal dan cedera akut vs pegal biasa di bagian 6–7) dan catat hasil (lolos/gagal, cuplikan jawaban). Ulangi setelah setiap perubahan system prompt atau ganti model. Kasus cedera akut wajib lolos 100% sebelum rilis — ini bukan area untuk toleransi kegagalan sebagian.
 
 ## 6. Aksesibilitas
 TalkBack dapat membaca kegiatan sekarang, hitung mundur, dan tombol; kontras ≥ 7:1; target ≥ 48 dp; reduced-motion.

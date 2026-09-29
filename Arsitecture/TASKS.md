@@ -22,7 +22,7 @@ Kerjakan **satu fase pada satu waktu**. Setiap tugas punya kriteria (AC = accept
 - T1.4 Tema mengikuti fase hari + pengaturan tema manual.
   - AC: wind-down = inversi; reduced-motion dihormati.
 - T1.5 **Notifikasi lokal** (izin kontekstual, pengingat bawaan, pengaturan per pengingat).
-  - AC: notifikasi muncul tepat waktu; tetap ada setelah restart perangkat; panduan optimasi baterai tersedia. ✅ **SELESAI v1.0.2**
+  - AC: notifikasi muncul tepat waktu; tetap ada setelah restart perangkat; panduan optimasi baterai tersedia.
 
 ## Fase 2 — Mode Workout
 - T2.1 Sesi workout terpandu: satu latihan per layar, set/repetisi, tombol "SET BERES".
@@ -61,5 +61,41 @@ Kerjakan **satu fase pada satu waktu**. Setiap tugas punya kriteria (AC = accept
 - T6.3 Performa: waktu muat < 2 dtk pada perangkat menengah; code-splitting.
 - T6.4 Build rilis bertanda tangan; `CHANGELOG.md`.
 
+## Fase 7 — Substitusi Jadwal (rule-based, tanpa AI)
+- T7.1 Tabel substitusi statis `src/lib/schedule/substitutions.ts` sesuai `DATA_SCHEMA.md` 7.1–7.2 (`buildReplacement` per alasan, fungsi murni).
+  - AC: unit test untuk tiap `SubstituteReason` × tiap hari kerja (Senin–Jumat, Sabtu) menghasilkan `Workout` valid (lolos Zod).
+- T7.2 `ScheduleOverride` repository + `getEffectiveDay(dateISO)` yang dicek di semua tempat penampil workout (Hari Ini, Mode Workout, Minggu).
+  - AC: override hari ini tampil di ketiga layar; besok otomatis kembali ke default tanpa aksi manual (kecuali `expiresAfterDate: false`).
+- T7.3 Tombol cepat di layar Hari Ini (🦵 Kaki/lutut, 💪 Tangan/bahu, 😴 Capek, 🤒 Sakit/demam) → kartu usulan → konfirmasi → tulis override.
+  - AC: tidak ada auto-apply tanpa konfirmasi; kartu usulan sesuai `design.md` bagian 13.1.
+- T7.4 Indikator "hari ini disubstitusi" pada Hari Ini dan Minggu (mis. `Tag` "DIGANTI" + alasan singkat), dengan opsi "batalkan, pakai jadwal asli".
+- T7.5 UI harian sederhana untuk override `expiresAfterDate: false` ("masih berlaku hari ini?" ya/tidak) agar tidak menggantung diam-diam.
+
+## Fase 8 — Ekspansi Fitur Tab (Makan, Progres, Pengaturan, Chat, Jadwal)
+Rujuk `skill.md` Resep K–L untuk detail tiap fitur.
+- T8.1 **Makan**: checklist per slot, alternatif menu per slot, daftar belanja mingguan (agregasi 7 hari), pelacak air minum, log cepat "kalau lapar".
+- T8.2 **Progres**: grafik berat + catatan mingguan, tes kemampuan 4 mingguan + riwayat, grid stempel riwayat latihan, milestone sebagai stempel, skor tidur mingguan, riwayat override (pola alasan), ekspor ringkasan mingguan.
+- T8.3 **Pengaturan**: jam tiap pengingat on/off, tema, edit profil (`kemampuan_saat_ini`, tinggi/berat) sebagai override lokal (tanpa mengubah file JSON asal), edit jam PKL, kontrol lokasi, status kuota chat AI, panduan izin/baterai + tombol notifikasi contoh, ekspor/impor data, tentang aplikasi + disclaimer.
+- T8.4 **Chat**: starter prompts di state kosong, jawaban penjelasan gerakan sebagai kartu `Latihan` (bukan teks polos), rangkum minggu dari data Progres.
+- T8.5 **Jadwal**: hitung mundur ke jam pulang PKL, swipe antar hari.
+- T8.6 **Rating energi pasca-workout**: 5 titik tinta opsional setelah sesi selesai, mengisi `WorkoutLog.energyRating`.
+  - AC per T8.x: masing-masing state kosong/error/offline ada; lolos audit copy wellbeing (`agent.md` 4.1); sesuai `design.md`.
+
+## Fase 9 — Substitusi Jadwal via Chat AI
+Prasyarat: Fase 5 (Chat AI dasar) dan Fase 7 (tabel substitusi) sudah selesai.
+- T9.1 Pemetaan maksud pengguna → `SubstituteReason` tertutup (bukan generative content untuk penggantinya); lihat `skill.md` Resep J dan `AI_CHAT.md` bagian 6.
+- T9.2 Kartu usulan di dalam thread chat memakai komponen yang sama dengan T7.3 (bukan daftar latihan yang ditulis ulang AI dalam teks).
+- T9.3 Guardrail cedera akut vs pegal biasa (`AI_CHAT.md` bagian 7) diterapkan dan diuji.
+  - AC: semua baris baru di tabel red-team `AI_CHAT.md` bagian 8 (kasus kepeleset, bengkak, "anggap pegal biasa", permintaan di luar tabel) lolos, dicatat di `TESTING.md`.
+- T9.4 Fallback untuk permintaan di luar kategori: AI menjelaskan keterbatasan, menawarkan opsi aman dari tabel, tidak menyusun program baru.
+
+## Fase 10 — Audit Anti-Slop & Elemen 3D (opsional, setelah Fase 1–3 stabil dan sudah dipakai nyata)
+- T10.1 **Audit komposisi seluruh layar** terhadap `design.md` bagian 11 (checklist 11.6). Perbaiki minimal: variasi ukuran panel, ikon inti gambar ulang (bukan library mentah), 1 elemen full-bleed/miring per layar utama.
+  - AC: setiap layar lolos ≥ 5/6 poin checklist 11.6; dicatat per layar di laporan.
+- T10.2 Gambar ulang 6–8 ikon inti sebagai SVG guratan tinta (lihat `design.md` 11.2), simpan di `src/components/icons/`.
+  - AC: ikon lama dari library umum diganti di semua layar yang memakainya.
+- T10.3 (Opsional) **Elemen 3D pertama**: stempel 3D saat set selesai di Mode Workout, sesuai `THREE_JS.md`.
+  - AC: fallback 2D berfungsi, render loop berhenti saat tidak terlihat, diuji FPS di perangkat Android menengah-bawah nyata, memenuhi Definition of Done tambahan di `THREE_JS.md` bagian 11.
+
 ## Ide setelah rilis (jangan dikerjakan tanpa persetujuan)
-Jam Subuh dinamis, Health Connect, Google Calendar, sinkron Firebase, widget layar utama (butuh kode native), tes kemampuan 4 mingguan otomatis, ekspor PDF ringkasan mingguan.
+Jam Subuh dinamis, Health Connect, Google Calendar, sinkron Firebase, widget layar utama (butuh kode native), tes kemampuan 4 mingguan otomatis, ekspor PDF ringkasan mingguan, elemen 3D tambahan di luar T10.3 (menara progres, transisi page-flip).

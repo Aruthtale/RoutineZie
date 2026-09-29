@@ -76,6 +76,13 @@ export interface ChatHistoryEntry {
   schemaVersion: 1;
 }
 
+// Fase 7 — Override jadwal harian (DATA_SCHEMA.md 7.3).
+// Impor tipe dari modul substitusi agar satu sumber kebenaran untuk bentuk
+// `Workout` dan `SubstituteReason`.
+import type { ScheduleOverride } from '@/lib/schedule/substitutions';
+export type { ScheduleOverride };
+export type ScheduleOverrideRow = ScheduleOverride;
+
 export class RoutineDatabase extends Dexie {
   workoutLogs!: Table<WorkoutLog, string>;
   weightLogs!: Table<WeightLog, string>;
@@ -83,6 +90,7 @@ export class RoutineDatabase extends Dexie {
   mealChecks!: Table<MealCheck, string>;
   settings!: Table<AppSettings, string>;
   chatHistory!: Table<ChatHistoryEntry, string>;
+  scheduleOverrides!: Table<ScheduleOverride, string>;
 
   constructor() {
     super('CloverzRoutineDB', {
@@ -96,6 +104,16 @@ export class RoutineDatabase extends Dexie {
       mealChecks: 'id, dateISO, waktu, done',
       settings: 'id',
       chatHistory: 'id, dateISO, createdAt',
+    });
+    this.version(3).stores({
+      workoutLogs: 'id, dateISO, hari, workoutNama',
+      weightLogs: 'id, dateISO, kg',
+      sleepLogs: 'id, dateISO, sleptBefore22',
+      mealChecks: 'id, dateISO, waktu, done',
+      settings: 'id',
+      chatHistory: 'id, dateISO, createdAt',
+      // Fase 7 — override jadwal harian (DATA_SCHEMA.md 7.3)
+      scheduleOverrides: 'id, dateISO, reason, expiresAfterDate',
     });
   }
 }

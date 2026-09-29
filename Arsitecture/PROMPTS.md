@@ -88,6 +88,53 @@ Laporan: Akar masalah • Perbaikan • Cara uji • Risiko.
 Audit seluruh UI terhadap design.md. Laporkan setiap pelanggaran: gradasi/blur, emoji sebagai ikon, radius bulat, bayangan lembut, kartu seragam tanpa hierarki, screentone berlebihan, teks di atas pola, font di luar token, ikon tidak konsisten, copy generik/menghakimi. Sertakan screenshot atau path komponen dan perbaikan yang diusulkan. Jalankan tes grayscale dan tes "tutup logo" pada tiap layar utama.
 ```
 
+## Prompt 6 — Fase 7 (Substitusi Jadwal, rule-based)
+```
+Lanjutkan Zenn Routine. Baca DATA_SCHEMA.md bagian 7, skill.md Resep I, design.md bagian 13.1, agent.md (aturan substitusi & cedera akut), dan TASKS.md Fase 7.
+Kerjakan HANYA Fase 7 (T7.1-T7.5): tabel substitusi statis (bukan mengarang di komponen UI), repository ScheduleOverride + getEffectiveDay yang dipakai konsisten di Hari Ini/Mode Workout/Minggu, tombol cepat dengan kartu usulan wajib konfirmasi (tidak ada auto-apply), indikator "DIGANTI" dengan opsi batalkan, dan penanganan override yang tidak otomatis kedaluwarsa.
+Wajib: jadwal default di data/jadwal_mingguan.json TIDAK PERNAH ditulis ulang; override tersimpan terpisah. Tambahkan unit test buildReplacement dan getEffectiveDay sesuai TESTING.md.
+Laporan seperti format biasa.
+```
+
+## Prompt 7 — Fase 8 (Ekspansi Fitur Tab)
+```
+Lanjutkan Zenn Routine. Baca skill.md Resep K-L, design.md bagian 13.2-13.4, dan TASKS.md Fase 8.
+Kerjakan HANYA Fase 8 (T8.1-T8.6). Boleh dikerjakan bertahap per tab jika terlalu besar untuk satu sesi -- sebutkan di rencana awalmu tab mana yang kamu kerjakan dulu (sarankan urutan: Pengaturan -> Makan -> Progres -> Chat -> Jadwal, karena Pengaturan dibutuhkan fitur lain).
+Untuk tiap fitur: sesuai design.md (grid stempel biner untuk riwayat, titik tinta untuk rating energi, bukan bintang/emoji), lolos audit copy wellbeing agent.md 4.1 (tidak ada skor kalori ketat, tidak ada streak menghukum), ada state kosong/error/offline.
+Edit profil dan jam PKL di Pengaturan disimpan sebagai override lokal, TIDAK mengubah data/jadwal_mingguan.json.
+Laporan: tab yang selesai, tab yang belum, Keputusan, Saran, Belum diverifikasi.
+```
+
+## Prompt 8 — Fase 9 (Substitusi Jadwal via Chat AI)
+```
+Lanjutkan Zenn Routine. Prasyarat: Fase 5 (Chat AI) dan Fase 7 (tabel substitusi) sudah selesai -- konfirmasi dulu sebelum mulai.
+Baca AI_CHAT.md bagian 6-8 secara penuh, skill.md Resep J, dan TASKS.md Fase 9.
+Kerjakan HANYA Fase 9 (T9.1-T9.4): pemetaan maksud pengguna ke SubstituteReason tertutup (bukan AI menyusun latihan pengganti dalam teks), kartu usulan di chat memakai komponen sama dengan tombol cepat (T7.3), guardrail cedera akut vs pegal biasa, fallback untuk permintaan di luar tabel.
+WAJIB: jalankan semua baris baru di tabel red-team AI_CHAT.md bagian 8 (kasus kepeleset, bengkak, "anggap pegal biasa", permintaan di luar tabel) dan laporkan hasil lolos/gagal per kasus. Kasus cedera akut harus 100% lolos sebelum kamu menandai fase ini selesai -- jika ada yang gagal, perbaiki dan uji ulang, jangan lanjut ke fase lain.
+Laporan: hasil red-team lengkap, Keputusan, Belum diverifikasi.
+```
+
+## Prompt 9 — Fase 10 (Audit Komposisi & Ikon Kustom)
+```
+Lanjutkan Zenn Routine. Aplikasi sudah jalan di HP tapi desainnya masih terasa "AI slop" walau token warna sudah sesuai design.md.
+Baca design.md bagian 11 (Diagnosis: kenapa masih terasa AI slop) dan TASKS.md Fase 7.
+Kerjakan HANYA T7.1–T7.2:
+1. Audit tiap layar utama (Hari Ini, Minggu, Workout, Makan, Progres) terhadap checklist 11.6. Untuk tiap layar, tuliskan skor (berapa dari 6 poin lolos) dan sebutkan poin yang gagal secara spesifik dengan path komponen/file.
+2. Perbaiki: variasikan ukuran panel (jangan seragam), tambahkan minimal 1 elemen full-bleed atau miring sengaja per layar utama, dan gambar ulang 6-8 ikon inti sebagai SVG guratan tinta 3px (bukan pakai library ikon mentah) — simpan di src/components/icons/.
+3. JANGAN mengubah palet warna, struktur data, atau fitur di luar tata letak/ikon.
+Laporan: skor sebelum/sesudah per layar, daftar file yang diubah, screenshot deskripsi (jika ada tooling), Keputusan, Saran, Belum diverifikasi.
+```
+
+## Prompt 10 — Elemen 3D (Stempel Tinta, opsional)
+```
+Lanjutkan Zenn Routine. Baca design.md bagian 12 dan THREE_JS.md secara penuh sebelum menulis kode apa pun.
+Tambahkan SATU elemen 3D: stempel tinta 3D yang muncul saat pengguna menandai satu set selesai di Mode Workout (T7.3 di TASKS.md).
+Wajib ikuti THREE_JS.md: instalasi via npm (bukan CDN), lazy-load dengan dynamic import ssr:false, material toon + outline hitam-putih (bukan realistis), render loop berhenti otomatis setelah animasi ±400-600ms dan saat layar tak terlihat, deteksi WebGL/reduced-motion sebelum mount dengan fallback ke SfxStamp 2D yang sudah ada.
+Jangan menambahkan three.js ke layar lain. Jangan membuat objek 3D dekoratif tanpa fungsi (bola/partikel mengambang).
+Uji di perangkat Android menengah-bawah nyata jika tersedia; catat FPS kasar dan ukuran chunk bundle 3D terpisah dari bundle utama.
+Laporan: Ringkasan • Cara uji • Hasil Definition of Done THREE_JS.md bagian 11 (checklist lolos/gagal) • Keputusan • Belum diverifikasi.
+```
+
 ## Prompt Impor Jadwal Baru (opsional)
 ```
 Saya akan menempelkan PDF/teks jadwal baru untuk hari [..]. Ubah menjadi objek Hari sesuai DATA_SCHEMA.md (semua field: jadwal, workout, pola_makan, ringkasan_energi, catatan_khusus). Validasi dengan Zod dan laporkan asumsi yang kamu buat. Jangan mengubah hari lain.

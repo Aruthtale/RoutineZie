@@ -150,3 +150,70 @@ Waktu disimpan sebagai ISO dengan offset lokal; tampilan memakai zona waktu pera
 ## 6. Ekspor/impor
 - Ekspor: satu file JSON `{ schemaVersion, jadwal, logs, settings }` lewat Share.
 - Impor: validasi Zod → pratinjau perubahan → konfirmasi → tulis. Jangan menimpa log tanpa konfirmasi.
+
+## 7. Override jadwal harian (substitusi latihan)
+
+Jadwal di `data/jadwal_mingguan.json` adalah **default tetap**, tidak pernah ditulis ulang oleh aplikasi. Perubahan untuk hari tertentu (sakit, cedera, capek, hujan) disimpan **terpisah** sebagai override, dan otomatis kembali ke default keesokan harinya kecuali override diperpanjang secara eksplisit.
+
+### 7.1 Alasan substitusi (tertutup, bukan teks bebas)
+```ts
+export type SubstituteReason =
+  | 'sakit_kaki_lutut'      // nyeri/cedera area kaki, lutut, pergelangan kaki
+  | 'sakit_tangan_bahu'     // nyeri/cedera area tangan, bahu, pergelangan tangan
+  | 'capek_kurang_tidur'    // lelah, kurang tidur, tidak sampai cedera
+  | 'sakit_demam'           // sakit umum (flu, demam, tidak enak badan)
+  | 'cuaca_hujan'           // hujan saat sesi lari
+  | 'lainnya';              // fallback: selalu diarahkan ke Full Rest, tidak ada substitusi otomatis
+```
+`'lainnya'` sengaja tidak punya tabel substitusi — tujuannya agar sistem (dan AI) tidak mencoba menebak pengganti untuk kasus yang tidak dikenali; defaultnya aman (istirahat).
+
+### 7.2 Tabel substitusi (rule-based, sumber kebenaran tunggal)
+Disimpan sebagai data statis di `src/lib/schedule/substitutions.ts`, **bukan** dihasilkan AI saat runtime.
+
+```ts
+export type SubstitutionRule = {
+  reason: SubstituteReason;
+  appliesToWorkoutDays: true;          // tidak berlaku untuk hari yang sudah Libur/Rest
+  buildReplacement: (originalDay: Hari) => Workout;   // fungsi murni, testable
+  requiresConfirmation: true;          // selalu true — tidak pernah auto-apply
+  severity: 'ringan' | 'perlu_istirahat_total';
+};
+```
+
+Aturan per alasan (acuan isi `buildReplacement`):
+| `reason` | Pengganti | `severity` |
+|---|---|---|
+| `sakit_kaki_lutut` | Ambil ulang latihan upper-body/core dari Senin atau Jumat (push-up, pike push-up, dead bug, plank); hilangkan semua gerakan kaki (squat, lunge, calf raise, jogging) | `perlu_istirahat_total` untuk bagian kaki |
+| `sakit_tangan_bahu` | Ambil latihan kaki dari Rabu; hilangkan semua gerakan tangan/bahu (push-up, pike push-up, diamond push-up, plank berat tangan) | `perlu_istirahat_total` untuk bagian tangan |
+| `capek_kurang_tidur` | Workout hari itu tetap, tapi jumlah set dipotong ~50% (mis. 3×→2×) dan `tanda_berhenti` ditegaskan lebih awal; label "versi ringan" | `ringan` |
+| `sakit_demam` | Selalu Full Rest (workout kosong seperti Minggu), tanpa opsi lain | `perlu_istirahat_total` |
+| `cuaca_hujan` | Ganti jogging dengan jalan cepat di tempat 15-20 menit + calisthenics ringan dari hari itu (set dikurangi) | `ringan` |
+
+### 7.3 Bentuk data Override
+```ts
+type ScheduleOverride = {
+  id: string;
+  dateISO: string;                 // tanggal berlaku (YYYY-MM-DD, lokal)
+  originalHari: string;            // "Selasa", dst — untuk audit/tampilan "harusnya X"
+  reason: SubstituteReason;
+  source: 'quick_button' | 'ai_chat';
+  replacementWorkout: Workout;     // hasil buildReplacement, disimpan utuh (bukan referensi) agar riwayat stabil
+  userConfirmed: true;             // hanya tersimpan setelah konfirmasi pengguna
+  expiresAfterDate: boolean;       // true = hanya berlaku dateISO itu; false = berlaku sampai ditandai selesai
+  note?: string;                   // catatan bebas dari pengguna atau ringkasan alasan dari chat
+  createdAt: string;
+  schemaVersion: 1;
+};
+```
+- Disimpan di repository, **terpisah dari `data/jadwal_mingguan.json`**.
+- `getNowAndNext` dan layar Hari Ini harus mengecek override untuk tanggal berjalan **sebelum** membaca default JSON: `getEffectiveDay(dateISO) = override(dateISO) ?? defaultDay(hariDalamMinggu)`.
+- Riwayat override tetap tersimpan (untuk pola "3 minggu ini sering ganti karena capek" di tab Progres) walau sudah lewat tanggalnya.
+
+### 7.4 Alur konfirmasi (wajib, baik dari tombol cepat maupun chat AI)
+1. Sistem/AI mengusulkan `SubstitutionRule` yang cocok dengan `reason`.
+2. Tampilkan **kartu usulan** (bukan langsung menulis override): workout asli vs pengganti, alasan singkat, tombol Terima/Tolak.
+3. Hanya setelah "Terima" → `ScheduleOverride` ditulis ke repository.
+4. Tidak ada auto-apply, baik dari tombol cepat maupun dari chat AI.
+
+### 7.5 Kasus `perlu_istirahat_total` untuk cedera akut
+Jika pengguna menyebut tanda **cedera akut** (kepeleset, jatuh, nyeri tajam, bengkak) — bukan sekadar pegal — sistem/AI **tidak boleh menawarkan substitusi latihan apa pun**, langsung arahkan ke Full Rest total untuk bagian tubuh itu dan sarankan bicara ke tenaga kesehatan bila nyeri tidak reda/berat. Lihat aturan lengkap di `AI_CHAT.md` bagian 8.

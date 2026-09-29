@@ -17,7 +17,7 @@ Tujuan pengguna: energi, kebugaran, dan **menambah massa tubuh secara bertahap**
 4. `DATA_SCHEMA.md` — bentuk JSON, tipe, aturan parsing
 5. `design.md` — sistem desain (manga-neubrutalism hitam-putih)
 6. `skill.md` — playbook implementasi (resep per jenis tugas)
-7. `INTEGRATIONS.md`, `AI_CHAT.md` — hanya saat mengerjakan fitur terkait
+7. `INTEGRATIONS.md`, `AI_CHAT.md`, `THREE_JS.md` — hanya saat mengerjakan fitur terkait
 8. `TASKS.md` — daftar tugas dan kriteria selesai
 9. `TESTING.md` — cara menguji
 
@@ -32,6 +32,7 @@ Jika dokumen saling bertentangan, urutan prioritas: **aturan keselamatan/wellbei
 - Penyimpanan: `@capacitor/preferences` untuk pengaturan; log lewat lapisan repository (awal: Dexie/IndexedDB, bisa diganti SQLite tanpa mengubah UI)
 - Plugin Capacitor: local-notifications, geolocation, haptics, share, (opsional) app, status-bar, splash-screen
 - Font di-bundel lewat `next/font` (tanpa CDN saat runtime)
+- three.js (opsional, sangat terbatas) untuk SATU elemen 3D bergaya tinta/toon — hanya saat task eksplisit memintanya, lihat `THREE_JS.md`. Selalu lazy-load (`dynamic import`, `ssr:false`) dan punya fallback 2D.
 
 ## 4. Aturan keras
 
@@ -45,6 +46,9 @@ Pengguna masih di bawah 18 tahun dan berat badan relatif ringan (BMI ±16,4). Ka
 - Tidak ada klaim medis. Jangan menjanjikan penambahan tinggi badan.
 - Tidur adalah prioritas: **jangan pernah** menjadwalkan sesuatu yang membuat tidur lewat 22.00.
 - Chat AI wajib mengikuti `AI_CHAT.md` (guardrail).
+- **Substitusi jadwal**: AI dan sistem hanya boleh mengganti workout dari tabel tetap di `DATA_SCHEMA.md` bagian 7.2, tidak pernah menyusun latihan pengganti bebas saat runtime. Semua substitusi butuh konfirmasi eksplisit pengguna; tidak ada auto-apply.
+- **Cedera akut vs pegal biasa**: untuk tanda cedera akut (kepeleset, jatuh, nyeri tajam, bengkak), sistem/AI **tidak boleh** menawarkan substitusi latihan — hanya istirahat total + saran bicara ke tenaga kesehatan. Jika ragu, selalu default ke jalur cedera akut. Lihat `AI_CHAT.md` bagian 7.
+- Jadwal default (`data/jadwal_mingguan.json`) **tidak pernah ditulis ulang** oleh fitur substitusi; perubahan harian disimpan terpisah sebagai `ScheduleOverride` dan otomatis kembali ke default keesokan harinya.
 
 ### 4.2 Teknis
 - Tidak ada API route, SSR, middleware, atau server actions (static export). Backend, jika ada, adalah layanan terpisah dan opsional.
@@ -61,6 +65,8 @@ Pengguna masih di bawah 18 tahun dan berat badan relatif ringan (BMI ±16,4). Ka
 - Ikuti `design.md` secara ketat. Gaya: **neubrutalism hitam-putih dengan kosakata manga** (panel, screentone, garis kecepatan, onomatopoeia).
 - DILARANG: gradasi, glassmorphism, warna ungu-biru bawaan AI, emoji sebagai ikon UI, ikon ✨ untuk AI, `rounded-2xl` + bayangan lembut, kartu seragam tanpa hierarki.
 - Jangan menyalin karakter, tata letak, atau aset dari manga/komik nyata.
+- Token warna saja TIDAK CUKUP. Jalankan checklist komposisi di `design.md` bagian 11 (simetri, ikon custom, variasi ukuran panel, ilustrasi bermakna) untuk setiap layar sebelum menandainya selesai.
+- Elemen 3D (three.js) hanya jika diminta eksplisit di `TASKS.md`; ikuti `design.md` bagian 12 dan `THREE_JS.md`. Gaya toon/outline hitam-putih saja, bukan render realistis/dekoratif mengambang.
 
 ### 4.4 Disiplin lingkup
 - Kerjakan hanya yang ada di `TASKS.md` untuk fase aktif. Ide tambahan → catat di bagian "Saran" pada laporan akhir, jangan diimplementasikan.

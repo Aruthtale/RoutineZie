@@ -86,16 +86,18 @@ export function getNowAndNext(jadwalList: any[], timeInMinutes: number): NowAndN
   return { nowItem, nextItem, currentPhase };
 }
 
+export interface NormalizedSet {
+  setIndex: number;
+  target: string;
+  tipeTarget: 'reps' | 'durasi';
+  restSec: number;
+}
+
 export interface NormalizedExercise {
   nama: string;
   tipe: 'reps' | 'durasi';
   setCount: number;
-  sets: {
-    setIndex: number;
-    target: string;
-    tipeTarget: 'reps' | 'durasi';
-    restSec: number;
-  }[];
+  sets: NormalizedSet[];
   durasiMinutes?: number;
   ototTarget?: string;
   peralatan?: string;

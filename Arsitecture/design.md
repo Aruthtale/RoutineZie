@@ -186,3 +186,111 @@ Onomatopoeia hanya di momen penting (timer selesai, latihan selesai, transisi fa
 - Ikon dan ilustrasi buatan sendiri atau lisensi terbuka yang jelas (catat sumber di `docs/ASSETS.md`).
 - Tidak ada aset dari manga/anime/komik nyata.
 - Ikon aplikasi: hitam-putih, siluet tebal, terbaca di ukuran kecil; splash screen berupa satu panel manga sederhana.
+
+---
+
+## 11. Diagnosis: kenapa masih terasa "AI slop" walau token sudah benar
+
+Token warna hitam-putih dan larangan elemen (bagian 2) **tidak cukup**. Slop paling sering muncul dari **komposisi**, bukan warna. Periksa lima hal ini di tiap layar:
+
+### 11.1 Simetri berlebihan
+AI cenderung menaruh semua elemen di tengah, ukuran seragam, jarak rata. Manga sungguhan hampir tidak pernah begitu.
+- **Perbaikan**: panel tidak harus sejajar grid sempurna. Boleh sedikit miring (`rotate: -1deg` sampai `2deg`) pada panel aksen (mis. `SfxStamp`, `Caption` catatan khusus). Ukuran panel bervariasi dengan sengaja — panel "sekarang" jauh lebih besar dari yang lain, bukan sekadar skala 1.2x.
+- **Aturan**: minimal satu elemen per layar yang **full-bleed** (menyentuh/melewati tepi layar), seperti panel manga yang keluar dari batas grid.
+
+### 11.2 Ikon dari library umum
+Lucide/Feather/Material dipakai apa adanya adalah salah satu penanda AI slop paling gampang dikenali, karena semua aplikasi AI memakainya dengan cara yang sama.
+- **Perbaikan**: gambar ulang 6–8 ikon inti (lari, push-up, makan, tidur, timer, cuaca, api/energi, centang) sebagai **guratan tinta tebal 3 px**, sudut tajam, sedikit tidak presisi (bukan vektor sempurna). Simpan sebagai SVG di `src/components/icons/`. Boleh mulai dari bentuk dasar Lucide sebagai kerangka, tapi gambar ulang garisnya, jangan pakai langsung.
+- Ikon sekunder (pengaturan, panah, silang) boleh tetap dari library minimalis asal ketebalan garisnya diseragamkan ke 2–3 px dan sudutnya dibuat tajam (`strokeLinecap: butt`, bukan `round`).
+
+### 11.3 Kartu seragam tanpa hierarki nyata
+Kalau semua `Panel` punya padding, bayangan, dan ukuran yang sama, halamannya terasa seperti daftar template, walau garisnya tebal.
+- **Perbaikan**: tetapkan 3 tingkat ukuran panel yang beda jauh, bukan mirip: `hero` (dominan, ~60% tinggi layar di atas fold), `wide` (satu baris penuh), `small` (kartu ringkas, bisa 2 kolom). Satu layar memakai maksimal satu `hero`.
+- Variasikan **orientasi teks**: judul besar boleh vertikal di sisi panel (gaya judul bab manga) untuk elemen non-esensial, bukan semua horizontal rata kiri.
+
+### 11.4 Ilustrasi geometris kosong
+Bentuk lingkaran/kotak polos sebagai "ilustrasi" adalah ciri khas AI slop generik, entah berwarna atau hitam-putih.
+- **Perbaikan**: kalau butuh elemen ilustratif (mis. layar kosong, onboarding), gambar linework sederhana bertema nyata (siluet orang push-up, siluet mangkuk nasi, siluet bantal) dengan guratan tangan, bukan bentuk geometris abstrak. Satu ilustrasi per konteks sudah cukup; jangan menghiasi tiap kartu kecil dengan ilustrasi.
+
+### 11.5 Copy dan micro-interaction generik
+"Selamat datang kembali!", checklist dengan centang hijau standar, transisi fade generik — ini pola default framework UI, bukan keputusan desain.
+- **Perbaikan**: ikuti suara di bagian 8. Centang jadi `Stamp` tinta (bukan ikon centang bulat). Transisi antar layar: potong tegas (cut, seperti pergantian panel), bukan fade lembut; durasi ≤ 150 ms.
+
+### 11.6 Checklist audit cepat (jalankan tiap layar)
+- [ ] Ada minimal 1 elemen full-bleed atau miring sengaja?
+- [ ] Ukuran panel bervariasi jelas (bukan grid seragam)?
+- [ ] Ikon inti buatan sendiri, bukan library mentah?
+- [ ] Tidak ada ilustrasi lingkaran/kotak kosong sebagai pengisi?
+- [ ] Copy spesifik ke konteks, bukan sapaan umum?
+- [ ] Kalau screenshot ditutup logonya, masih terlihat khas aplikasi ini (bukan generik)?
+
+Kalau sebuah layar gagal di 2+ poin checklist ini, layar itu masih slop meski token warna sudah benar.
+
+## 12. Elemen 3D (three.js) — opsional, sangat terbatas
+
+Three.js **mudah menjadi slop 3D**: bola/torus berputar mengambang, partikel bertebaran, gradient mesh — ini versi lain dari template AI, hanya dalam 3D. Elemen 3D di aplikasi ini **hanya boleh dipakai kalau ikut gaya tinta yang sama**, bukan render realistis atau dekorasi mengambang.
+
+### 12.1 Prinsip
+1. **Toon/outline shader hitam-putih**, bukan PBR/material realistis. Objek 3D harus terlihat seperti gambar tinta beranimasi, konsisten dengan `Panel`, `SfxStamp`, dsb.
+2. **Satu fitur 3D saja untuk MVP**, di satu layar. Jangan menambah 3D ke banyak tempat sekaligus.
+3. **Fungsional, bukan dekoratif**: elemen 3D harus menjelaskan atau memperkuat sesuatu (progres, hitungan, transisi), bukan sekadar "terlihat keren".
+4. Selalu ada **fallback 2D statis** untuk perangkat lemah, mode hemat baterai, dan `prefers-reduced-motion`.
+
+### 12.2 Kandidat fitur (pilih satu untuk MVP)
+| Fitur | Layar | Kenapa cocok |
+|---|---|---|
+| **Menara progres mingguan** — kubus/balok tinta bertumpuk tiap sesi selesai, dilihat dari sudut isometrik, garis tebal + outline shader | Progres | Visual "bertumbuh" yang relevan dengan tujuan menambah massa tubuh, tanpa jadi grafik angka semata |
+| **Stempel 3D saat set selesai** — objek stempel jatuh dan "menghantam" panel dengan efek tinta menyebar (shader, bukan partikel realistis) | Mode Workout | Memperkuat momen `SfxStamp` yang sudah ada di desain 2D |
+| **Transisi halaman antar hari** — panel hari berputar seperti membalik halaman manga (page-flip sederhana) | Minggu → Detail Hari | Mengikuti metafora "jadwal = halaman manga" di bagian 1 |
+
+Rekomendasi urutan: mulai dari **stempel 3D** (paling kecil lingkupnya, dampak jelas), baru pertimbangkan yang lain.
+
+### 12.3 Gaya shader (acuan konsep, bukan kode final)
+- **Toon shading** 2 tingkat (terang/gelap) tanpa gradasi halus — meniru cel-shading manga.
+- **Outline hitam tebal** di tepi siluet (teknik "backface expansion" atau outline shader pass), konsisten dengan `--line: 3px` di 2D.
+- Latar tetap `--paper` (atau `--ink` saat wind-down); jangan ada langit/gradient/lighting realistis di belakang objek.
+- Tidak ada tekstur foto atau material metalik/kaca.
+
+### 12.4 Batasan teknis (wajib)
+- **Lazy-load** three.js hanya di layar yang memakainya (`dynamic import`, `ssr: false`); jangan masuk bundle utama.
+- Ini proyek Next.js biasa (bukan artifact web), jadi `three` diinstal normal lewat npm dan di-bundle Next.js, **bukan** lewat CDN.
+- Batasi `devicePixelRatio` ke maksimal 2, geometri low-poly, dan matikan render loop (`cancelAnimationFrame`) saat layar tidak terlihat (`visibilitychange`/navigasi).
+- Uji di **perangkat Android menengah-bawah** sungguhan, bukan cuma emulator/desktop — WebGL di webview Capacitor bisa jauh lebih lambat.
+- `prefers-reduced-motion` atau performa rendah terdeteksi → tampilkan versi 2D statis (`SfxStamp`/`InkChart` biasa) sebagai pengganti, bukan memaksakan 3D.
+- Elemen 3D tidak boleh memblokir interaksi utama (tombol tetap responsif walau render 3D belum selesai dimuat).
+
+### 12.5 Yang dilarang untuk 3D
+- Objek mengambang/berputar tanpa arti (bola, torus, kubus dekoratif) sebagai pengisi layar kosong.
+- Material realistis, refleksi kaca, pencahayaan berwarna, partikel bertebaran generik.
+- 3D di splash screen atau di banyak layar sekaligus "supaya modern" — ini justru pola slop yang sama, hanya dalam tiga dimensi.
+
+## 13. Pola UI tambahan
+
+### 13.1 Kartu usulan substitusi jadwal
+Muncul dari tombol cepat (Hari Ini) atau dari chat AI — tampilan harus **identik** di kedua tempat.
+```
+┌────────────────────────────────┐
+│ USUL GANTI          [x Tutup]  │
+│ ────────────────────────────── │
+│ Alasan: Kaki/lutut sakit       │
+│                                 │
+│ ASLI          →   PENGGANTI    │
+│ Easy Run          Push + Core  │
+│ (kaki)             (upper body)│
+│                                 │
+│ [ TOLAK ]      [ TERIMA ]      │  ← InkButton outline / solid
+└────────────────────────────────┘
+```
+- `Panel` biasa (garis 3px, bayangan keras), bukan modal melayang dengan blur.
+- Tombol "TERIMA" solid hitam, "TOLAK" outline — hierarki jelas tapi keduanya sama besar (tidak menekan pengguna ke satu pilihan).
+- Setelah diterima: `Tag` "DIGANTI · [alasan singkat]" muncul menempel di panel workout hari itu, dengan tautan kecil "pakai jadwal asli" untuk membatalkan.
+- Untuk kasus cedera akut (lihat `AI_CHAT.md` bagian 7): kartu ini **tidak muncul**; tampilkan `Caption` pesan istirahat + saran tenaga kesehatan sebagai gantinya, bukan pilihan Terima/Tolak.
+
+### 13.2 Grid stempel riwayat (Progres)
+Pengganti "kalender kontribusi" hijau-gradasi yang generik: grid kotak 3px per hari, diisi **stempel tinta solid** bila sesi selesai, kotak kosong bila tidak, dan pola `tone-dots` tipis bila hari itu override/istirahat (bukan dianggap "gagal"). Tanpa gradasi intensitas — biner sengaja, karena ini bukan tentang seberapa keras, tapi konsistensi.
+
+### 13.3 Rating energi (titik tinta)
+5 titik sejajar, kosong/terisi penuh (bukan bintang/emoji, bukan gradasi warna hijau-merah). Opsional, boleh dilewati tanpa ada penalti visual atas pilihan "lewati".
+
+### 13.4 Starter prompts (Chat, state kosong)
+Baris `InkButton` outline kecil di atas input, 3–4 pilihan (mis. "Jelaskan gerakan ini", "Aku pegal, sesuaikan latihan"), hilang otomatis setelah pesan pertama dikirim — bukan menu permanen yang memenuhi layar.

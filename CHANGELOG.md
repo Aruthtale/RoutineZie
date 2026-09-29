@@ -3,6 +3,31 @@
 Semua perubahan penting pada RoutineZie akan didokumentasikan di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/), versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.1.0] — 2026-09-29
+
+### Added
+- **Fase 7 — Substitusi Jadwal (rule-based, tanpa AI)** — pengguna bisa mengganti
+  latihan hari ini secara instan saat sedang tidak fit, tanpa menyentuh
+  `jadwal_mingguan.json` (file default tetap utuh).
+  - **T7.1** `src/lib/schedule/substitutions.ts` — tabel substitusi 100% deterministik
+    (sakit kaki/lutut, sakit tangan/bahu, capek/kurang tidur, sakit/demam, cuaca hujan).
+    Membangun pengganti otomatis dari pool gerakan cadangan di JSON.
+  - **T7.2** `ScheduleOverride` disimpan di IndexedDB (table `scheduleOverrides`,
+    Dexie v3). `getEffectiveDay(date) = override(date) ?? defaultDay(hari)` —
+    satu-satunya sumber kebenaran untuk latihan hari ini.
+  - **T7.3** Kartu usulan + tombol cepat di layar Hari Ini. Konfirmasi wajib
+    sebelum override ditulis — tidak pernah auto-apply.
+  - **T7.4** Indikator "⚡ DIGANTI" + tombol "Batalkan Pengganti" di kartu latihan.
+  - **T7.5** Konfirmasi harian untuk override yang tidak kedaluwarsa otomatis
+    ("⏰ MASIH BERLAKU?") saat aplikasi dibuka.
+  - Quick action chat "Sesuaikan Workout" sekarang membuka layar Hari Ini
+    (rule-based) alih-alih memanggil AI.
+  - 16 unit test baru (total 72 test lulus).
+
+### Changed
+- Type `NormalizedSet` dipindah ke `parser.ts` dan di-re-export dari
+  `substitutions.ts` agar tidak ada dua definisi tampilan latihan.
+
 ## [1.0.2] — 2026-09-29
 
 ### Added
