@@ -1,10 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { getScheduleForDay, getNowAndNext, parseWaktu, getPulangMinutes, formatJam, findMentionedExercise, type NormalizedWorkout } from '@/lib/schedule/parser';
 import { Clock, Calendar, ChevronRight, Info, Dumbbell, X, Play, Utensils, ChartBar, Settings as SettingsIcon, Activity, MessageCircle, Send, Bot } from 'lucide-react';
 import WorkoutModeModal from '@/components/WorkoutModeModal';
 import MealChecklist from '@/components/MealChecklist';
+import WaterTracker from '@/components/WaterTracker';
+import HungerLogger from '@/components/HungerLogger';
+import ShoppingListPanel, { AlternatifMenuPanel } from '@/components/ShoppingListPanel';
 import ProgressView from '@/components/ProgressView';
 import SettingsView from '@/components/SettingsView';
 import NotificationSettingsSection from '@/components/NotificationSettingsSection';
@@ -123,6 +126,12 @@ export default function RoutinePage() {
 
   const profil = (jadwalRaw as any)?.profil;
   const polaMakan = dayData?.pola_makan || [];
+
+  // T8.1 — agregasi pola makan 7 hari untuk daftar belanja mingguan.
+  const polaMakanMingguan = useMemo(() => {
+    const all = (jadwalRaw as any)?.hari ?? [];
+    return all.flatMap((h: any) => (Array.isArray(h.pola_makan) ? h.pola_makan : []));
+  }, [jadwalRaw]);
 
   const pklStatus =
     dayData?.pkl === 'Libur'
@@ -568,7 +577,11 @@ export default function RoutinePage() {
                   {profil?.usia ? `${profil.usia} TAHUN` : 'INFO NUTRISI'}
                 </span>
               </div>
-              <MealChecklist dateISO={new Date().toISOString().split('T')[0]} polaMakan={polaMakan} />
+              <MealChecklist dateISO={todayISO} polaMakan={polaMakan} />
+              <WaterTracker dateISO={todayISO} targetGelas={profil?.info_kalori_dan_nutrisi?.air_minum_ml ? undefined : 8} />
+              <HungerLogger dateISO={todayISO} />
+              <AlternatifMenuPanel polaMakanHari={polaMakan} />
+              <ShoppingListPanel polaMakanMingguan={polaMakanMingguan} />
             </section>
           )}
 

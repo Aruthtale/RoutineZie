@@ -3,6 +3,17 @@
 Semua perubahan penting pada RoutineZie akan didokumentasikan di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/), versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.2.0] — 2026-09-29
+
+### Added
+- **Fase 8: T8.1 Makan** — integrasi lengkap tab Makan dengan:
+  - Pelacak air minum (tally gelas per hari dengan batas/target dinamis).
+  - Log cepat "kalau lapar" (catatan bebas tanpa kalori/peringatan penilaian).
+  - Alternatif menu per slot dengan kelompok bahan dasar sama.
+  - Daftar belanja mingguan agregasi 7 hari per kelompok bahan.
+- Skema Dexie versi 4 dengan tabel `waterLogs` dan `hungerLogs`.
+- Ekspor/impor data mencakup riwayat air dan log lapar.
+
 ## [1.1.0] — 2026-09-29
 
 ### Added

@@ -51,6 +51,23 @@ export interface MealCheck {
   schemaVersion: 1;
 }
 
+/** T8.1 — Tally air minum (bilangan gelas, bukan angka presisi). */
+export interface WaterLog {
+  id: string; // "water_<dateISO>"
+  dateISO: string;
+  glasses: number;
+  schemaVersion: 1;
+}
+
+/** T8.1 — Log cepat "kalau lapar" tanpa penilaian. */
+export interface HungerLog {
+  id: string;
+  dateISO: string;
+  timestamp: string;
+  note: string;
+  schemaVersion: 1;
+}
+
 export interface AppSettings {
   id: 'current_settings';
   theme: 'auto' | 'light' | 'dark';
@@ -99,6 +116,8 @@ export class RoutineDatabase extends Dexie {
   weightLogs!: Table<WeightLog, string>;
   sleepLogs!: Table<SleepLog, string>;
   mealChecks!: Table<MealCheck, string>;
+  waterLogs!: Table<WaterLog, string>;
+  hungerLogs!: Table<HungerLog, string>;
   settings!: Table<AppSettings, string>;
   chatHistory!: Table<ChatHistoryEntry, string>;
   scheduleOverrides!: Table<ScheduleOverride, string>;
@@ -125,6 +144,18 @@ export class RoutineDatabase extends Dexie {
       chatHistory: 'id, dateISO, createdAt',
       // Fase 7 — override jadwal harian (DATA_SCHEMA.md 7.3)
       scheduleOverrides: 'id, dateISO, reason, expiresAfterDate',
+    });
+    this.version(4).stores({
+      workoutLogs: 'id, dateISO, hari, workoutNama',
+      weightLogs: 'id, dateISO, kg',
+      sleepLogs: 'id, dateISO, sleptBefore22',
+      mealChecks: 'id, dateISO, waktu, done',
+      settings: 'id',
+      chatHistory: 'id, dateISO, createdAt',
+      scheduleOverrides: 'id, dateISO, reason, expiresAfterDate',
+      // Fase 8 — pelacak air & log lapar (T8.1)
+      waterLogs: 'id, dateISO, glasses',
+      hungerLogs: 'id, dateISO, timestamp',
     });
   }
 }

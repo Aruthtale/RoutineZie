@@ -1,4 +1,4 @@
-import { db, WorkoutLog, WeightLog, SleepLog, MealCheck, AppSettings, ChatHistoryEntry, ScheduleOverride } from './index';
+import { db, WorkoutLog, WeightLog, SleepLog, MealCheck, AppSettings, ChatHistoryEntry, ScheduleOverride, WaterLog, HungerLog } from './index';
 
 export class RoutineRepository {
   // --- Workout ---
@@ -155,21 +155,66 @@ export class RoutineRepository {
     });
   }
 
+  // --- T8.1: Pelacak Air Minum (tally gelas) ---
+  static async getWaterLog(dateISO: string): Promise<WaterLog | undefined> {
+    return db.waterLogs.get(`water_${dateISO}`);
+  }
+
+  static async setWaterGlasses(dateISO: string, glasses: number): Promise<void> {
+    await db.waterLogs.put({
+      id: `water_${dateISO}`,
+      dateISO,
+      glasses: Math.max(0, glasses),
+      schemaVersion: 1,
+    });
+  }
+
+  static async addWaterGlass(dateISO: string, delta: number): Promise<number> {
+    const current = (await db.waterLogs.get(`water_${dateISO}`))?.glasses ?? 0;
+    const next = Math.max(0, current + delta);
+    await db.waterLogs.put({ id: `water_${dateISO}`, dateISO, glasses: next, schemaVersion: 1 });
+    return next;
+  }
+
+  // --- T8.1: Log Cepat "Kalau Lapar" (tanpa penilaian) ---
+  static async addHungerLog(dateISO: string, note: string): Promise<void> {
+    const noteTrim = note.trim();
+    if (!noteTrim) return;
+    await db.hungerLogs.put({
+      id: `hunger_${dateISO}_${Date.now()}`,
+      dateISO,
+      timestamp: new Date().toISOString(),
+      note: noteTrim,
+      schemaVersion: 1,
+    });
+  }
+
+  static async getHungerLogsByDate(dateISO: string): Promise<HungerLog[]> {
+    return db.hungerLogs.where('dateISO').equals(dateISO).reverse().sortBy('timestamp');
+  }
+
+  static async getHungerLogs(limit = 20): Promise<HungerLog[]> {
+    const all = await db.hungerLogs.reverse().sortBy('timestamp');
+    return all.slice(0, limit);
+  }
+
   // --- Export All Data ---
   static async exportAllData(): Promise<string> {
-    const [workouts, weights, sleeps, meals, settings, chatHistory] = await Promise.all([
+    const [workouts, weights, sleeps, meals, settings, chatHistory, water, hunger] = await Promise.all([
       db.workoutLogs.toArray(),
       db.weightLogs.toArray(),
       db.sleepLogs.toArray(),
       db.mealChecks.toArray(),
       db.settings.toArray(),
       db.chatHistory.toArray(),
+      db.waterLogs.toArray(),
+      db.hungerLogs.toArray(),
     ]);
 
     const backup = {
       app: 'CloverzRoutine',
       exportedAt: new Date().toISOString(),
-      schemaVersion: 2,
+      schemaVersion: 3,
       data: {
         workouts,
         weights,
@@ -177,6 +222,8 @@ export class RoutineRepository {
         meals,
         settings,
         chatHistory,
+        water,
+        hunger,
       },
     };
 
@@ -220,3 +267,5 @@ export class RoutineRepository {
     }
   }
 }
+
+export type { WaterLog, HungerLog };
