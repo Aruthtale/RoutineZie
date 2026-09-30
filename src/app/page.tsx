@@ -23,10 +23,15 @@ import {
   type Workout,
   normalizeReplacement,
   buildReplacement,
-  SUBSTITUTION_RULES,
 } from '@/lib/schedule/substitutions';
 import { dateToISO, DAY_NAMES, getEffectiveDay, applyOverride, clearOverride, getActiveNonExpiringOverrides } from '@/lib/schedule/effectiveDay';
-import { SubstitutionPanel, SubstitutionQuickButtons } from '@/components/SubstitutionPanel';
+import { SubstitutionPanel, SubstitutionQuickButtons, AcuteInjuryNotice } from '@/components/SubstitutionPanel';
+import {
+  classifySubstitutionIntentWithHistory,
+  extractSubstitutionTag,
+  hasAcuteInjuryTag,
+  stripSubstitutionTag,
+} from '@/lib/ai/substitutionIntent';
 
 const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
@@ -42,6 +47,14 @@ export default function RoutinePage() {
   const [chatLoading, setChatLoading] = useState<boolean>(false);
   const [substitutionReason, setSubstitutionReason] = useState<SubstituteReason | null>(null);
   const [pendingReplacement, setPendingReplacement] = useState<Workout | null>(null);
+  // T9.3 — usulan dari tab Chat (sumber: 'ai_chat'). Terpisah dari usulan
+  // tombol cepat di tab Hari Ini (sumber: 'quick_button') agar tidak saling
+  // timpang; keduanya memakai tabel substitutions.ts yang sama.
+  const [chatProposal, setChatProposal] = useState<{
+    reason: Exclude<SubstituteReason, 'lainnya'>;
+    replacement: Workout;
+  } | null>(null);
+  const [chatAcuteInjury, setChatAcuteInjury] = useState<boolean>(false);
   const [overrideApplied, setOverrideApplied] = useState<string | null>(null); // dateISO
 
   useEffect(() => {
@@ -146,6 +159,10 @@ export default function RoutinePage() {
 
   const handleChatSend = async (text: string) => {
     setChatLoading(true);
+    // Bersihkan usulan/peringkat dari jawaban sebelumnya — yang lama tidak
+    // lagi relevan untuk pertanyaan baru (design.md 13.1).
+    setChatProposal(null);
+    setChatAcuteInjury(false);
     
     const userMsg: ChatMsg = { role: 'user', text, timestamp: new Date().toISOString() };
     // Kumpulkan riwayat SEBELUM userMsg agar ikut terkirim (provider pangkas 10 terakhir)
@@ -183,8 +200,51 @@ export default function RoutinePage() {
         for await (const chunk of raw) chunks.push(chunk);
         response = chunks.join('');
       }
-      
-      const assistantMsg: ChatMsg = { role: 'assistant', text: response };
+
+      // T9.2/T9.3 — proses tag [[SUBSTITUTE:<alasan>]] dari AI.
+      // Tag tidak dikenal/nilai 'lainnya' → null, lalu jatuh ke klasifikasi
+      // sisi-klien dari teks pengguna (termasuk riwayat percakapan).
+      // 'acute_injury' adalah nilai tag khusus (bukan SubstituteReason) —
+      // tidak pernah memunculkan substitusi.
+      let tagReason: Exclude<SubstituteReason, 'lainnya'> | 'acute_injury' | null = null;
+      if (hasAcuteInjuryTag(response)) {
+        tagReason = 'acute_injury';
+      } else {
+        tagReason = extractSubstitutionTag(response);
+        if (!tagReason) {
+          const intent = classifySubstitutionIntentWithHistory([
+            ...prevMessages.filter((m) => m.role === 'user').map((m) => m.text),
+            text,
+          ]);
+          if (intent.kind === 'acute_injury') tagReason = 'acute_injury';
+          else if (intent.kind === 'proposal') tagReason = intent.reason;
+        }
+      }
+
+      // Cedera akut → tampilkan kartu peringatan, JANGAN usulkan substitusi.
+      if (tagReason === 'acute_injury') {
+        setChatProposal(null);
+        setChatAcuteInjury(true);
+      } else if (tagReason) {
+        // Usulan tetap dari tabel substitutions.ts — AI tidak mengarang.
+        const rawDay = (jadwalRaw as any)?.hari?.find((h: any) => h.hari === selectedDay) ?? null;
+        setChatAcuteInjury(false);
+        setChatProposal({
+          reason: tagReason,
+          replacement: buildReplacement(tagReason, {
+            hari: selectedDay,
+            tipe: dayData?.tipe ?? 'biasa',
+            pkl: rawDay?.pkl ?? '',
+            workout: rawDay?.workout ?? null,
+          }),
+        });
+      }
+
+      const assistantMsg: ChatMsg = {
+        role: 'assistant',
+        // Tag tidak untuk dilihat pengguna — buang sebelum masuk thread.
+        text: stripSubstitutionTag(response),
+      };
 
       // T8.4 — bila jawaban membahas gerakan dari jadwal hari ini, lampirkan
       // kartu latihan (bukan teks polos).
@@ -316,7 +376,12 @@ export default function RoutinePage() {
           ] as { key: Tab; icon: any; label: string }[]).map((tab) => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => {
+                setActiveTab(tab.key);
+                // Reset scroll: tanpa ini posisi scroll tab sebelumnya
+                // dipertahankan, membuat header sticky menutupi konten atas.
+                window.scrollTo(0, 0);
+              }}
               aria-current={activeTab === tab.key ? 'page' : undefined}
               aria-pressed={activeTab === tab.key}
               className={`flex-1 min-h-[52px] neo-btn-sm flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-black uppercase transition-colors ${
@@ -645,11 +710,42 @@ export default function RoutinePage() {
                 }}
               />
 
-              {/* System Prompt Info */}
-              <div className="neo-box-sm p-2 bg-[#09090b]/5 text-[11px] font-mono text-[#09090b]/70 leading-relaxed space-y-1">
-                <span className="font-black block text-[11px] text-[#09090b] uppercase">System Prompt:</span>
-                <span>Kamu adalah asisten di aplikasi RoutineZie. Usia pengguna: 17 tahun. Jawab dalam Bahasa Indonesia, ringkas, hangat.</span>
-              </div>
+              {/* T9.3 — Usulan dari chat (sumber: 'ai_chat') */}
+              {chatAcuteInjury && <AcuteInjuryNotice />}
+              {chatProposal && (
+                <SubstitutionPanel
+                  proposal={{
+                    reason: chatProposal.reason,
+                    original: effectiveWorkout ?? null,
+                    replacement: chatProposal.replacement,
+                  }}
+                  onAccept={async () => {
+                    // Override hanya ditulis setelah "Terima" (design.md 13.1).
+                    await applyOverride({
+                      dateISO: todayISO,
+                      reason: chatProposal.reason,
+                      source: 'ai_chat',
+                      // Berlaku hanya hari ini; besok kembali normal
+                      // (DATA_SCHEMA.md 7.3).
+                      expiresAfterDate: true,
+                      replacementWorkout: chatProposal.replacement,
+                    });
+                    setChatProposal(null);
+                    setOverrideApplied(todayISO);
+                    getEffectiveDay(todayISO).then((d) => setActiveOverride(d.override));
+                  }}
+                  onReject={() => {
+                    // Tidak ada aksi yang menghakimi — tutup, tetap jadwal asli.
+                    setChatProposal(null);
+                  }}
+                />
+              )}
+
+              {/*
+                Info system prompt disembunyikan: menampilkan prompt mentah ke
+                pengguna adalah kebocoran internal. Gunakan guardrails.ts /
+                DevTools bila perlu inspeksi.
+              */}
             </section>
           )}
 

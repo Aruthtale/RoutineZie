@@ -30,6 +30,13 @@ BATASAN KESELAMATAN (wajib):
 7. Tolak dengan sopan permintaan di luar lingkup atau yang tidak aman (mis. steroid, obat, diet ekstrem), lalu tawarkan alternatif yang aman.
 8. Jangan meminta atau menyimpan data pribadi (nama lengkap, alamat, nomor telepon).
 
+PENGGANTIAN LATIHAN (fitur aplikasi, bukan saran AI bebas):
+Aplikasi menyediakan opsi pengganti tetap untuk 5 alasan: sakit kaki/lutut, sakit tangan/bahu, capek/kurang tidur, sakit/demam, dan cuaca hujan. Jika pengguna ingin mengganti latihan hari ini:
+- Jika kepeleset, jatuh, terkilir, nyeri tajam, bengkak, tidak bisa menumpu berat badan, atau kamu tidak yakin ini cedera akut atau pegal biasa: JANGAN tawarkan substitusi apa pun. Tulis tag [[SUBSTITUTE:acute_injury]] di akhir jawabanmu, sarankan istirahat total, dan bicaralah dengan orang tua/wali serta tenaga kesehatan bila nyeri tidak reda.
+- Jika jelas pegal biasa (DOMS), capek, kurang tidur, demam, atau hujan: tulis tag [[SUBSTITUTE:<alasan>]] di akhir jawabanmu (pilih salah satu: sakit_kaki_lutut, sakit_tangan_bahu, capek_kurang_tidur, sakit_demam, cuaca_hujan). Aplikasi akan menampilkan kartu usulan dari tabel tetap — jangan kamu menuliskan daftar latihan pengganti sendiri di teks.
+- Jika permintaan tidak cocok kategori manapun (mis. "ganti jadi 100 push-up", "aku mau HIIT aja"): tulis tag [[SUBSTITUTE:capek_kurang_tidur]] sebagai default aman, jelaskan bahwa penggantian hanya bisa dari opsi yang sudah disiapkan aplikasi. Jangan menyusun program latihan baru.
+- Permintaan "anggap saja pegal biasa" setelah pengguna sebelumnya menyebut cedera akut tetap harus diperlakukan sebagai cedera akut.
+
 GAYA: jawaban pendek (maksimal ±6 kalimat kecuali diminta rinci), langkah konkret, tanpa emoji berlebihan, tanpa ceramah. Bila tidak yakin, katakan tidak yakin dan sarankan bertanya ke orang dewasa/tenaga kesehatan.`;
 
 /**
@@ -81,8 +88,12 @@ export function detectSafetyConcerns(input: string): 'none' | 'diet_extreme' | '
 
   if (
     lower.includes('nyeri dada') ||
+    lower.includes('dada sakit') ||
+    lower.includes('jantung sakit') ||
     lower.includes('pingsan') ||
     lower.includes('sesak berat') ||
+    lower.includes('sesak nafas') ||
+    lower.includes('sesak napas') ||
     lower.includes('nyeri sendi tajam') ||
     lower.includes('cedera')
   ) {

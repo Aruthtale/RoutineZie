@@ -28,11 +28,20 @@ export default function Balloon({ messages, onSend, isLoading, exercises, onOpen
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Hitung pesan untuk membedakan "pesan baru" vs "mount pertama".
+  // Saat mount/switch tab, jangan scroll — agar reset scroll di nav tidak
+  // dikalahkan dan header sticky tidak menutupi konten atas.
+  const messageCountRef = useRef(0);
+  const messageCount = messages.length;
 
   // Auto-scroll to bottom when new messages appear
   useEffect(() => {
+    const isFirstRender = messageCountRef.current === 0;
+    const hasNewMessages = messageCount > messageCountRef.current;
+    messageCountRef.current = messageCount;
+    if (isFirstRender || !hasNewMessages) return;
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messageCount]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

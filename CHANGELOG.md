@@ -3,6 +3,26 @@
 Semua perubahan penting pada RoutineZie akan didokumentasikan di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/), versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.5.0] — 2026-09-30
+
+### Fixed
+- **Header melayang menutupi konten saat ganti tab** — posisi scroll tab sebelumnya
+  dipertahankan setelah pindah tab, membuat header sticky `ROUTINEZIE` tampak
+  menutupi bagian atas layar baru (paling kasat di tab Chat).
+  - Navigasi bawah sekarang mengembalikan scroll ke posisi paling atas.
+  - `Balloon` tidak lagi memanggil `scrollIntoView` saat mount pertama kali;
+    auto-scroll ke pesan terbaru hanya terjadi saat benar-benar ada pesan baru.
+- **Kebocoran system prompt ke pengguna** — panel "System Prompt" di tab Chat
+  menampilkan instruksi internal AI secara mentah. Panel dev dihapus; prompt
+  hanya dirujuk dari `guardrails.ts` dan tidak pernah dirender ke UI.
+- **Deteksi tag cedera akut dari AI tidak terpakai (dead code)** — AI diinstruksikan
+  memancarkan `[[SUBSTITUTE:acute_injury]]`, tetapi helper `hasAcuteInjuryTag`
+  tidak tersambung di jalur UI. Kini dipakai sebagai sinyal deteksi utama di
+  `page.tsx`, dengan klasifikasi sisi-klien tetap menjadi fallback.
+
+### Changed
+- Import `SUBSTITUTION_RULES` yang tidak terpakai dihapus dari `page.tsx`.
+
 ## [1.4.0] — 2026-09-30
 
 ### Added
