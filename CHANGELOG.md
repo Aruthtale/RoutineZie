@@ -3,6 +3,16 @@
 Semua perubahan penting pada RoutineZie akan didokumentasikan di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/), versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.4.0] — 2026-09-30
+
+### Added
+- **Pembaruan aplikasi dari dalam aplikasi** (tab Pengaturan):
+  - Tombol "Cek Pembaruan" membandingkan versi terpasang dengan rilis terbaru di GitHub.
+  - Bila ada versi baru, pengguna dapat mengunduh dan memasang APK langsung dari aplikasi — layar Install Android terbuka otomatis.
+  - Cadangan otomatis ke `raw.githubusercontent.com` saat API GitHub terkena batas permintaan (60/jam per IP).
+  - Izin "sumber tak dikenal" ditangani: pengguna diarahkan sekali ke pengaturan, lalu cukup ketuk "Perbarui" lagi.
+  - Di luar Android, unduhan diserahkan ke browser.
+
 ## [1.3.0] — 2026-09-29
 
 ### Added

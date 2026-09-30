@@ -75,7 +75,7 @@ Kerjakan **satu fase pada satu waktu**. Setiap tugas punya kriteria (AC = accept
 Rujuk `skill.md` Resep K–L untuk detail tiap fitur.
 - T8.1 **Makan**: checklist per slot, alternatif menu per slot, daftar belanja mingguan (agregasi 7 hari), pelacak air minum, log cepat "kalau lapar".
 - T8.2 **Progres**: grafik berat + catatan mingguan, tes kemampuan 4 mingguan + riwayat, grid stempel riwayat latihan, milestone sebagai stempel, skor tidur mingguan, riwayat override (pola alasan), ekspor ringkasan mingguan.
-- T8.3 **Pengaturan**: jam tiap pengingat on/off, tema, edit profil (`kemampuan_saat_ini`, tinggi/berat) sebagai override lokal (tanpa mengubah file JSON asal), edit jam PKL, kontrol lokasi, status kuota chat AI, panduan izin/baterai + tombol notifikasi contoh, ekspor/impor data, tentang aplikasi + disclaimer.
+- T8.3 **Pengaturan**: jam tiap pengingat on/off, tema, edit profil (`kemampuan_saat_ini`, tinggi/berat) sebagai override lokal (tanpa mengubah file JSON asal), edit jam PKL, kontrol lokasi, status kuota chat AI, panduan izin/baterai + tombol notifikasi contoh, ekspor/impor data, tentang aplikasi + disclaimer, **pembaruan aplikasi dari dalam aplikasi (cek rilis GitHub → unduh → pasang APK)**.
 - T8.4 **Chat**: starter prompts di state kosong, jawaban penjelasan gerakan sebagai kartu `Latihan` (bukan teks polos), rangkum minggu dari data Progres.
 - T8.5 **Jadwal**: hitung mundur ke jam pulang PKL, swipe antar hari.
 - T8.6 **Rating energi pasca-workout**: 5 titik tinta opsional setelah sesi selesai, mengisi `WorkoutLog.energyRating`.
