@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Download, RefreshCw, Check, AlertTriangle, Info } from 'lucide-react';
 import { checkForUpdate, formatBytes, isNative, APP_VERSION, type UpdateInfo } from '@/lib/updater';
-import { downloadAndInstallApk } from '@/lib/apkInstaller';
+import { downloadAndInstallApk, cleanupCachedApks } from '@/lib/apkInstaller';
 
 type Status = 'idle' | 'checking' | 'up-to-date' | 'available' | 'downloading' | 'error';
 
@@ -31,6 +31,8 @@ export default function UpdateChecker() {
     if (!info) return;
     setStatus('downloading');
     try {
+      // Bersihkan APK dari percobaan unduh sebelumnya agar cache tidak menumpuk.
+      await cleanupCachedApks();
       const hasil = await downloadAndInstallApk(info.downloadUrl);
       if (hasil.installerNeedsPermission) {
         setPerluIzin(true);

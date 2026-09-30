@@ -35,19 +35,20 @@ public class ApkInstallerPlugin extends Plugin {
             return;
         }
 
-        // Bisa berupa content:// (siap pakai), file:// (strip skema), atau
-        // path relatif terhadap penyimpanan eksternal (hasil Filesystem.writeFile).
+        // Tiga bentuk path yang mungkin diterima:
+        //  - content://  → URI siap pakai dari FileProvider (hasil Filesystem.writeFile
+        //                  dengan Directory.Cache → authority {pkg}.fileprovider).
+        //  - file://     → path absolut di sistem file.
+        //  - path relatif → fallback ke penyimpanan eksternal + Cache/file dir.
         Uri apkUri;
         File file;
         if (path.startsWith("content://")) {
             apkUri = Uri.parse(path);
-            file = null; // tidak bisa diperiksa langsung
+            file = resolveContentUriToFile(apkUri);
         } else {
             String fsPath = path.startsWith("file://") ? path.substring(7) : path;
-            file = fsPath.startsWith("/")
-                    ? new File(fsPath)
-                    : new File(android.os.Environment.getExternalStorageDirectory(), fsPath);
-            if (!file.exists()) {
+            file = resolveFilePath(fsPath);
+            if (file == null || !file.exists()) {
                 call.reject("FILE_TIDAK_DITEMUKAN");
                 return;
             }
@@ -113,5 +114,53 @@ public class ApkInstallerPlugin extends Plugin {
         } catch (Exception e) {
             call.reject("GAGAL_BUKA_INSTALLER", e);
         }
+    }
+
+    /**
+     * Petakan path absolut / relatif ke File yang benar. Path relatif dari
+     * Filesystem plugin dapat berada di filesDir, cacheDir, atau storan
+     * eksternal — coba semuanya agar pemanggil lama tetap berfungsi.
+     */
+    private File resolveFilePath(String fsPath) {
+        if (fsPath == null || fsPath.isEmpty()) return null;
+        File direct = new File(fsPath);
+        if (direct.isAbsolute()) return direct;
+
+        Context ctx = getContext();
+        File[] candidates = new File[]{
+                new File(ctx.getCacheDir(), fsPath),      // Directory.Cache
+                new File(ctx.getFilesDir(), fsPath),      // Directory.Data
+                new File(ctx.getExternalCacheDir(), fsPath),
+                new File(android.os.Environment.getExternalStorageDirectory(), fsPath),
+        };
+        for (File c : candidates) {
+            if (c != null && c.exists()) return c;
+        }
+        // Belum ada — kembalikan kandidat cache (paling mungkin) agar pesan
+        // FILE_TIDAK_DITEMUKAN tetap akurat untuk alur tulis-terbaru.
+        return candidates[0];
+    }
+
+    /**
+     * Coba balikkan content:// URI ke File di direktori milik app. Dipakai
+     * hanya untuk pesan galat yang lebih jelas; URI tetap dipakai langsung
+     * saat memasang, jadi kegagalan di sini tidak fatal.
+     */
+    private File resolveContentUriToFile(Uri uri) {
+        try {
+            String last = uri.getLastPathSegment();
+            if (last == null) return null;
+            Context ctx = getContext();
+            File[] candidates = new File[]{
+                    new File(ctx.getCacheDir(), last),
+                    new File(ctx.getFilesDir(), last),
+            };
+            for (File c : candidates) {
+                if (c.exists()) return c;
+            }
+        } catch (Exception ignored) {
+            // Bukan URI milik FileProvider kita — abaikan.
+        }
+        return null;
     }
 }
