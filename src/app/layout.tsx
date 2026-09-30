@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Anton, Space_Mono, IBM_Plex_Sans } from 'next/font/google';
 import './globals.css';
+import { SafeAreaBootstrap } from '@/components/SafeAreaBootstrap';
 
 const anton = Anton({
   weight: '400',
@@ -45,7 +46,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={`h-full ${anton.variable} ${spaceMono.variable} ${ibmPlexSans.variable}`}>
-      <body className="font-sans antialiased h-full">{children}</body>
+      <body className="font-sans antialiased h-full">
+        <SafeAreaBootstrap />
+        {children}
+      </body>
     </html>
   );
 }

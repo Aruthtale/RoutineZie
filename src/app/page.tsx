@@ -401,21 +401,28 @@ export default function RoutinePage() {
       {/* Mobile Shell Wrapper */}
       <div className="w-full max-w-md bg-[#ffffff] h-full flex flex-col shadow-2xl border-x-2 border-[#09090b] relative">
         
-        {/* App Bar / Header */}
-        <header className="shrink-0 neo-box border-t-0 border-x-0 bg-[#ffffff] p-4 flex items-center justify-between z-20">
-          <div>
-            <h1 className="text-xl font-extrabold tracking-tight uppercase text-[#09090b]">RoutineZie</h1>
-            <p className="text-xs font-bold text-[#09090b]/70">
-              {selectedDay} • Fase: <span className="uppercase font-black underline text-[#09090b]">{currentPhase}</span>
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
+        {/* App Bar / Header — sticky di bawah status bar (safe-area) */}
+        <header className="shrink-0 bg-[#ffffff] border-b-[3px] border-[#09090b] z-20">
+          {/* Safe-area padding atas (status bar) — andal di Android 15 + iOS */}
+          <div className="pt-[var(--safe-top)]" />
+          <div className="px-4 pb-3 pt-2 flex items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <h1 className="font-display text-2xl leading-none tracking-tight uppercase text-[#09090b]">
+                RoutineZie
+              </h1>
+              <p className="text-[11px] font-bold text-[#09090b]/70 mt-1 truncate">
+                {selectedDay} · Fase:{' '}
+                <span className="uppercase font-black underline text-[#09090b]">
+                  {currentPhase}
+                </span>
+              </p>
+            </div>
             <span
               aria-label={pklStatus}
-              className={`neo-box-sm px-2.5 py-1 text-xs font-mono font-black tracking-wide ${
+              className={`shrink-0 neo-box-sm px-2.5 py-1 text-xs font-mono font-black tracking-wide ${
                 isPKL
                   ? 'bg-[#09090b] text-[#ffffff]'
-                  : 'bg-[#ffffff] text-[#09090b] border-2 border-[#09090b]'
+                  : 'bg-[#ffffff] text-[#09090b]'
               }`}
             >
               {pklStatus}
@@ -789,11 +796,12 @@ export default function RoutinePage() {
           )}
         </main>
 
-        {/* Bottom Tab Navigation */}
+        {/* Bottom Tab Navigation — border atas 3px (sama dengan header) */}
         <nav
           aria-label="Navigasi utama"
-          className="shrink-0 bg-[#ffffff] border-t-2 border-[#09090b] flex z-30 pb-[env(safe-area-inset-bottom)]"
+          className="shrink-0 bg-[#ffffff] border-t-[3px] border-[#09090b] flex z-30"
         >
+          <div className="flex w-full pb-[var(--safe-bottom)]">
           {([
             { key: 'schedule', icon: InkSchedule, label: 'Jadwal' },
             { key: 'meals', icon: InkMeal, label: 'Makan' },
@@ -820,6 +828,7 @@ export default function RoutinePage() {
               <tab.icon className="w-5 h-5" aria-hidden="true" /> {tab.label}
             </button>
           ))}
+          </div>
         </nav>
 
         {/* Item Detail Modal */}

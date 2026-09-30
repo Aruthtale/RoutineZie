@@ -45,11 +45,31 @@
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: transparent;
-    /* Safe area: status bar & gesture bar (design.md §9) */
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+  }
+
+  /*
+   * Safe area: status bar & gesture bar (design.md §9 + T8.3).
+   * Android 15 (targetSdk 35) memaksa edge-to-edge; env() sering 0 di
+   * WebView, jadi pakai fallback konstan + StatusBar plugin (lihat
+   * layout.tsx). iOS tetap andal lewat env() murni.
+   */
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+  }
+
+  /* Mobile: terapkan safe-area padding ke body.
+     Android: nilai ditingkatkan via JS di layout.tsx (env() sering 0).
+     iOS: env() murni sudah andal. */
+  @media (max-width: 540px) {
+    body {
+      padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
+      padding-left: var(--safe-left);
+      padding-right: var(--safe-right);
+    }
   }
 
   /* A11y: support system font scale up to 130% without breaking layout */
@@ -68,15 +88,23 @@
   }
 }
 
-/* Manga Neubrutalism Helper Utility Classes */
+/*
+ * Manga Neubrutalism Helper Utility Classes
+ * Token mengikuti referensi neobrutalism.dev + design.md §3.1:
+ *   --border-width: 2px (default) / 3px (thick)
+ *   --shadow: 4px 4px 0 var(--kuro)
+ * Konsistensi: semua kelas neo-* pakai nilai token yang sama.
+ */
+
+/* ===== BOX (panel/kartu statis) ===== */
 .neo-box {
   border: 2px solid var(--kuro);
-  box-shadow: 3px 3px 0px var(--kuro);
+  box-shadow: 4px 4px 0px var(--kuro);
 }
 
 .neo-box-sm {
   border: 2px solid var(--kuro);
-  box-shadow: 2px 2px 0px var(--kuro);
+  box-shadow: 3px 3px 0px var(--kuro);
 }
 
 .neo-box-thick {
@@ -84,9 +112,10 @@
   box-shadow: 4px 4px 0px var(--kuro);
 }
 
+/* ===== BUTTON (interaktif, punya state :active) ===== */
 .neo-btn {
   border: 2px solid var(--kuro);
-  box-shadow: 3px 3px 0px var(--kuro);
+  box-shadow: 4px 4px 0px var(--kuro);
   font-weight: 700;
   transition:
     transform 0.05s ease,
@@ -99,11 +128,26 @@
   box-shadow: 1px 1px 0px var(--kuro);
 }
 
+.neo-btn-sm {
+  border: 2px solid var(--kuro);
+  box-shadow: 3px 3px 0px var(--kuro);
+  font-weight: 700;
+  transition:
+    transform 0.05s ease,
+    box-shadow 0.05s ease;
+  cursor: pointer;
+}
+
+.neo-btn-sm:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--kuro);
+}
+
 .neo-btn-black {
   background-color: var(--kuro);
   color: var(--shiro);
   border: 2px solid var(--kuro);
-  box-shadow: 3px 3px 0px var(--haiiro);
+  box-shadow: 4px 4px 0px var(--haiiro);
   font-weight: 700;
   transition:
     transform 0.05s ease,
