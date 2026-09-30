@@ -44,8 +44,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={`${anton.variable} ${spaceMono.variable} ${ibmPlexSans.variable}`}>
-      <body className="font-sans antialiased">{children}</body>
+    <html lang="id" className={`h-full ${anton.variable} ${spaceMono.variable} ${ibmPlexSans.variable}`}>
+      <body className="font-sans antialiased h-full">{children}</body>
     </html>
   );
 }

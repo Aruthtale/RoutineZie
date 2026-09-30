@@ -3,7 +3,7 @@
 import React from 'react';
 import ExportImportManager from './ExportImportManager';
 import UpdateChecker from './UpdateChecker';
-import { Settings, Shield, Bell, Moon, Sun, Monitor } from 'lucide-react';
+import { Settings, Shield } from 'lucide-react';
 import jadwalRaw from '@/data/jadwal_mingguan.json';
 
 export default function SettingsView() {

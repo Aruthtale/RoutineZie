@@ -1,21 +1,24 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, type SVGProps } from 'react';
 import WeightTracker from './WeightTracker';
 import SleepConsistencyTracker from './SleepConsistencyTracker';
 import AbilityTestPanel from './AbilityTestPanel';
 import WorkoutStampGrid from './WorkoutStampGrid';
 import InsightsPanel from './InsightsPanel';
-import { Scale, Moon, Dumbbell, Calendar, Lightbulb } from 'lucide-react';
+import { Scale } from 'lucide-react';
+import { InkSleep, InkRun, InkSchedule, InkFlame } from './icons/InkIcons';
 
 type TabKey = 'weight' | 'sleep' | 'ability' | 'stamps' | 'insights';
 
-const TABS: { key: TabKey; label: string; icon: typeof Scale }[] = [
-  { key: 'weight', label: 'BERAT', icon: Scale },
-  { key: 'sleep', label: 'TIDUR', icon: Moon },
-  { key: 'ability', label: 'TES', icon: Dumbbell },
-  { key: 'stamps', label: 'STEMPEL', icon: Calendar },
-  { key: 'insights', label: 'WAWASAN', icon: Lightbulb },
+type IconCmp = (props: SVGProps<SVGSVGElement>) => React.JSX.Element;
+
+const TABS: { key: TabKey; label: string; icon: IconCmp }[] = [
+  { key: 'weight', label: 'BERAT', icon: Scale as IconCmp },
+  { key: 'sleep', label: 'TIDUR', icon: InkSleep },
+  { key: 'ability', label: 'TES', icon: InkRun },
+  { key: 'stamps', label: 'STEMPEL', icon: InkSchedule },
+  { key: 'insights', label: 'WAWASAN', icon: InkFlame },
 ];
 
 export default function ProgressView() {

@@ -8,7 +8,8 @@ import {
   clearActiveWorkoutSession,
 } from '@/lib/workout/session';
 import { NormalizedWorkout, NormalizedExercise } from '@/lib/schedule/parser';
-import { Dumbbell, Play, CheckCircle2, RotateCcw, HelpCircle, ArrowLeft, Timer, Check, Info } from 'lucide-react';
+import { Play, RotateCcw, HelpCircle, ArrowLeft, Info } from 'lucide-react';
+import { InkStamp } from './icons/InkIcons';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { RoutineRepository } from '@/lib/db/repository';
 
@@ -222,7 +223,7 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
         {session.isFinished ? (
           <main className="flex-1 p-6 flex flex-col items-center justify-center text-center space-y-6 overflow-y-auto">
             <div className="neo-box-thick bg-[#09090b] text-[#ffffff] p-8 w-full">
-              <CheckCircle2 className="w-16 h-16 mx-auto mb-3 text-[#ffffff]" />
+              <InkStamp className="w-16 h-16 mx-auto mb-3 text-[#ffffff]" />
               <h1 className="text-2xl font-black uppercase tracking-tight">WORKOUT SELESAI!</h1>
               <p className="text-xs font-bold text-[#ffffff]/80 mt-2 leading-relaxed">
                 Tubuhmu berkembang bertahap hari ini. Disiplin adalah kunci!

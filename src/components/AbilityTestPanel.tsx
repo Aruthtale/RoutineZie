@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { RoutineRepository } from '@/lib/db/repository';
 import { AbilityTest } from '@/lib/db';
-import { Dumbbell, Plus, History, TrendingUp, X } from 'lucide-react';
+import { InkRun, InkStamp } from './icons/InkIcons';
+import { Plus, History, TrendingUp, X } from 'lucide-react';
 
 /**
  * T8.2c — Tes kemampuan berkala. Benchmark default diambil dari
@@ -90,7 +91,7 @@ export default function AbilityTestPanel() {
     <div className="space-y-3">
       <div className="flex items-center justify-between border-b-2 border-[#09090b] pb-2">
         <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-          <Dumbbell className="w-4 h-4" /> TES KEMAMPUAN
+          <InkRun className="w-4 h-4" /> TES KEMAMPUAN
         </h3>
         <div className="flex gap-1.5">
           <button

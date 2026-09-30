@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { RoutineRepository } from '@/lib/db/repository';
 import { SleepLog, WorkoutLog } from '@/lib/db';
 import { computeSleepWeekStats, getWeekDates, getWeekStart, getWeekLabel } from '@/lib/progress/weeklyStats';
-import { Moon, Award, Plus, Calendar, Clock, CheckCircle2 } from 'lucide-react';
+import { InkSleep, InkStamp, InkSchedule } from './icons/InkIcons';
+import { Plus, Clock, CheckCircle2 } from 'lucide-react';
 
 export default function SleepConsistencyTracker() {
   const [sleepLogs, setSleepLogs] = useState<SleepLog[]>([]);
@@ -70,7 +71,7 @@ export default function SleepConsistencyTracker() {
       {/* Header */}
       <div className="flex items-center justify-between border-b-2 border-[#09090b] pb-2">
         <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-          <Moon className="w-4 h-4 text-[#09090b]" /> LOG TIDUR & KONSISTENSI
+          <InkSleep className="w-4 h-4 text-[#09090b]" /> LOG TIDUR & KONSISTENSI
         </h3>
         <span className="text-[11px] font-black uppercase text-[#09090b]/60 bg-[#09090b]/5 px-2 py-0.5 neo-box-sm">
           TARGET ≤ 22.00
@@ -108,7 +109,7 @@ export default function SleepConsistencyTracker() {
       <div className="neo-box p-3.5 bg-[#ffffff] space-y-1.5">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-black uppercase tracking-wider text-[#09090b]/70 flex items-center gap-1">
-            <Moon className="w-3.5 h-3.5" /> SKOR TIDUR MINGGUAN
+            <InkSleep className="w-3.5 h-3.5" /> SKOR TIDUR MINGGUAN
           </span>
           <span className="text-[10px] font-mono font-bold text-[#09090b]/50 uppercase">
             {getWeekLabel(weekStartISO)}
@@ -147,7 +148,7 @@ export default function SleepConsistencyTracker() {
       <div className="neo-box p-3.5 bg-[#ffffff] space-y-1.5">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-black uppercase tracking-wider text-[#09090b]/70 flex items-center gap-1">
-            <Award className="w-3.5 h-3.5 text-[#09090b]" /> KONSISTENSI LATIHAN (7 HARI TERAKHIR)
+            <InkStamp className="w-3.5 h-3.5 text-[#09090b]" /> KONSISTENSI LATIHAN (7 HARI TERAKHIR)
           </span>
           <span className="text-xs font-mono font-black text-[#09090b]">
             {uniqueWorkoutDays} / 6 SESI
@@ -247,7 +248,7 @@ export default function SleepConsistencyTracker() {
                 className="neo-box-sm p-2 flex items-center justify-between text-xs bg-[#ffffff]"
               >
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-3.5 h-3.5 text-[#09090b]/50" />
+                  <InkSchedule className="w-3.5 h-3.5 text-[#09090b]/50" />
                   <span className="font-mono font-bold text-[#09090b]">{log.dateISO}</span>
                   <span className="text-[11px] font-mono text-[#09090b]/70">
                     {log.sleptAt} - {log.wokeAt}

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { getScheduleForDay, getNowAndNext, parseWaktu, getPulangMinutes, formatJam, findMentionedExercise, type NormalizedWorkout } from '@/lib/schedule/parser';
-import { Clock, Calendar, ChevronRight, Info, Dumbbell, X, Play, Utensils, ChartBar, Settings as SettingsIcon, Activity, MessageCircle, Send, Bot } from 'lucide-react';
+import { ChevronRight, Info, X, Play, Settings as SettingsIcon, Send } from 'lucide-react';
 import WorkoutModeModal from '@/components/WorkoutModeModal';
 import MealChecklist from '@/components/MealChecklist';
 import WaterTracker from '@/components/WaterTracker';
@@ -24,6 +24,16 @@ import {
   normalizeReplacement,
   buildReplacement,
 } from '@/lib/schedule/substitutions';
+import { useDaySwipe } from '@/hooks/useDaySwipe';
+import { useBackHandler, registerBackHandler } from '@/hooks/useBackHandler';
+import {
+  InkSchedule,
+  InkMeal,
+  InkProgress,
+  InkChat,
+  InkRun,
+  InkAssistant,
+} from '@/components/icons/InkIcons';
 import { dateToISO, DAY_NAMES, getEffectiveDay, applyOverride, clearOverride, getActiveNonExpiringOverrides } from '@/lib/schedule/effectiveDay';
 import { SubstitutionPanel, SubstitutionQuickButtons, AcuteInjuryNotice } from '@/components/SubstitutionPanel';
 import {
@@ -56,6 +66,7 @@ export default function RoutinePage() {
   } | null>(null);
   const [chatAcuteInjury, setChatAcuteInjury] = useState<boolean>(false);
   const [overrideApplied, setOverrideApplied] = useState<string | null>(null); // dateISO
+  const [showExitToast, setShowExitToast] = useState<boolean>(false);
 
   useEffect(() => {
     const dayIndex = new Date().getDay();
@@ -85,6 +96,56 @@ export default function RoutinePage() {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Hierarki tombol Back Android: modal dulu → tab home → tekan 2x untuk keluar.
+  // Ref mencegah listener lama memakai state/`activeTab` yang basi.
+  const activeTabRef = useRef<Tab>(activeTab);
+  activeTabRef.current = activeTab;
+
+  // Tier-1: modal yang sedang terbuka mendaftar handler penutupannya sendiri.
+  // Stack LIFO berarti modal yang paling belakang dibuka ditutup paling dulu.
+  useEffect(() => {
+    if (!selectedItemDetail) return;
+    return registerBackHandler(() => {
+      setSelectedItemDetail(null);
+      return true;
+    });
+  }, [selectedItemDetail]);
+
+  useEffect(() => {
+    if (!isWorkoutModeOpen) return;
+    return registerBackHandler(() => {
+      setIsWorkoutModeOpen(false);
+      return true;
+    });
+  }, [isWorkoutModeOpen]);
+
+  useBackHandler({
+    getActiveTab: () => activeTabRef.current,
+    goHome: () => setActiveTab('schedule'),
+    onExitPrompt: () => {
+      setShowExitToast(true);
+      window.setTimeout(() => setShowExitToast(false), 2000);
+    },
+  });
+
+  // T8.5 — Navigasi hari via swipe gesture horizontal
+  const handlePrevDay = () => {
+    const curIdx = DAYS.indexOf(selectedDay);
+    const prevIdx = (curIdx - 1 + DAYS.length) % DAYS.length;
+    setSelectedDay(DAYS[prevIdx]);
+  };
+
+  const handleNextDay = () => {
+    const curIdx = DAYS.indexOf(selectedDay);
+    const nextIdx = (curIdx + 1) % DAYS.length;
+    setSelectedDay(DAYS[nextIdx]);
+  };
+
+  const daySwipe = useDaySwipe({
+    onSwipeLeft: handleNextDay,
+    onSwipeRight: handlePrevDay,
+  });
 
   const dayData = getScheduleForDay(selectedDay);
   const { nowItem, nextItem, currentPhase } = getNowAndNext(
@@ -336,12 +397,12 @@ export default function RoutinePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f4f5] flex justify-center text-[#09090b] font-sans antialiased">
+    <div className="h-screen bg-[#f4f4f5] flex justify-center text-[#09090b] font-sans antialiased overflow-hidden">
       {/* Mobile Shell Wrapper */}
-      <div className="w-full max-w-md bg-[#ffffff] min-h-screen flex flex-col shadow-2xl border-x-2 border-[#09090b] relative pb-24">
+      <div className="w-full max-w-md bg-[#ffffff] h-full flex flex-col shadow-2xl border-x-2 border-[#09090b] relative">
         
         {/* App Bar / Header */}
-        <header className="neo-box border-t-0 border-x-0 bg-[#ffffff] p-4 flex items-center justify-between sticky top-0 z-20">
+        <header className="shrink-0 neo-box border-t-0 border-x-0 bg-[#ffffff] p-4 flex items-center justify-between z-20">
           <div>
             <h1 className="text-xl font-extrabold tracking-tight uppercase text-[#09090b]">RoutineZie</h1>
             <p className="text-xs font-bold text-[#09090b]/70">
@@ -362,43 +423,10 @@ export default function RoutinePage() {
           </div>
         </header>
 
-        {/* Bottom Tab Navigation */}
-        <nav
-          aria-label="Navigasi utama"
-          className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-[#ffffff] border-t-2 border-[#09090b] flex z-30 pb-[env(safe-area-inset-bottom)]"
-        >
-          {([
-            { key: 'schedule', icon: Clock, label: 'Jadwal' },
-            { key: 'meals', icon: Utensils, label: 'Makan' },
-            { key: 'progress', icon: ChartBar, label: 'Progres' },
-            { key: 'chat', icon: MessageCircle, label: 'Chat' },
-            { key: 'settings', icon: SettingsIcon, label: 'Pengaturan' },
-          ] as { key: Tab; icon: any; label: string }[]).map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => {
-                setActiveTab(tab.key);
-                // Reset scroll: tanpa ini posisi scroll tab sebelumnya
-                // dipertahankan, membuat header sticky menutupi konten atas.
-                window.scrollTo(0, 0);
-              }}
-              aria-current={activeTab === tab.key ? 'page' : undefined}
-              aria-pressed={activeTab === tab.key}
-              className={`flex-1 min-h-[52px] neo-btn-sm flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-black uppercase transition-colors ${
-                activeTab === tab.key
-                  ? 'bg-[#09090b] text-[#ffffff]'
-                  : 'bg-[#ffffff] text-[#09090b]/70 hover:bg-[#09090b]/5'
-              }`}
-            >
-              <tab.icon className="w-5 h-5" aria-hidden="true" /> {tab.label}
-            </button>
-          ))}
-        </nav>
-
-        <main className="p-4 space-y-5 flex-1 pb-12">
+        <main className="p-4 space-y-5 flex-1 overflow-y-auto pb-6">
           {/* ====================== TAB: JADWAL ====================== */}
           {activeTab === 'schedule' && (
-            <>
+            <div {...daySwipe} className="space-y-5">
               {/* T7.5 — override "berlaku terus" yang belum dikonfirmasi hari ini */}
               {staleNonExpiring && (
                 <section className="neo-box bg-[#ffffff] p-3.5 space-y-2 border-[3px]">
@@ -522,7 +550,7 @@ export default function RoutinePage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="neo-box p-2 bg-[#09090b] text-[#ffffff]">
-                        <Dumbbell className="w-5 h-5" />
+                        <InkRun className="w-5 h-5" />
                       </div>
                       <div>
                         <span className="text-[11px] font-black uppercase tracking-wider text-[#09090b]/60 block">
@@ -598,7 +626,7 @@ export default function RoutinePage() {
 
               <section className="space-y-3">
                 <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-[#09090b]" /> AGENDA {selectedDay.toUpperCase()}
+                  <InkSchedule className="w-4 h-4 text-[#09090b]" /> AGENDA {selectedDay.toUpperCase()}
                 </h3>
                 <div className="space-y-2.5">
                   {dayData?.jadwal?.map((item: any, idx: number) => (
@@ -628,7 +656,7 @@ export default function RoutinePage() {
                   ))}
                 </div>
               </section>
-            </>
+            </div>
           )}
 
           {/* ====================== TAB: MAKAN ====================== */}
@@ -636,7 +664,7 @@ export default function RoutinePage() {
             <section className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-                  <Utensils className="w-4 h-4 text-[#09090b]" /> POLA MAKAN {selectedDay.toUpperCase()}
+                  <InkMeal className="w-4 h-4 text-[#09090b]" /> POLA MAKAN {selectedDay.toUpperCase()}
                 </h3>
                 <span className="text-[11px] font-black uppercase text-[#09090b]/60 bg-[#09090b]/5 px-2 py-0.5 neo-box-sm">
                   {profil?.usia ? `${profil.usia} TAHUN` : 'INFO NUTRISI'}
@@ -654,7 +682,7 @@ export default function RoutinePage() {
           {activeTab === 'progress' && (
             <section className="space-y-3">
               <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-                <Activity className="w-4 h-4 text-[#09090b]" /> LOG & PROGRES MINGGUAN
+                <InkProgress className="w-4 h-4 text-[#09090b]" /> LOG & PROGRES MINGGUAN
               </h3>
               <ProgressView />
             </section>
@@ -666,7 +694,7 @@ export default function RoutinePage() {
               {/* Chat Header */}
               <div className="neo-box p-4 bg-[#09090b] text-[#ffffff] space-y-2">
                 <div className="flex items-center gap-2">
-                  <Bot className="w-5 h-5 text-[#ffffff]" />
+                  <InkAssistant className="w-5 h-5 text-[#ffffff]" />
                   <div>
                     <h3 className="text-sm font-black uppercase">Zenn Assistant</h3>
                     <p className="text-[11px] font-mono text-[#ffffff]/60">
@@ -761,6 +789,39 @@ export default function RoutinePage() {
           )}
         </main>
 
+        {/* Bottom Tab Navigation */}
+        <nav
+          aria-label="Navigasi utama"
+          className="shrink-0 bg-[#ffffff] border-t-2 border-[#09090b] flex z-30 pb-[env(safe-area-inset-bottom)]"
+        >
+          {([
+            { key: 'schedule', icon: InkSchedule, label: 'Jadwal' },
+            { key: 'meals', icon: InkMeal, label: 'Makan' },
+            { key: 'progress', icon: InkProgress, label: 'Progres' },
+            { key: 'chat', icon: InkChat, label: 'Chat' },
+            { key: 'settings', icon: SettingsIcon, label: 'Pengaturan' },
+          ] as { key: Tab; icon: any; label: string }[]).map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => {
+                setActiveTab(tab.key);
+                // Reset scroll: tanpa ini posisi scroll tab sebelumnya
+                // dipertahankan, membuat header sticky menutupi konten atas.
+                window.scrollTo(0, 0);
+              }}
+              aria-current={activeTab === tab.key ? 'page' : undefined}
+              aria-pressed={activeTab === tab.key}
+              className={`flex-1 min-h-[52px] neo-btn-sm flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-black uppercase transition-colors ${
+                activeTab === tab.key
+                  ? 'bg-[#09090b] text-[#ffffff]'
+                  : 'bg-[#ffffff] text-[#09090b]/70 hover:bg-[#09090b]/5'
+              }`}
+            >
+              <tab.icon className="w-5 h-5" aria-hidden="true" /> {tab.label}
+            </button>
+          ))}
+        </nav>
+
         {/* Item Detail Modal */}
         {selectedItemDetail && (
           <div className="fixed inset-0 bg-[#09090b]/75 z-50 flex items-end sm:items-center justify-center p-4">
@@ -796,6 +857,21 @@ export default function RoutinePage() {
             workoutData={effectiveWorkout}
             onClose={() => setIsWorkoutModeOpen(false)}
           />
+        )}
+
+        {/* Toast verifikasi keluar (tier-3 back button) */}
+        {showExitToast && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] pointer-events-none"
+          >
+            <div className="neo-box bg-[#09090b] text-[#ffffff] px-4 py-2.5 shadow-2xl">
+              <span className="text-xs font-black uppercase tracking-wide">
+                Tekan sekali lagi untuk keluar
+              </span>
+            </div>
+          </div>
         )}
       </div>
     </div>

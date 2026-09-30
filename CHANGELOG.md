@@ -3,6 +3,53 @@
 Semua perubahan penting pada RoutineZie akan didokumentasikan di sini.
 Format mengikuti [Keep a Changelog](https://keepachangelog.com/id/1.1.0/), versi mengikuti [Semantic Versioning](https://semver.org/lang/id/).
 
+## [1.6.0] — 2026-09-30
+
+### Added
+- **Hierarki tombol/gestur Back Android 3-tier** (`src/hooks/useBackHandler.ts`)
+  — sebelumnya Back langsung menutup aplikasi dari mana saja.
+  - Tier 1: modal/overlay terbuka → tutup modal teratas (stack register/
+    unregister global via `registerBackHandler`).
+  - Tier 2: bukan di tab utama → kembali ke tab utama.
+  - Tier 3: sudah di tab utama → tekan 2x dalam 2000ms untuk keluar; tekanan
+    pertama memunculkan toast verifikasi.
+  - `src/hooks/useDaySwipe.ts` — gestur geser kiri/kanan untuk pindah hari.
+- **Otomatisasi red-team AI (T9.3)** — `src/lib/ai/redteam.test.ts`, 24 kasus
+  dari tabel `AI_CHAT.md` bagian 8 sebagai unit test Vitest (semua lolos).
+
+### Fixed
+- **Navigasi bawah menutupi konten (paling kasat di tab Chat)** — nav memakai
+  `position: fixed` sementara shell memakai `min-h-screen`, sehingga panel chat,
+  pertanyaan cepat, dan input bisa tertimpa nav.
+  - Shell direstrukturisasi jadi app shell flexbox: `html`/`body` dapat
+    `h-full`, root `h-screen overflow-hidden`, dan `<main>` menjadi satu-satunya
+    area scroll (`flex-1 overflow-y-auto`).
+  - `<nav>` kini in-flow (`shrink-0`) **setelah** `<main>` di DOM, bukan fixed —
+    urutan DOM sebelumnya (`header → nav → main`) membuat nav muncul di tengah.
+  - `<header>` juga jadi in-flow (`sticky` tidak lagi diperlukan).
+- **Notifikasi terjadwal tidak pernah muncul di Android 8+** — jadwal memakai
+  `channelId: 'routinezie-reminders'`, tapi plugin hanya membuat channel
+  `'default'` saat load; Android 8+ menolak notifikasi dengan channelId tak
+  terdaftar secara diam-diam.
+  - `NotificationService.ensureChannel()` kini membuat channel sekali sebelum
+    schedule (`IMPORTANCE_HIGH`, getar, `VISIBILITY_PUBLIC`).
+  - `CHANNEL_ID` diekspor jadi satu sumber kebenaran; `smallIcon`/`largeIcon`
+    yang ambigu dihapus dari request (mencegah ikon hilang di status bar).
+  - Ikon status bar `ic_stat_icon.xml` ditambahkan.
+- **Deteksi cedera akut melewatkan frasa "tidak bisa menumpu berat badan"**
+  (AI_CHAT.md bagian 7) — pola regex diperluas: `menumpu|numpu`.
+- **Ikon library umum bercampur dengan gaya tinta** — beberapa komponen masih
+  memakai ikon Lucide mentah (`Calendar`, `Check`, `CheckCircle2`) atau inline
+  SVG ad-hoc, merusak konsistensi T10.2.
+  - `Balloon` (header chat), `WeeklyNoteEditor`, `WorkoutModeModal` (layar
+    selesai), `SleepConsistencyTracker`, dan `ProgressView` sekarang memakai
+    SVG guratan tinta dari `src/components/icons/InkIcons.tsx`.
+  - Import Lucide yang tidak terpakai dibersihkan dari `page.tsx`,
+    `SettingsView.tsx`, dan `WorkoutModeModal.tsx`.
+
+### Changed
+- Versi naik ke 1.6.0 (versionCode 160) untuk rilis GitHub.
+
 ## [1.5.0] — 2026-09-30
 
 ### Fixed

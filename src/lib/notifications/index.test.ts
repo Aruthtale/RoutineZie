@@ -8,6 +8,7 @@ vi.mock('@capacitor/local-notifications', () => ({
     schedule: vi.fn().mockResolvedValue({ notifications: [] }),
     getPending: vi.fn().mockResolvedValue({ notifications: [] }),
     cancel: vi.fn().mockResolvedValue(undefined),
+    createChannel: vi.fn().mockResolvedValue(undefined),
   },
 }));
 
@@ -145,5 +146,20 @@ describe('NotificationService', () => {
   it('cancelAll memanggil cancel', async () => {
     await NotificationService.cancelAll();
     expect(LocalNotifications.getPending).toHaveBeenCalled();
+  });
+
+  it('reschedule selalu membuat channel sebelum menjadwalkan', async () => {
+    // Di Android 8+ channelId tak terdaftar menyebabkan notifikasi ditolak
+    // diam-diam — channel harus dibuat tiap reschedule (idempotent di native).
+    (LocalNotifications.createChannel as any).mockClear();
+    await NotificationService.reschedule(HARI_UJI, {
+      enabled: true,
+      offsetMinutes: 0,
+      itemIds: [],
+    });
+    expect(LocalNotifications.createChannel).toHaveBeenCalledTimes(1);
+    expect((LocalNotifications.createChannel as any).mock.calls[0][0]).toMatchObject({
+      id: 'routinezie-reminders',
+    });
   });
 });

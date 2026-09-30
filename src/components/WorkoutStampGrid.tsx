@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { RoutineRepository } from '@/lib/db/repository';
 import { WorkoutLog, Milestone } from '@/lib/db';
 import { getWeekDates, getWeekStart, checkMilestones, countWorkoutsPerWeek, computeSleepWeekStats } from '@/lib/progress/weeklyStats';
-import { Award, Calendar } from 'lucide-react';
+import { InkStamp, InkSchedule } from './icons/InkIcons';
 
 /**
  * T8.2d — Grid stempel riwayat latihan + milestone. Menampilkan:
@@ -80,7 +80,7 @@ export default function WorkoutStampGrid() {
     <div className="space-y-3">
       <div className="flex items-center justify-between border-b-2 border-[#09090b] pb-2">
         <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-          <Calendar className="w-4 h-4" /> STAMEL LATIHAN
+          <InkSchedule className="w-4 h-4" /> STAMEL LATIHAN
         </h3>
         <div className="flex items-center gap-1.5">
           <button
@@ -129,7 +129,7 @@ export default function WorkoutStampGrid() {
       {/* Milestone */}
       <div className="space-y-2">
         <span className="text-[11px] font-black uppercase text-[#09090b]/60 block tracking-wider flex items-center gap-1.5">
-          <Award className="w-3.5 h-3.5" /> MILESTONE TERCAPAI
+          <InkStamp className="w-3.5 h-3.5" /> MILESTONE TERCAPAI
         </span>
         {loading ? (
           <p className="text-[11px] text-[#09090b]/50">Memuat…</p>

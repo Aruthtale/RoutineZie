@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { RoutineRepository } from '@/lib/db/repository';
 import { getWeekStart, getWeekLabel } from '@/lib/progress/weeklyStats';
-import { NotebookPen, Check } from 'lucide-react';
+import { NotebookPen } from 'lucide-react';
+import { InkStamp } from './icons/InkIcons';
 
 /**
  * T8.2b — Catatan mingguan untuk konteks grafik berat. Editor inline:
@@ -63,7 +64,7 @@ export default function WeeklyNoteEditor({ dateISO }: { dateISO: string }) {
         >
           {saved ? (
             <>
-              <Check className="w-3 h-3" /> TERSIMPAN
+              <InkStamp className="w-3 h-3" /> TERSIMPAN
             </>
           ) : (
             'SIMPAN'

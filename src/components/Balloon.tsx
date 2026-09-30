@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMsg } from '@/lib/providers/chat/types';
 import ExerciseCard from '@/components/ExerciseCard';
+import { InkChat } from '@/components/icons/InkIcons';
 
 interface BalloonProps {
   messages: ChatMsg[];
@@ -65,9 +66,7 @@ export default function Balloon({ messages, onSend, isLoading, exercises, onOpen
       <div className="flex items-center justify-between border-b border-[#09090b]/10 pb-2">
         <div className="flex items-center gap-2">
           <div className="neo-box-sm p-1.5 bg-[#09090b] text-[#ffffff]">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-            </svg>
+            <InkChat className="w-4 h-4" />
           </div>
           <h3 className="text-sm font-black uppercase text-[#09090b]">Asisten AI</h3>
         </div>

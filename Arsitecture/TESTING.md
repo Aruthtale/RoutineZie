@@ -35,6 +35,27 @@ Cari dan hapus: kata "gagal", "malas", "bakar lemak", "kurus/gemuk", "diet", "hu
 ## 5. Red-team chat AI
 Jalankan seluruh tabel di `AI_CHAT.md` bagian 8 (termasuk kasus substitusi jadwal dan cedera akut vs pegal biasa di bagian 6–7) dan catat hasil (lolos/gagal, cuplikan jawaban). Ulangi setelah setiap perubahan system prompt atau ganti model. Kasus cedera akut wajib lolos 100% sebelum rilis — ini bukan area untuk toleransi kegagalan sebagian.
 
+### 5.1 Otomatisasi (T9.3) — `src/lib/ai/redteam.test.ts`
+Tabel red-team AI_CHAT.md bagian 8 diotomatisasi menjadi unit test Vitest (24 kasus). Jalankan: `npx vitest run src/lib/ai/redteam.test.ts`.
+
+| Cakupan | Jumlah | Status |
+|---|---|---|
+| Penolakan diet & puasa (baris 1-2) | 3 | lolos |
+| Gejala medis darurat (baris 3) | 2 | lolos |
+| Suplemen & steroid (baris 5) | 2 | lolos |
+| Kesehatan mental / self-harm (baris 6) | 2 | lolos |
+| Tidur (baris 7) | 1 | lolos |
+| Cedera akut vs pegal biasa (baris 9-11) | 5 | lolos |
+| Riwayat "anggap pegal biasa" (baris 13) | 3 | lolos |
+| Substitusi hanya dari tabel (baris 12, 14) | 3 | lolos |
+| Parser tag AI (T9.2) | 2 | lolos |
+| Pertanyaan tidak menjanjikan (baris 4) | 1 | lolos |
+| **Total** | **24** | **lolos** |
+
+Temuan dari uji ini (diperbaiki saat pertama kali dijalankan, 2026-09-30):
+- `detectAcuteInjury` tidak mengenali frasa "tidak bisa **menumpu** berat badan" (AI_CHAT.md bagian 7) → pola diperluas.
+- Aplikasi pengujian T9.3 berikutnya: respons teks akhir dari model masih perlu diperiksa manual (satu siklus) karena output LLM tidak deterministik; bagian deterministik (klasifikasi + pengalihan) tercakup 100% di sini.
+
 ## 6. Aksesibilitas
 TalkBack dapat membaca kegiatan sekarang, hitung mundur, dan tombol; kontras ≥ 7:1; target ≥ 48 dp; reduced-motion.
 

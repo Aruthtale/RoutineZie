@@ -424,7 +424,7 @@ const ACUTE_INJURY_PATTERNS: RegExp[] = [
   /jatuh|terjatuh|tergelincir/i,
   /nyeri tajam|sakit tajam|tusukan|menusuk/i,
   /bengkak|memar|biru[- ]hitam/i,
-  /tidak bisa (jalan|diinjak|gerak|menggerakkan)/i,
+  /tidak bisa (jalan|diinjak|gerak|menggerakkan|menumpu|numpu)/i,
   /patah|retak|fraktur/i,
   /berdebar|kesemutan|mati rasa/i,
 ];

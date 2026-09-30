@@ -32,6 +32,13 @@ import { parseWaktu } from '@/lib/schedule/parser';
 const PREF_KEY = 'routinezie_notification_settings';
 
 /**
+ * ID notification channel Android. Harus persis sama dengan yang dipakai di
+ * tiap request schedule (field `channelId`) dan dibuat sekali via
+ * `NotificationService.ensureChannel()`.
+ */
+export const CHANNEL_ID = 'routinezie-reminders';
+
+/**
  * Jumlah maksimum notifikasi yang dijadwalkan sekaligus.
  * Android 12+ membatasi ~quota ratusan; kita ambil aman 40 (~2 hari ke depan).
  */
@@ -132,6 +139,30 @@ export class NotificationService {
     }
   }
 
+  /**
+   * Buat notification channel Android (API 26+).
+   *
+   * WAJIB: jadwal memakai channelId 'routinezie-reminders', tapi plugin hanya
+   * membuat channel 'default' saat load. Di Android 8+ notifikasi dengan
+   * channelId yang belum terdaftar ditolak diam-diam — inilah akar masalah
+   * "notifikasi tidak muncul". Di web/no-op aman diabaikan.
+   */
+  static async ensureChannel(): Promise<void> {
+    try {
+      await LocalNotifications.createChannel({
+        id: CHANNEL_ID,
+        name: 'Pengingat Jadwal',
+        description: 'Pengingat jadwal harian RoutineZie',
+        importance: 4, // IMPORTANCE_HIGH — muncul sebagai heads-up + bersuara
+        vibration: true,
+        visibility: 1, // VISIBILITY_PUBLIC
+      });
+    } catch (e) {
+      // Plugin web/no-op melempar "not implemented" — bukan error fatal.
+      console.warn('createChannel tidak didukung (web?):', e);
+    }
+  }
+
   /** Cek status izin tanpa meminta popup. */
   static async checkPermission(): Promise<boolean> {
     try {
@@ -174,6 +205,10 @@ export class NotificationService {
 
     if (!settings.enabled) return { scheduled: 0, total: 0, ids: [] };
 
+    // Channel WAJIB dibuat sebelum schedule — kalau tidak, Android 8+ menolak
+    // notifikasi dengan channelId tak terdaftar secara diam-diam.
+    await this.ensureChannel();
+
     let allItems = buildReminderItems(hariList, { maxDays: 7 });
 
     // Filter: jika itemIds non-kosong, hanya item terpilih
@@ -194,9 +229,7 @@ export class NotificationService {
           title: `${item.waktu} · ${item.dayName}`,
           body: item.kegiatan + (item.detail ? `\n${item.detail}` : ''),
           schedule: { at: new Date(fireAt * 1000) },
-          smallIcon: 'ic_stat_icon',
-          largeIcon: 'ic_stat_icon',
-          channelId: 'routinezie-reminders',
+          channelId: CHANNEL_ID,
           extra: { dayName: item.dayName, waktu: item.waktu },
         } as any;
       })
