@@ -9,10 +9,26 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--
+      Tema layar utama.
+
+      Android 15 (targetSdk 35) memaksa edge-to-edge: status bar & navigation bar
+      transparan, dan setBackgroundColor/setOverlaysWebView dari JS diabaikan OS.
+      Supaya ikon jam/baterai tetap terbaca, kita atur di sini:
+        - windowLightStatusBar = true -> ikon status bar GELAP (latar app putih)
+        - statusBarColor transparent  -> biarkan WebView yang mengisi area itu
+      windowLightStatusBar butuh API 23; minSdk proyek sudah 23, jadi aman.
+
+      windowLayoutInDisplayCutoutMode (notch/cutout) butuh API 28 dan diatur
+      terpisah di values-v28/styles.xml.
+    -->
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
 
