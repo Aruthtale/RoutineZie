@@ -4,4 +4,6 @@
     <string name="title_activity_main">RoutineZie</string>
     <string name="package_name">com.routinezie.app</string>
     <string name="custom_url_scheme">com.routinezie.app</string>
+    <string name="widget_label">RoutineZie — Berikutnya</string>
+    <string name="widget_description">Kegiatan berikutnya &amp; jam pulang PKL, langsung di layar utama.</string>
 </resources>

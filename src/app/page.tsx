@@ -35,6 +35,7 @@ import {
   InkAssistant,
 } from '@/components/icons/InkIcons';
 import { dateToISO, DAY_NAMES, getEffectiveDay, applyOverride, clearOverride, getActiveNonExpiringOverrides } from '@/lib/schedule/effectiveDay';
+import { setWidgetState, buildWidgetState } from '@/lib/widget';
 import { SubstitutionPanel, SubstitutionQuickButtons, AcuteInjuryNotice } from '@/components/SubstitutionPanel';
 import {
   classifySubstitutionIntentWithHistory,
@@ -217,6 +218,33 @@ export default function RoutinePage() {
   const pulangMinutes = getPulangMinutes(dayData?.pkl);
   const isWorkDay = isToday && pulangMinutes !== null;
   const sisaMenitPulang = isWorkDay ? pulangMinutes! - currentTimeMinutes : null;
+
+  // Sinkronkan widget layar utama (Android) dengan jadwal hari ini.
+  // Hanya untuk HARI INI — hari lain tidak relevan bagi widget. Dipanggil ulang
+  // setiap kali jadwal/override/waktu berubah.
+  useEffect(() => {
+    if (!isToday) return;
+    const now = new Date();
+
+    // Bila hari ini disubstitusi, widget menampilkan nama latihan pengganti
+    // (bukan kegiatan berikutnya dari jadwal asli) agar konsisten dengan app.
+    const overrideTitle = activeOverride
+      ? effectiveWorkout?.nama
+        ? `${effectiveWorkout.nama} (diganti)`
+        : 'Latihan diganti'
+      : null;
+
+    const state = buildWidgetState({
+      nextTitle: overrideTitle ?? nextItem?.kegiatan ?? null,
+      nextTime: activeOverride ? null : nextItem?.waktu ?? null,
+      pkl: dayData?.pkl ?? null,
+      sisaMenitPulang,
+      nowTime: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
+      dateISO: todayISO,
+      updatedAt: now.getTime(),
+    });
+    void setWidgetState(state);
+  }, [isToday, nextItem, dayData?.pkl, sisaMenitPulang, todayISO, activeOverride, effectiveWorkout?.nama]);
 
   const handleChatSend = async (text: string) => {
     setChatLoading(true);

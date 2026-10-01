@@ -21,6 +21,7 @@ public class MainActivity extends BridgeActivity {
         // Daftarkan plugin tulisan tangan — cap sync TIDAK otomatis
         // mendaftarkan plugin native non-npm ini.
         registerPlugin(ApkInstallerPlugin.class);
+        registerPlugin(RoutineZieWidgetPlugin.class);
         super.onCreate(savedInstanceState);
     }
 }
