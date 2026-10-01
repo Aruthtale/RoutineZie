@@ -82,31 +82,44 @@ git push origin main
 for SLUG in "${REPOS[@]}"; do
   OWNER="${SLUG%%/*}"
   echo "==> Rilis ${TAG} di ${SLUG} (akun: ${OWNER})"
-  # Pilih akun per-perintah via GH_TOKEN. `gh release create` TIDAK punya flag -u;
+  # Pilih akun per-perintah via env token. `gh release create` TIDAK punya flag -u;
   # `-u` hanya berlaku untuk `gh auth switch`. Ambil token akun yang tepat di sini.
-  TOKEN="$(gh auth token -u "$OWNER" -h github.com 2>/dev/null || true)"
-  if [ -z "$TOKEN" ]; then
+  GHT="$(gh auth token -u "$OWNER" -h github.com 2>/dev/null || true)"
+  if [ -z "$GHT" ]; then
     echo "GAGAL: tidak bisa mengambil token untuk akun ${OWNER}." >&2
     echo "       Login dulu: gh auth login -h github.com (sebagai ${OWNER})" >&2
     exit 1
   fi
-  GH_TOKEN="$TOKEN" gh release create "${TAG}" \
+  # Salin ke nama file bertag agar asset GitHub ikut bertag (label #…# hanya
+  # mengubah judul tampilan, bukan nama file — file tetap memakai nama asli).
+  STAGED="/tmp/app-release-${TAG}.apk"
+  cp "$APK_ABS" "$STAGED"
+  GH_TOKEN="$GHT" gh release create "${TAG}" \
     --repo "${SLUG}" \
     --title "${TITLE}" \
     --notes-file "${NOTES}" \
-    "${APK_ABS}#app-release-${TAG}.apk"
-  unset TOKEN
+    "$STAGED"
+  rm -f "$STAGED"
+  unset GHT
 done
 
 echo "==> Verifikasi asset di kedua rilis"
 OK=1
+ASSET_NAME="app-release-${TAG}.apk"
 for SLUG in "${REPOS[@]}"; do
+  # Nama asset = nama file yang diunggah (bukan label). Ambil berdasarkan ukuran.
   SIZE=$(gh release view "${TAG}" --repo "${SLUG}" --json assets \
-          --jq ".assets[] | select(.name==\"app-release-${TAG}.apk\") | .size" 2>/dev/null || true)
+          --jq ".assets[] | select(.name==\"${ASSET_NAME}\") | .size" 2>/dev/null || true)
+  if [ "${SIZE:-0}" != "${APK_SIZE}" ]; then
+    # Fallback: asset tunggal apa pun yang ukurannya cocok (gh versi lama bisa
+    # menyimpan dengan nama asli file).
+    SIZE=$(gh release view "${TAG}" --repo "${SLUG}" --json assets \
+            --jq ".assets[] | select(.size==${APK_SIZE}) | .size" 2>/dev/null | head -1 || true)
+  fi
   if [ "${SIZE:-0}" = "${APK_SIZE}" ]; then
-    echo "    OK  ${SLUG}: app-release-${TAG}.apk ${SIZE} byte"
+    echo "    OK  ${SLUG}: ${ASSET_NAME} ${SIZE} byte"
   else
-    echo "    !!  ${SLUG}: asset tidak cocok (size='${SIZE:-kosong}')" >&2
+    echo "    !!  ${SLUG}: asset tidak cocok (size='${SIZE:-kosong}', harusnya ${APK_SIZE})" >&2
     OK=0
   fi
 done
