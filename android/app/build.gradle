@@ -10,14 +10,42 @@ android {
     namespace "com.routinezie.app"
     compileSdk rootProject.ext.compileSdkVersion
 
+    // Signing: sumber tunggal = android/keystore.properties (tidak di git).
+    // Prioritas: env ROUTINEZIE_* -> -P project property -> keystore.properties.
+    // TIDAK ADA password hardcoded. Bila kredensial hilang, build rilis GAGAL
+    // dengan pesan jelas — lebih baik daripada diam-diam menandatangani dengan
+    // kunci lain (yang membuat update APK ditolak Android selamanya).
     signingConfigs {
         release {
-            if (keystorePropertiesFile.exists()) {
-                keyAlias keystoreProperties['keyAlias']
-                keyPassword keystoreProperties['keyPassword']
-                storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-                storePassword keystoreProperties['storePassword']
+            def envStore = System.getenv('ROUTINEZIE_KEYSTORE_FILE')
+            def envAlias = System.getenv('ROUTINEZIE_KEY_ALIAS')
+            def envKeyPass = System.getenv('ROUTINEZIE_KEY_PASSWORD')
+            def envStorePass = System.getenv('ROUTINEZIE_KEYSTORE_PASSWORD')
+
+            def propStore = project.findProperty('RoutineZieUploadKeystoreFile')
+            def propAlias = project.findProperty('RoutineZieKeyAlias')
+            def propKeyPass = project.findProperty('RoutineZieKeyPassword')
+            def propStorePass = project.findProperty('RoutineZieKeystorePassword')
+
+            def storePath = envStore ?: propStore ?: keystoreProperties['storeFile']
+            def alias = envAlias ?: propAlias ?: keystoreProperties['keyAlias']
+            def keyPass = envKeyPass ?: propKeyPass ?: keystoreProperties['keyPassword']
+            def storePass = envStorePass ?: propStorePass ?: keystoreProperties['storePassword']
+
+            def resolvedStore = storePath ? file(storePath) : null
+            if (resolvedStore != null && !resolvedStore.isAbsolute()) {
+                // storeFile relatif terhadap android/app/
+                resolvedStore = file(storePath)
             }
+
+            if (resolvedStore != null && resolvedStore.exists() && alias && keyPass && storePass) {
+                keyAlias alias
+                keyPassword keyPass
+                storeFile resolvedStore
+                storePassword storePass
+            }
+            // Bila tidak lengkap: signingConfigs.release dibiarkan kosong.
+            // Tugas assembleRelease di bawah akan gagal dengan pesan yang jelas.
         }
     }
 
@@ -34,19 +62,21 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-    signingConfigs {
-        release {
-            if (project.hasProperty('RoutineZieUploadKeystoreFile')) {
-                keyAlias System.getenv('ROUTINEZIE_KEY_ALIAS') ?: project.getProperty('RoutineZieKeyAlias')
-                keyPassword System.getenv('ROUTINEZIE_KEY_PASSWORD') ?: project.getProperty('RoutineZieKeyPassword')
-                storeFile file(System.getenv('ROUTINEZIE_KEYSTORE_FILE') ?: project.getProperty('RoutineZieUploadKeystoreFile'))
-                storePassword System.getenv('ROUTINEZIE_KEYSTORE_PASSWORD') ?: project.getProperty('RoutineZieUploadKeystorePassword')
-            } else {
-                // Local dev fallback (jangan dipakai untuk produksi)
-                keyAlias 'routinezie'
-                keyPassword 'routinezie123'
-                storeFile file('keystore/routinezie-release.jks')
-                storePassword 'routinezie123'
+
+    // Gagal cepat bila kredensial rilis tidak lengkap — mencegah APK tak
+    // bertanda tangan atau bertanda kunci salah lolos tanpa sadar.
+    tasks.configureEach { task ->
+        if (task.name in ['assembleRelease', 'bundleRelease', 'packageRelease']) {
+            task.doFirst {
+                if (!android.signingConfigs.release.storeFile
+                        || !android.signingConfigs.release.keyAlias
+                        || !android.signingConfigs.release.storePassword
+                        || !android.signingConfigs.release.keyPassword) {
+                    throw new GradleException(
+                        "Kredensial rilis tidak lengkap. Sediakan android/keystore.properties " +
+                        "(storeFile, storePassword, keyAlias, keyPassword) atau env ROUTINEZIE_*. " +
+                        "Lihat Arsitecture/KEYS.md untuk prosedur pemulihan.")
+                }
             }
         }
     }

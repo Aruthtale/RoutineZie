@@ -21,7 +21,11 @@
 # keystore & secrets (jangan masuk git)
 *.jks
 *.keystore
+*.zombie
 keystore.properties
+keystore/
+**/keystore/
+!android/app/keystore/.gitkeep
 
 # debug
 npm-debug.log*
