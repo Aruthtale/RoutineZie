@@ -16,7 +16,7 @@ export const UPDATE_REPO = {
 } as const;
 
 /** Versi aplikasi sekarang — satu-satunya sumber kebenaran di sisi klien. */
-export const APP_VERSION = '1.6.2';
+export const APP_VERSION = '1.6.3';
 
 /** Bentuk metadata pembaruan yang dikembalikan checkForUpdate(). */
 export interface UpdateInfo {

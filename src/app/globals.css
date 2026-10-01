@@ -60,16 +60,25 @@
     --safe-right: env(safe-area-inset-right, 0px);
   }
 
-  /* Mobile: terapkan safe-area padding ke body.
-     Android: nilai ditingkatkan via JS di layout.tsx (env() sering 0).
-     iOS: env() murni sudah andal. */
-  @media (max-width: 540px) {
-    body {
-      padding-top: var(--safe-top);
-      padding-bottom: var(--safe-bottom);
-      padding-left: var(--safe-left);
-      padding-right: var(--safe-right);
-    }
+  /*
+   * Fallback Android ditangani di JS (SafeAreaBootstrap), bukan lewat kelas
+   * CSS — Capacitor tidak memasang kelas penanda pada <html>, jadi selektor
+   * berbasis kelas tidak akan pernah aktif. Lihat SafeAreaBootstrap.tsx.
+   */
+
+  /*
+   * Mobile safe-area TIDAK diterapkan ke body.
+   * Memberi padding pada body sementara shell memakai height:100vh membuat
+   * total tinggi = 100vh + safe-top + safe-bottom → shell meluber keluar
+   * viewport, body yang jadi scroll container, dan bottom nav ikut tergulir.
+   * Safe-area kini diterapkan di dalam shell (header & nav di page.tsx),
+   * sehingga hanya <main> yang menggulir.
+   */
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
   }
 
   /* A11y: support system font scale up to 130% without breaking layout */

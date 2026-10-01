@@ -397,7 +397,7 @@ export default function RoutinePage() {
   };
 
   return (
-    <div className="h-screen bg-[#f4f4f5] flex justify-center text-[#09090b] font-sans antialiased overflow-hidden">
+    <div className="h-[100dvh] bg-[#f4f4f5] flex justify-center text-[#09090b] font-sans antialiased overflow-hidden">
       {/* Mobile Shell Wrapper */}
       <div className="w-full max-w-md bg-[#ffffff] h-full flex flex-col shadow-2xl border-x-2 border-[#09090b] relative">
         
@@ -430,7 +430,7 @@ export default function RoutinePage() {
           </div>
         </header>
 
-        <main className="p-4 space-y-5 flex-1 overflow-y-auto pb-6">
+        <main className="p-4 space-y-5 flex-1 min-h-0 overflow-y-auto overscroll-contain pb-[calc(1.5rem+var(--safe-bottom))]">
           {/* ====================== TAB: JADWAL ====================== */}
           {activeTab === 'schedule' && (
             <div {...daySwipe} className="space-y-5">
