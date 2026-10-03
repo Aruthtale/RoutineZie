@@ -261,21 +261,28 @@ export class RoutineRepository {
 
   // --- Export All Data ---
   static async exportAllData(): Promise<string> {
-    const [workouts, weights, sleeps, meals, settings, chatHistory, water, hunger] = await Promise.all([
+    const [
+      workouts, weights, sleeps, meals, settings, chatHistory,
+      scheduleOverrides, water, hunger, abilityTests, weeklyNotes, milestones,
+    ] = await Promise.all([
       db.workoutLogs.toArray(),
       db.weightLogs.toArray(),
       db.sleepLogs.toArray(),
       db.mealChecks.toArray(),
       db.settings.toArray(),
       db.chatHistory.toArray(),
+      db.scheduleOverrides.toArray(),
       db.waterLogs.toArray(),
       db.hungerLogs.toArray(),
+      db.abilityTests.toArray(),
+      db.weeklyNotes.toArray(),
+      db.milestones.toArray(),
     ]);
 
     const backup = {
       app: 'CloverzRoutine',
       exportedAt: new Date().toISOString(),
-      schemaVersion: 3,
+      schemaVersion: 5,
       data: {
         workouts,
         weights,
@@ -283,8 +290,12 @@ export class RoutineRepository {
         meals,
         settings,
         chatHistory,
+        scheduleOverrides,
         water,
         hunger,
+        abilityTests,
+        weeklyNotes,
+        milestones,
       },
     };
 
@@ -293,38 +304,67 @@ export class RoutineRepository {
 
   // --- Import Data ---
   static async importData(jsonString: string): Promise<{ success: boolean; message: string }> {
+    let parsed: any;
     try {
-      const parsed = JSON.parse(jsonString);
-      if (!parsed.data) {
-        return { success: false, message: 'Format file tidak valid (data hilang).' };
-      }
+      parsed = JSON.parse(jsonString);
+    } catch {
+      return { success: false, message: 'Gagal parsing JSON. File mungkin rusak.' };
+    }
 
-      const { workouts, weights, sleeps, meals, settings, chatHistory } = parsed.data;
+    if (!parsed || typeof parsed !== 'object' || !parsed.data) {
+      return { success: false, message: 'Format file tidak valid (data hilang).' };
+    }
 
-      await db.transaction('rw', [db.workoutLogs, db.weightLogs, db.sleepLogs, db.mealChecks, db.settings, db.chatHistory], async () => {
-        if (Array.isArray(workouts) && workouts.length > 0) {
-          await db.workoutLogs.bulkPut(workouts);
-        }
-        if (Array.isArray(weights) && weights.length > 0) {
-          await db.weightLogs.bulkPut(weights);
-        }
-        if (Array.isArray(sleeps) && sleeps.length > 0) {
-          await db.sleepLogs.bulkPut(sleeps);
-        }
-        if (Array.isArray(meals) && meals.length > 0) {
-          await db.mealChecks.bulkPut(meals);
-        }
-        if (Array.isArray(settings) && settings.length > 0) {
-          await db.settings.bulkPut(settings);
-        }
-        if (Array.isArray(chatHistory) && chatHistory.length > 0) {
-          await db.chatHistory.bulkPut(chatHistory);
-        }
-      });
+    const d = parsed.data;
 
-      return { success: true, message: 'Impor data berhasil dipulihkan!' };
+    // Helper: validasi array sederhana — hanya tolak non-array / null
+    const arr = (v: any): any[] => (Array.isArray(v) ? v : []);
+
+    // Daftar tabel yang akan di-import (semua 12)
+    const tables = [
+      { store: db.workoutLogs,        rows: arr(d.workouts) },
+      { store: db.weightLogs,          rows: arr(d.weights) },
+      { store: db.sleepLogs,           rows: arr(d.sleeps) },
+      { store: db.mealChecks,          rows: arr(d.meals) },
+      { store: db.settings,            rows: arr(d.settings) },
+      { store: db.chatHistory,         rows: arr(d.chatHistory) },
+      { store: db.scheduleOverrides,   rows: arr(d.scheduleOverrides) },
+      { store: db.waterLogs,           rows: arr(d.water) },
+      { store: db.hungerLogs,          rows: arr(d.hunger) },
+      { store: db.abilityTests,        rows: arr(d.abilityTests) },
+      { store: db.weeklyNotes,         rows: arr(d.weeklyNotes) },
+      { store: db.milestones,          rows: arr(d.milestones) },
+    ];
+
+    const totalRows = tables.reduce((sum, t) => sum + t.rows.length, 0);
+    if (totalRows === 0) {
+      return { success: false, message: 'Tidak ada data untuk diimpor.' };
+    }
+
+    try {
+      await db.transaction(
+        'rw',
+        tables.map((t) => t.store),
+        async () => {
+          for (const { store, rows } of tables) {
+            if (rows.length > 0) {
+              // Filter baris tanpa id (wajib untuk Dexie primary key)
+              const valid = rows.filter((r: any) => r && typeof r === 'object' && r.id != null);
+              if (valid.length > 0) {
+                await (store as any).bulkPut(valid);
+              }
+            }
+          }
+        },
+      );
+
+      const importedCount = tables.reduce((sum, t) => sum + t.rows.length, 0);
+      return {
+        success: true,
+        message: `Impor berhasil! ${importedCount} data dipulihkan dari ${tables.filter((t) => t.rows.length > 0).length} tabel.`,
+      };
     } catch (e: any) {
-      return { success: false, message: `Gagal impor: ${e?.message || 'Error parsing JSON'}` };
+      return { success: false, message: `Gagal impor: ${e?.message || 'Unknown error'}` };
     }
   }
 }

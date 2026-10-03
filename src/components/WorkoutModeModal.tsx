@@ -167,6 +167,7 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
   const handleFinishWorkout = async () => {
     triggerHaptic();
     if (session) {
+      let saveFailed = false;
       try {
         const todayISO = new Date().toISOString().split('T')[0];
         await RoutineRepository.saveWorkoutLog({
@@ -189,10 +190,18 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
         });
       } catch (err) {
         console.error('Failed to save workout log to database:', err);
+        saveFailed = true;
+        // Tampilkan pesan error ke user, JANGAN hapus sesi
+        alert('Gagal menyimpan workout! Data sesi tersimpan sementara. Coba lagi atau cek penyimpanan perangkat.');
       }
+      // Hanya hapus sesi jika save berhasil
+      if (!saveFailed) {
+        clearActiveWorkoutSession();
+        onClose();
+      }
+    } else {
+      onClose();
     }
-    clearActiveWorkoutSession();
-    onClose();
   };
 
   return (

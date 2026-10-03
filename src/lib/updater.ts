@@ -15,8 +15,8 @@ export const UPDATE_REPO = {
   repo: 'RoutineZie',
 } as const;
 
-/** Versi aplikasi sekarang — satu-satunya sumber kebenaran di sisi klien. */
-export const APP_VERSION = '1.6.4';
+/** Versi aplikasi sekarang — di-bake dari package.json saat build. */
+export const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? '1.7.0';
 
 /** Bentuk metadata pembaruan yang dikembalikan checkForUpdate(). */
 export interface UpdateInfo {
