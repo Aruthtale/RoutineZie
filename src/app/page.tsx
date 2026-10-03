@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { getScheduleForDay, getNowAndNext, parseWaktu, getPulangMinutes, formatJam, findMentionedExercise, type NormalizedWorkout } from '@/lib/schedule/parser';
+import { getScheduleForDay, getNowAndNext, parseWaktu, getPulangMinutes, formatJam, formatSisaWaktu, findMentionedExercise, type NormalizedWorkout } from '@/lib/schedule/parser';
 import { ChevronRight, Info, X, Play, Settings as SettingsIcon, Send } from 'lucide-react';
 import WorkoutModeModal from '@/components/WorkoutModeModal';
 import MealChecklist from '@/components/MealChecklist';
@@ -218,6 +218,16 @@ export default function RoutinePage() {
   const pulangMinutes = getPulangMinutes(dayData?.pkl);
   const isWorkDay = isToday && pulangMinutes !== null;
   const sisaMenitPulang = isWorkDay ? pulangMinutes! - currentTimeMinutes : null;
+
+  // Sprint #4 — hitung mundur ke kegiatan berikutnya (hero "SEKARANG").
+  // Hanya untuk HARI INI; hari lain tidak relevan.
+  const nextStartMinutes = useMemo(() => {
+    if (!nextItem?.waktu) return null;
+    const parsed = parseWaktu(nextItem.waktu);
+    return parsed ? parsed.startMinutes : null;
+  }, [nextItem]);
+  const sisaMenitNext =
+    isToday && nextStartMinutes !== null ? nextStartMinutes - currentTimeMinutes : null;
 
   // Sinkronkan widget layar utama (Android) dengan jadwal hari ini.
   // Hanya untuk HARI INI — hari lain tidak relevan bagi widget. Dipanggil ulang
@@ -524,26 +534,54 @@ export default function RoutinePage() {
               </div>
 
               {nowItem ? (
-                <section className="neo-box-thick bg-[#ffffff] p-4 relative overflow-hidden space-y-2">
+                <section className="neo-box-thick bg-[#09090b] text-[#ffffff] p-5 relative overflow-hidden space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="neo-box-sm bg-[#09090b] text-[#ffffff] px-2 py-0.5 text-xs font-black uppercase tracking-wider">
-                      SEKARANG (NOW)
+                    <span className="bg-[#ffffff] text-[#09090b] px-2.5 py-1 text-[11px] font-black uppercase tracking-widest">
+                      SEKARANG
                     </span>
-                    <span className="text-xs font-mono font-black text-[#09090b] bg-[#09090b]/5 px-2 py-0.5 neo-box-sm">
+                    <span className="text-xs font-mono font-black text-[#ffffff]/70">
                       {nowItem.waktu}
                     </span>
                   </div>
-                  <h2 className="text-xl font-black uppercase text-[#09090b] leading-snug">{nowItem.kegiatan}</h2>
+                  {/* Hero: kegiatan sekarang pakai font display besar */}
+                  <h2
+                    className="text-3xl sm:text-4xl font-black uppercase leading-[1.05] tracking-tight"
+                    style={{ fontFamily: 'var(--font-anton), sans-serif' }}
+                  >
+                    {nowItem.kegiatan}
+                  </h2>
                   {nowItem.detail && (
-                    <p className="text-xs text-[#09090b]/80 font-medium leading-relaxed bg-[#09090b]/5 p-2 neo-box-sm">
+                    <p className="text-xs text-[#ffffff]/70 font-medium leading-relaxed border-l-2 border-[#ffffff]/30 pl-3">
                       {nowItem.detail}
                     </p>
                   )}
+                  {/* Hitung mundur ke kegiatan berikutnya */}
+                  {sisaMenitNext !== null && sisaMenitNext > 0 && nextItem && (
+                    <div className="flex items-center gap-2 pt-1 border-t border-[#ffffff]/20">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#ffffff]/50">
+                        {formatSisaWaktu(sisaMenitNext)} lagi
+                      </span>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#ffffff]/80 truncate">
+                        → {nextItem.kegiatan}
+                      </span>
+                    </div>
+                  )}
                 </section>
               ) : (
-                <section className="neo-box bg-[#ffffff] p-4 border-dashed text-center space-y-1">
-                  <span className="text-xs font-black uppercase text-[#09090b]/60">STATUS SEKARANG</span>
-                  <p className="text-sm font-black uppercase text-[#09090b]">WAKTU BEBAS / DILUAR JADWAL UTAMA</p>
+                <section className="neo-box-thick bg-[#ffffff] p-5 text-center space-y-2">
+                  <span className="text-[11px] font-black uppercase tracking-widest text-[#09090b]/50">SEKARANG</span>
+                  <p
+                    className="text-2xl font-black uppercase text-[#09090b] leading-tight"
+                    style={{ fontFamily: 'var(--font-anton), sans-serif' }}
+                  >
+                    Waktu Bebas
+                  </p>
+                  <p className="text-xs text-[#09090b]/60 font-medium">Diluar jadwal utama</p>
+                  {sisaMenitNext !== null && sisaMenitNext > 0 && nextItem && (
+                    <p className="text-[11px] font-bold uppercase text-[#09090b]/70 pt-1 border-t border-[#09090b]/10">
+                      {formatSisaWaktu(sisaMenitNext)} lagi → {nextItem.kegiatan}
+                    </p>
+                  )}
                 </section>
               )}
 
@@ -557,23 +595,23 @@ export default function RoutinePage() {
                 </section>
               )}
 
-              {/* T8.5 — hitung mundur ke jam pulang PKL */}
+              {/* T8.5 — hitung mundur ke jam pulang PKL (pendukung, bukan hero) */}
               {sisaMenitPulang !== null && (
-                <section className="neo-box bg-[#09090b] text-[#ffffff] p-3.5 space-y-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-black uppercase tracking-wider text-[#ffffff]/70">
+                <section className="neo-box bg-[#ffffff] p-3 space-y-1">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="font-black uppercase tracking-wider text-[#09090b]/60">
                       {sisaMenitPulang > 0 ? 'PULANG PKL DALAM' : 'JAM PKL SUDAH LEWAT'}
                     </span>
-                    <span className="font-mono font-black text-[#ffffff]/80">
+                    <span className="font-mono font-black text-[#09090b]/60">
                       {formatJam(pulangMinutes!)}
                     </span>
                   </div>
                   {sisaMenitPulang > 0 ? (
-                    <p className="text-3xl font-black font-mono tracking-tight">
+                    <p className="text-lg font-black font-mono tracking-tight text-[#09090b]">
                       {Math.floor(sisaMenitPulang / 60)}j {sisaMenitPulang % 60}m
                     </p>
                   ) : (
-                    <p className="text-sm font-black uppercase">
+                    <p className="text-xs font-black uppercase text-[#09090b]/70">
                       Waktunya istirahat hari ini 🎉
                     </p>
                   )}

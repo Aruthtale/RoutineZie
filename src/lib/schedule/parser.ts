@@ -83,6 +83,21 @@ export function formatJam(totalMinutes: number): string {
 }
 
 /**
+ * Format durasi sisa (dalam menit) menjadi teks ringkas berbahasa Indonesia.
+ * Mis. 90 → "1 jam 30 menit", 45 → "45 menit", 1 → "kurang dari 1 menit".
+ * Mengembalikan '' bila menit negatif (sudah lewat).
+ */
+export function formatSisaWaktu(menit: number): string {
+  if (menit <= 0) return '';
+  if (menit < 1) return 'kurang dari 1 menit';
+  const h = Math.floor(menit / 60);
+  const m = menit % 60;
+  if (h === 0) return `${m} menit`;
+  if (m === 0) return `${h} jam`;
+  return `${h} jam ${m} menit`;
+}
+
+/**
  * T8.4 — Cari gerakan yang disebut dalam teks jawaban AI. Cocokkan nama gerakan
  * (case-insensitive) terhadap daftar latihan hari ini. Mengembalikan nama asli
  * dari data, atau null bila tidak ada yang cocok.

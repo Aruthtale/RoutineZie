@@ -135,8 +135,9 @@ async function fetchViaCDN(): Promise<UpdateInfo> {
     hasUpdate: true,
     latestVersion: `v${latest}`,
     currentVersion: APP_VERSION,
-    // Pola unduh langsung rilis terbaru; nama aset mengikuti konvensi "app-release.apk".
-    downloadUrl: `https://github.com/${UPDATE_REPO.owner}/${UPDATE_REPO.repo}/releases/latest/download/app-release.apk`,
+    // Pola unduh langsung rilis terbaru; nama aset mengikuti konvensi
+    // "app-release-v<versi>.apk" (lihat scripts/release.sh ASSET_NAME).
+    downloadUrl: `https://github.com/${UPDATE_REPO.owner}/${UPDATE_REPO.repo}/releases/download/v${latest}/app-release-v${latest}.apk`,
     releaseNotes: '',
     apkSize: null,
     fallbackCDN: true,

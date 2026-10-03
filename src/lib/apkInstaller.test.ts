@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { arrayBufferToBase64 } from './apkInstaller';
+import { arrayBufferToBase64, isApkPayload } from './apkInstaller';
 
 /**
  * Regresi v1.6.2: unduhan APK di dalam aplikasi gagal dengan
@@ -64,5 +64,27 @@ describe('arrayBufferToBase64', () => {
     const bytes = new Uint8Array(300).fill(0xab);
     const hasil = arrayBufferToBase64(bytes.buffer as ArrayBuffer);
     expect(hasil).toMatch(/^[A-Za-z0-9+/]*={0,2}$/);
+  });
+});
+
+describe('isApkPayload (magic byte validation)', () => {
+  it('menerima payload APK/ZIP asli (PK\\x03\\x04)', () => {
+    const buf = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0x14, 0x00]).buffer;
+    expect(isApkPayload(buf)).toBe(true);
+  });
+
+  it('menolak halaman HTML error', () => {
+    const html = new TextEncoder().encode('<!DOCTYPE html><html>404</html>').buffer;
+    expect(isApkPayload(html)).toBe(false);
+  });
+
+  it('menolak payload kosong atau terlalu pendek', () => {
+    expect(isApkPayload(new ArrayBuffer(0))).toBe(false);
+    expect(isApkPayload(new Uint8Array([0x50, 0x4b]).buffer)).toBe(false);
+  });
+
+  it('menolak ZIP dengan signature lain (mis. file acak)', () => {
+    const random = new Uint8Array([0x00, 0x01, 0x02, 0x03]).buffer;
+    expect(isApkPayload(random)).toBe(false);
   });
 });

@@ -88,6 +88,27 @@ function toBase64(data: unknown): string {
 }
 
 /**
+ * Verifikasi payload yang diunduh benar-benar APK (arsip ZIP), bukan halaman
+ * HTML error atau file lain. APK selalu diawali magic bytes "PK\x03\x04"
+ * (0x50 0x4B 0x03 0x04). Tanpa cek ini, unduhan yang gagal (mis. 404 HTML,
+ * halaman login, atau captive portal) akan tetap ditulis sebagai .apk dan
+ * diserahkan ke installer — membingungkan dan berpotensi berbahaya.
+ */
+export function isApkPayload(buffer: ArrayBuffer): boolean {
+  if (!buffer || buffer.byteLength < 4) return false;
+  const b = new Uint8Array(buffer, 0, 4);
+  return b[0] === 0x50 && b[1] === 0x4b && b[2] === 0x03 && b[3] === 0x04;
+}
+
+/** Cek magic byte dari string base64 (dipakai saat payload datang sebagai base64). */
+function base64StartsWithZipMagic(b64: string): boolean {
+  if (!b64 || b64.length < 8) return false;
+  // "PK\x03\x04" dalam base64 adalah "UEsDBA==" untuk 4 byte pertama.
+  // Bandingkan 4 karakter pertama dari decode manual: 'P','K',0x03,0x04.
+  return b64.startsWith('UEsDB');
+}
+
+/**
  * Unduh APK dan buka installer Android. Di luar Android, serahkan ke browser.
  */
 export async function downloadAndInstallApk(downloadUrl: string): Promise<DownloadApkResult> {
@@ -107,9 +128,19 @@ export async function downloadAndInstallApk(downloadUrl: string): Promise<Downlo
     throw new Error(`Unduhan gagal (HTTP ${response.status})`);
   }
 
+  // Verifikasi magic byte APK SEBELUM konversi — payload ArrayBuffer langsung dicek.
+  if (response.data instanceof ArrayBuffer && !isApkPayload(response.data)) {
+    throw new Error('File yang diunduh bukan APK yang valid (mungkin halaman error). Unduhan dibatalkan.');
+  }
+
   const base64 = toBase64(response.data);
   if (!base64 || base64.length < 4) {
     throw new Error('APK kosong / gagal diunduh');
+  }
+
+  // Verifikasi magic byte untuk payload yang datang sebagai base64.
+  if (typeof response.data === 'string' && !base64StartsWithZipMagic(base64)) {
+    throw new Error('File yang diunduh bukan APK yang valid (mungkin halaman error). Unduhan dibatalkan.');
   }
 
   // Tahap 2: tulis ke Directory.Cache — selalu dapat ditulis di semua versi

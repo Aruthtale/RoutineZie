@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseWaktu, getPhaseFromTime, getNowAndNext, getScheduleForDay, normalizeWorkoutData } from './parser';
+import { parseWaktu, getPhaseFromTime, getNowAndNext, getScheduleForDay, normalizeWorkoutData, formatSisaWaktu } from './parser';
 
 describe('Schedule Parser Utilities', () => {
   it('should correctly parse range time strings', () => {
@@ -56,5 +56,21 @@ describe('Schedule Parser Utilities', () => {
     const minggu = getScheduleForDay('Minggu');
     expect(minggu).not.toBeNull();
     expect(minggu?.workout.nama).toBe('Full Rest');
+  });
+
+  describe('formatSisaWaktu', () => {
+    it('formats minutes only', () => {
+      expect(formatSisaWaktu(45)).toBe('45 menit');
+    });
+    it('formats hours only', () => {
+      expect(formatSisaWaktu(120)).toBe('2 jam');
+    });
+    it('formats hours and minutes', () => {
+      expect(formatSisaWaktu(90)).toBe('1 jam 30 menit');
+    });
+    it('returns empty string for zero or negative', () => {
+      expect(formatSisaWaktu(0)).toBe('');
+      expect(formatSisaWaktu(-5)).toBe('');
+    });
   });
 });
