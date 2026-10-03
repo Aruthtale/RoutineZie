@@ -109,9 +109,56 @@ function base64StartsWithZipMagic(b64: string): boolean {
 }
 
 /**
- * Unduh APK dan buka installer Android. Di luar Android, serahkan ke browser.
+ * Hitung digest SHA-256 (hex lowercase) dari ArrayBuffer via WebCrypto.
+ * Dipakai untuk memverifikasi APK yang diunduh cocok dengan digest yang
+ * dipublikasikan GitHub — melindungi dari APK yang diubah di tengah jalan.
+ * Mengembalikan null bila WebCrypto tidak tersedia (mis. konteks non-secure).
  */
-export async function downloadAndInstallApk(downloadUrl: string): Promise<DownloadApkResult> {
+export async function sha256Hex(buffer: ArrayBuffer): Promise<string | null> {
+  try {
+    const subtle = (globalThis.crypto && (globalThis.crypto as Crypto).subtle) || null;
+    if (!subtle) return null;
+    const digest = await subtle.digest('SHA-256', buffer);
+    return Array.from(new Uint8Array(digest))
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
+  } catch {
+    return null;
+  }
+}
+
+/** Ubah base64 → ArrayBuffer (untuk verifikasi hash payload berbentuk base64). */
+export function base64ToArrayBuffer(b64: string): ArrayBuffer {
+  const bin = atob(b64);
+  const len = bin.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes.buffer;
+}
+
+/**
+ * Verifikasi payload terhadap digest SHA-256 yang diharapkan (hex lowercase).
+ * @returns true bila cocok; false bila tidak cocok ATAU hash tak dapat dihitung
+ *          (fail-closed: bila kita punya hash harapan tapi tak bisa memverifikasi,
+ *          jangan anggap lolos).
+ */
+export async function verifyApkSha256(buffer: ArrayBuffer, expectedHex: string): Promise<boolean> {
+  const actual = await sha256Hex(buffer);
+  if (!actual) return false;
+  return actual === expectedHex.toLowerCase();
+}
+
+/**
+ * Unduh APK dan buka installer Android. Di luar Android, serahkan ke browser.
+ * @param downloadUrl URL APK.
+ * @param expectedSha256 Digest SHA-256 (hex) dari GitHub, bila tersedia. Bila
+ *   diberikan, unduhan DIBATALKAN kecuali hash cocok — melindungi dari APK
+ *   yang diubah di tengah jalan.
+ */
+export async function downloadAndInstallApk(
+  downloadUrl: string,
+  expectedSha256?: string | null,
+): Promise<DownloadApkResult> {
   if (!isNative()) {
     // Cadangan web: serahkan ke browser pengguna.
     window.open(downloadUrl, '_blank');
@@ -141,6 +188,18 @@ export async function downloadAndInstallApk(downloadUrl: string): Promise<Downlo
   // Verifikasi magic byte untuk payload yang datang sebagai base64.
   if (typeof response.data === 'string' && !base64StartsWithZipMagic(base64)) {
     throw new Error('File yang diunduh bukan APK yang valid (mungkin halaman error). Unduhan dibatalkan.');
+  }
+
+  // Verifikasi integritas SHA-256 bila GitHub menyediakan digest. Fail-closed:
+  // bila hash harapan ada tapi tak dapat dihitung, unduhan dibatalkan.
+  if (expectedSha256) {
+    const buf = response.data instanceof ArrayBuffer
+      ? response.data
+      : base64ToArrayBuffer(base64);
+    const ok = await verifyApkSha256(buf, expectedSha256);
+    if (!ok) {
+      throw new Error('Verifikasi integritas APK gagal (SHA-256 tidak cocok). Unduhan dibatalkan demi keamanan.');
+    }
   }
 
   // Tahap 2: tulis ke Directory.Cache — selalu dapat ditulis di semua versi

@@ -33,7 +33,7 @@ export default function UpdateChecker() {
     try {
       // Bersihkan APK dari percobaan unduh sebelumnya agar cache tidak menumpuk.
       await cleanupCachedApks();
-      const hasil = await downloadAndInstallApk(info.downloadUrl);
+      const hasil = await downloadAndInstallApk(info.downloadUrl, info.apkSha256);
       if (hasil.installerNeedsPermission) {
         setPerluIzin(true);
         setPesan('Aktifkan "Izinkan dari sumber ini" sekali di pengaturan, lalu ketuk Perbarui lagi.');
@@ -94,6 +94,9 @@ export default function UpdateChecker() {
             <div className="text-xs font-bold text-ink">
               Versi baru tersedia: <span className="font-mono">{info.latestVersion}</span>
               {info.apkSize ? <span className="font-mono"> ({formatBytes(info.apkSize)})</span> : null}
+              <div className="text-[10px] font-medium text-ink/70 mt-0.5">
+                {info.apkSha256 ? '🔒 Integritas APK akan diverifikasi (SHA-256)' : '⚠️ Tanpa hash dari GitHub — hanya magic byte yang dicek'}
+              </div>
             </div>
           </div>
           {info.releaseNotes ? (

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { compareSemver, formatBytes, APP_VERSION } from './updater';
+import { compareSemver, formatBytes, APP_VERSION, pickApkAsset } from './updater';
 
 describe('compareSemver', () => {
   it('membandingkan versi dengan prefiks v', () => {
@@ -45,5 +45,39 @@ describe('formatBytes', () => {
 describe('APP_VERSION', () => {
   it('berformat semver', () => {
     expect(APP_VERSION).toMatch(/^\d+\.\d+\.\d+$/);
+  });
+});
+
+describe('pickApkAsset (aset + digest SHA-256)', () => {
+  it('memilih aset .apk dan mengekstrak digest sha256', () => {
+    const sha = 'a'.repeat(64);
+    const aset = pickApkAsset([
+      { name: 'notes.txt', browser_download_url: 'https://x/notes.txt' },
+      { name: 'app-release-v1.8.0.apk', browser_download_url: 'https://x/app.apk', size: 6546279, digest: `sha256:${sha}` },
+    ]);
+    expect(aset).not.toBeNull();
+    expect(aset!.url).toBe('https://x/app.apk');
+    expect(aset!.size).toBe(6546279);
+    expect(aset!.sha256).toBe(sha);
+  });
+
+  it('sha256 null bila digest tidak ada / format salah', () => {
+    const a = pickApkAsset([{ name: 'a.apk', browser_download_url: 'https://x/a.apk' }]);
+    expect(a!.sha256).toBeNull();
+    const b = pickApkAsset([{ name: 'a.apk', browser_download_url: 'https://x/a.apk', digest: 'md5:abc' }]);
+    expect(b!.sha256).toBeNull();
+    const c = pickApkAsset([{ name: 'a.apk', browser_download_url: 'https://x/a.apk', digest: 'sha256:tooshort' }]);
+    expect(c!.sha256).toBeNull();
+  });
+
+  it('normalisasi digest ke huruf kecil', () => {
+    const shaUpper = 'ABCDEF'.repeat(10) + 'ABCD'; // 64 char
+    const a = pickApkAsset([{ name: 'a.apk', browser_download_url: 'https://x/a.apk', digest: `sha256:${shaUpper}` }]);
+    expect(a!.sha256).toBe(shaUpper.toLowerCase());
+  });
+
+  it('null bila tidak ada aset .apk', () => {
+    expect(pickApkAsset([{ name: 'notes.txt', browser_download_url: 'https://x/n.txt' }])).toBeNull();
+    expect(pickApkAsset([])).toBeNull();
   });
 });

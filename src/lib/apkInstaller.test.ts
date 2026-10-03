@@ -88,3 +88,41 @@ describe('isApkPayload (magic byte validation)', () => {
     expect(isApkPayload(random)).toBe(false);
   });
 });
+
+describe('verifikasi SHA-256 (integritas unduhan APK)', () => {
+  // sha256 dari byte tertentu — dihitung via Node crypto sebagai referensi.
+  const refHex = (buf: ArrayBuffer) =>
+    require('crypto').createHash('sha256').update(Buffer.from(buf)).digest('hex');
+
+  it('sha256Hex cocok dengan referensi Node', async () => {
+    const { sha256Hex } = await import('./apkInstaller');
+    const bytes = new TextEncoder().encode('RoutineZie update payload');
+    const hex = await sha256Hex(bytes.buffer as ArrayBuffer);
+    expect(hex).toBe(refHex(bytes.buffer as ArrayBuffer));
+  });
+
+  it('verifyApkSha256 menerima hash yang cocok', async () => {
+    const { verifyApkSha256 } = await import('./apkInstaller');
+    const buf = new TextEncoder().encode('PK\x03\x04 fake apk body').buffer as ArrayBuffer;
+    const expected = refHex(buf);
+    expect(await verifyApkSha256(buf, expected)).toBe(true);
+    // huruf besar juga harus diterima
+    expect(await verifyApkSha256(buf, expected.toUpperCase())).toBe(true);
+  });
+
+  it('verifyApkSha256 MENOLAK APK yang diubah (hash beda)', async () => {
+    const { verifyApkSha256 } = await import('./apkInstaller');
+    const asli = new TextEncoder().encode('PK\x03\x04 asli').buffer as ArrayBuffer;
+    const palsu = new TextEncoder().encode('PK\x03\x04 palsu').buffer as ArrayBuffer;
+    const expected = refHex(asli);
+    expect(await verifyApkSha256(palsu, expected)).toBe(false);
+  });
+
+  it('base64ToArrayBuffer mengembalikan byte yang sama', async () => {
+    const { base64ToArrayBuffer } = await import('./apkInstaller');
+    const bytes = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0xff, 0x00, 0x7f]);
+    const b64 = Buffer.from(bytes).toString('base64');
+    const back = new Uint8Array(base64ToArrayBuffer(b64));
+    expect(Array.from(back)).toEqual(Array.from(bytes));
+  });
+});

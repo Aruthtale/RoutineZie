@@ -32,6 +32,11 @@ export interface UpdateInfo {
   releaseNotes: string;
   /** Ukuran APK dalam byte bila diketahui. */
   apkSize: number | null;
+  /**
+   * Digest SHA-256 aset APK dari GitHub (hex lowercase), bila tersedia.
+   * Dipakai untuk memverifikasi integritas unduhan sebelum instalasi.
+   */
+  apkSha256: string | null;
   /** true saat data berasal dari cadangan raw package.json (catatan tak tersedia). */
   fallbackCDN: boolean;
 }
@@ -43,6 +48,7 @@ const NO_UPDATE = (latest: string, fallbackCDN: boolean): UpdateInfo => ({
   downloadUrl: '',
   releaseNotes: '',
   apkSize: null,
+  apkSha256: null,
   fallbackCDN,
 });
 
@@ -66,10 +72,20 @@ export function compareSemver(v1: string, v2: string): number {
 }
 
 /** Ambil aset APK pertama dari daftar aset rilis, atau null bila tidak ada. */
-function pickApkAsset(assets: Array<{ name?: string; browser_download_url?: string; size?: number }>) {
+export function pickApkAsset(assets: Array<{ name?: string; browser_download_url?: string; size?: number; digest?: string }>) {
   const apk = (assets || []).find((a) => (a.name || '').toLowerCase().endsWith('.apk'));
   if (!apk || !apk.browser_download_url) return null;
-  return { url: apk.browser_download_url, size: typeof apk.size === 'number' ? apk.size : null };
+  // GitHub menyediakan `digest` berbentuk "sha256:<hex>" (bila diaktifkan).
+  let sha: string | null = null;
+  if (typeof apk.digest === 'string') {
+    const m = apk.digest.match(/^sha256:([0-9a-f]{64})$/i);
+    if (m) sha = m[1].toLowerCase();
+  }
+  return {
+    url: apk.browser_download_url,
+    size: typeof apk.size === 'number' ? apk.size : null,
+    sha256: sha,
+  };
 }
 
 /**
@@ -99,6 +115,7 @@ async function fetchLatestRelease(): Promise<UpdateInfo> {
       downloadUrl: `https://github.com/${UPDATE_REPO.owner}/${UPDATE_REPO.repo}/releases/latest`,
       releaseNotes: String(data.body || ''),
       apkSize: null,
+      apkSha256: null,
       fallbackCDN: false,
     };
   }
@@ -109,6 +126,7 @@ async function fetchLatestRelease(): Promise<UpdateInfo> {
     downloadUrl: asset.url,
     releaseNotes: String(data.body || ''),
     apkSize: asset.size,
+    apkSha256: asset.sha256,
     fallbackCDN: false,
   };
 }
@@ -140,6 +158,7 @@ async function fetchViaCDN(): Promise<UpdateInfo> {
     downloadUrl: `https://github.com/${UPDATE_REPO.owner}/${UPDATE_REPO.repo}/releases/download/v${latest}/app-release-v${latest}.apk`,
     releaseNotes: '',
     apkSize: null,
+    apkSha256: null,
     fallbackCDN: true,
   };
 }
