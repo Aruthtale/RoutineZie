@@ -6,11 +6,12 @@ import { SleepLog, WorkoutLog } from '@/lib/db';
 import { computeSleepWeekStats, getWeekDates, getWeekStart, getWeekLabel } from '@/lib/progress/weeklyStats';
 import { InkSleep, InkStamp, InkSchedule } from './icons/InkIcons';
 import { Plus, Clock, CheckCircle2 } from 'lucide-react';
+import { localDateISO } from '@/lib/date';
 
 export default function SleepConsistencyTracker() {
   const [sleepLogs, setSleepLogs] = useState<SleepLog[]>([]);
   const [workoutLogs, setWorkoutLogs] = useState<WorkoutLog[]>([]);
-  const [inputDate, setInputDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [inputDate, setInputDate] = useState(() => localDateISO());
   const [inputSleepTime, setInputSleepTime] = useState('21:30');
   const [inputWakeTime, setInputWakeTime] = useState('04:45');
   const [rating, setRating] = useState<1 | 2 | 3 | 4 | 5>(4);
@@ -42,7 +43,7 @@ export default function SleepConsistencyTracker() {
   const now = new Date();
   const getDaysAgoISO = (days: number) => {
     const d = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
-    return d.toISOString().split('T')[0];
+    return localDateISO(d);
   };
 
   const iso7DaysAgo = getDaysAgoISO(7);

@@ -3,6 +3,8 @@
  * Digunakan untuk mengekspor jadwal rutin atau sesi latihan ke Google Calendar.
  */
 
+import { localDateISO } from '@/lib/date';
+
 export const GOOGLE_CONFIG = {
   clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
   apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY || '',
@@ -36,7 +38,7 @@ export class GoogleCalendarService {
     detail?: string,
     dateISO?: string
   ): CalendarEventPayload {
-    const today = dateISO || new Date().toISOString().split('T')[0];
+    const today = dateISO || localDateISO();
     
     // Normalisasi format "05.20" -> "05:20"
     const startNormalized = waktuStart.replace('.', ':');

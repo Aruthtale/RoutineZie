@@ -14,6 +14,7 @@ import {
   Umbrella,
   AlertCircle,
 } from 'lucide-react';
+import { localDateISO } from '@/lib/date';
 
 interface WeatherWidgetProps {
   selectedDay: string;
@@ -55,7 +56,7 @@ export default function WeatherWidget({ selectedDay }: WeatherWidgetProps) {
 
   // Get weather around morning workout (05:00 - 07:00)
   const currentHour = new Date().getHours();
-  const todayISO = new Date().toISOString().split('T')[0];
+  const todayISO = localDateISO();
 
   const morningWeather = forecast?.hourly.find((h) => {
     return h.timeISO.startsWith(todayISO) && h.timeISO.includes('T06:00');

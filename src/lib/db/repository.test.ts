@@ -1,11 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { indexedDB, IDBKeyRange } from 'fake-indexeddb';
-import { RoutineDatabase } from './index';
 import { RoutineRepository } from './repository';
 
-// Set global indexedDB before creating DB instance
-globalThis.indexedDB = indexedDB;
-globalThis.IDBKeyRange = IDBKeyRange;
+// indexedDB polyfill dipasang oleh src/test/setup.ts (vitest setupFiles).
 
 describe('RoutineRepository Dexie DB Tests', () => {
   beforeEach(async () => {

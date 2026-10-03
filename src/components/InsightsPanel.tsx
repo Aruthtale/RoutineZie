@@ -5,6 +5,7 @@ import { RoutineRepository } from '@/lib/db/repository';
 import { ScheduleOverride } from '@/lib/schedule/substitutions';
 import { getWeekDates, getWeekStart, getWeekLabel, computeSleepWeekStats } from '@/lib/progress/weeklyStats';
 import { Lightbulb, Download, RefreshCw } from 'lucide-react';
+import { localDateISO } from '@/lib/date';
 
 /**
  * T8.2f — Pola alasan substitusi (override) + ekspor ringkasan mingguan.
@@ -26,7 +27,7 @@ export default function InsightsPanel() {
   const [weekOffset, setWeekOffset] = useState(0);
   const [busy, setBusy] = useState(false);
 
-  const todayISO = new Date().toISOString().split('T')[0];
+  const todayISO = localDateISO();
   const todayWeekStart = getWeekStart(todayISO);
   const [y, m, d] = todayWeekStart.split('-').map(Number);
   const shifted = new Date(y, m - 1, d + weekOffset * 7);

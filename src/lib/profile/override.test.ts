@@ -1,8 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { indexedDB, IDBKeyRange } from 'fake-indexeddb';
 
-globalThis.indexedDB = indexedDB;
-globalThis.IDBKeyRange = IDBKeyRange;
+// indexedDB polyfill dipasang oleh src/test/setup.ts (vitest setupFiles).
 
 describe('profile override (T9)', () => {
   let mod: typeof import('./override');

@@ -5,6 +5,7 @@ import { RoutineRepository } from '@/lib/db/repository';
 import { AbilityTest } from '@/lib/db';
 import { InkRun, InkStamp } from './icons/InkIcons';
 import { Plus, History, TrendingUp, X } from 'lucide-react';
+import { localDateISO } from '@/lib/date';
 
 /**
  * T8.2c — Tes kemampuan berkala. Benchmark default diambil dari
@@ -28,7 +29,7 @@ interface BarisInput {
 
 export default function AbilityTestPanel() {
   const [tests, setTests] = useState<AbilityTest[]>([]);
-  const [inputDate, setInputDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [inputDate, setInputDate] = useState(() => localDateISO());
   const [cycle, setCycle] = useState<'4-week' | '8-week'>('4-week');
   const [baris, setBaris] = useState<BarisInput[]>(
     DEFAULT_BENCHMARKS.map((b) => ({ ...b, nilai: '' }))

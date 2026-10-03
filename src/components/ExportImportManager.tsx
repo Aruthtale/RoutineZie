@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { RoutineRepository } from '@/lib/db/repository';
 import { Download, Upload, CheckCircle2, AlertCircle, FileText } from 'lucide-react';
+import { localDateISO } from '@/lib/date';
 
 export default function ExportImportManager() {
   const [importPreview, setImportPreview] = useState<any | null>(null);
@@ -18,7 +19,7 @@ export default function ExportImportManager() {
       const blob = new Blob([jsonString], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      const dateStr = new Date().toISOString().split('T')[0];
+      const dateStr = localDateISO();
       a.href = url;
       a.download = `cloverz-backup-${dateStr}.json`;
       document.body.appendChild(a);

@@ -11,26 +11,20 @@ import rawData from '@/data/jadwal_mingguan.json';
 import { getScheduleForDay } from './parser';
 import { buildScheduleOverride, type ScheduleOverride, type SubstituteReason, type Workout } from './substitutions';
 import { applyPklOverride } from '@/lib/profile/override';
+import { localDateISO, dayNameForISO as dayNameForISOFromDate } from '@/lib/date';
 
 export const DAY_NAMES = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
 /**
  * Tanggal lokal YYYY-MM-DD (zona perangkat). Dipakai sebagai kunci override.
+ * Delegasi ke util tanggal terpusat agar tidak ada logika tanggal kedua.
  */
 export function dateToISO(d: Date = new Date()): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
+  return localDateISO(d);
 }
 
 export function dayNameForISO(dateISO: string): string {
-  // Parsing manual untuk menghindari UTC-shift bug (new Date('YYYY-MM-DD')
-  // diinterpretasikan sebagai UTC di beberapa engine).
-  const [y, m, d] = dateISO.split('-').map(Number);
-  if (!y || !m || !d) return 'Senin';
-  const idx = new Date(y, m - 1, d).getDay();
-  return DAY_NAMES[idx];
+  return dayNameForISOFromDate(dateISO);
 }
 
 /** Bentuk DayInput untuk buildReplacement. */

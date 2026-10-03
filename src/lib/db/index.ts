@@ -1,5 +1,4 @@
 import Dexie, { Table } from 'dexie';
-import { indexedDB as fakeIndexedDB, IDBKeyRange as fakeIDBKeyRange } from 'fake-indexeddb';
 
 export interface SetLog {
   reps?: number;
@@ -177,10 +176,7 @@ export class RoutineDatabase extends Dexie {
   scheduleOverrides!: Table<ScheduleOverride, string>;
 
   constructor() {
-    super('CloverzRoutineDB', {
-      indexedDB: typeof window !== 'undefined' && window.indexedDB ? window.indexedDB : fakeIndexedDB,
-      IDBKeyRange: typeof window !== 'undefined' && window.IDBKeyRange ? window.IDBKeyRange : fakeIDBKeyRange,
-    });
+    super('CloverzRoutineDB');
     this.version(2).stores({
       workoutLogs: 'id, dateISO, hari, workoutNama',
       weightLogs: 'id, dateISO, kg',

@@ -6,11 +6,12 @@ import { WeightLog } from '@/lib/db';
 import InkChart, { InkChartPoint } from './InkChart';
 import WeeklyNoteEditor from './WeeklyNoteEditor';
 import { Scale, Plus, AlertTriangle, Info, Calendar } from 'lucide-react';
+import { localDateISO } from '@/lib/date';
 
 export default function WeightTracker() {
   const [logs, setLogs] = useState<WeightLog[]>([]);
   const [inputKg, setInputKg] = useState('');
-  const [inputDate, setInputDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [inputDate, setInputDate] = useState(() => localDateISO());
   const [inputNote, setInputNote] = useState('');
   const [loading, setLoading] = useState(true);
 

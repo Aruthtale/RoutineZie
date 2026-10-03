@@ -5,6 +5,7 @@ import { RoutineRepository } from '@/lib/db/repository';
 import { WorkoutLog, Milestone } from '@/lib/db';
 import { getWeekDates, getWeekStart, checkMilestones, countWorkoutsPerWeek, computeSleepWeekStats } from '@/lib/progress/weeklyStats';
 import { InkStamp, InkSchedule } from './icons/InkIcons';
+import { localDateISO } from '@/lib/date';
 
 /**
  * T8.2d — Grid stempel riwayat latihan + milestone. Menampilkan:
@@ -20,7 +21,7 @@ export default function WorkoutStampGrid() {
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const todayISO = new Date().toISOString().split('T')[0];
+  const todayISO = localDateISO();
   // Geser minggu sesuai offset (0 = minggu ini, -1 = minggu lalu, dst.)
   const todayWeekStart = getWeekStart(todayISO);
   const [y, m, d] = todayWeekStart.split('-').map(Number);

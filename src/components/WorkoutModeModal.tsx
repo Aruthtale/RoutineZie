@@ -12,6 +12,7 @@ import { Play, RotateCcw, HelpCircle, ArrowLeft, Info } from 'lucide-react';
 import { InkStamp } from './icons/InkIcons';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { RoutineRepository } from '@/lib/db/repository';
+import { localDateISO } from '@/lib/date';
 
 interface WorkoutModeModalProps {
   dayName: string;
@@ -169,7 +170,7 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
     if (session) {
       let saveFailed = false;
       try {
-        const todayISO = new Date().toISOString().split('T')[0];
+        const todayISO = localDateISO();
         await RoutineRepository.saveWorkoutLog({
           id: `workout_${todayISO}_${session.dayName}`,
           dateISO: todayISO,
