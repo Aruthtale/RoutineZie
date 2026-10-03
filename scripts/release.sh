@@ -39,6 +39,21 @@ APK_SHA=$(sha256sum "$APK_ABS" | cut -d' ' -f1)
 echo "    ukuran: ${APK_SIZE} byte"
 echo "    sha256: ${APK_SHA}"
 
+# --- Guard 0: JANGAN rilis APK yang memuat API key di bundle klien ---
+# Static export meng-inline NEXT_PUBLIC_* ke JS klien, dan APK berisi JS itu.
+# Rilis publik = key bocor ke siapa pun yang mengunduh APK. Gerbang ini
+# menghentikan rilis sebelum terunggah.
+echo "==> Cek kebocoran API key di dalam APK"
+LEAK=$(unzip -p "$APK_ABS" 'assets/public/_next/static/chunks/*.js' 2>/dev/null \
+       | grep -oE '(AQ\.Ab8[A-Za-z0-9_-]{20,}|AIza[A-Za-z0-9_-]{30,})' | sort -u || true)
+if [ -n "$LEAK" ]; then
+  echo "GAGAL: APK memuat API key di bundle klien — akan bocor ke publik bila dirilis." >&2
+  echo "       Perbaikan: pakai ProxyChatProvider (NEXT_PUBLIC_CHAT_PROXY_ENDPOINT)," >&2
+  echo "       HAPUS NEXT_PUBLIC_GEMINI_API_KEY dari env, lalu build ulang." >&2
+  exit 1
+fi
+echo "    aman: tidak ada API key di bundle APK"
+
 # --- Guard 1: versi di APK harus cocok dengan TAG yang akan dirilis ---
 AAPT2="${AAPT2:-$(command -v aapt2 || echo /opt/android-sdk/build-tools/37.0.0/aapt2)}"
 APK_BADGE=$("$AAPT2" dump badging "$APK_ABS" 2>/dev/null | grep "^package:" || true)
