@@ -130,11 +130,25 @@ export function getNowAndNext(jadwalList: any[], timeInMinutes: number): NowAndN
 
     if (timeInMinutes >= parsed.startMinutes && timeInMinutes < parsed.endMinutes) {
       nowItem = item;
-      nextItem = jadwalList[i + 1] || null;
       break;
-    } else if (timeInMinutes < parsed.startMinutes) {
-      if (!nowItem) {
-        // We are before this slot
+    }
+    if (timeInMinutes < parsed.startMinutes) {
+      // Kita sebelum slot ini — inilah kegiatan berikutnya.
+      nextItem = item;
+      break;
+    }
+  }
+
+  // Kegiatan berikutnya = item pertama yang BELUM mulai (start > sekarang).
+  // Tidak boleh sekadar jadwalList[i+1]: jadwal bisa punya titik waktu atau
+  // rentang yang tumpang tindih, sehingga item setelah nowItem bisa saja
+  // sudah mulai lebih dulu (mis. "05.00" titik + "05.00-05.30" rentang).
+  if (nowItem && !nextItem) {
+    for (let i = 0; i < jadwalList.length; i++) {
+      const item = jadwalList[i];
+      const parsed = parseWaktu(item.waktu);
+      if (!parsed) continue;
+      if (parsed.startMinutes > timeInMinutes) {
         nextItem = item;
         break;
       }
