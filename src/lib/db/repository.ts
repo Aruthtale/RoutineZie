@@ -1,4 +1,5 @@
 import { db, WorkoutLog, WeightLog, SleepLog, MealCheck, AppSettings, ChatHistoryEntry, ScheduleOverride, WaterLog, HungerLog, AbilityTest, WeeklyNote, Milestone } from './index';
+import { validateRows, type TableKey } from './importSchema';
 
 export class RoutineRepository {
   // --- Workout ---
@@ -320,20 +321,21 @@ export class RoutineRepository {
     // Helper: validasi array sederhana — hanya tolak non-array / null
     const arr = (v: any): any[] => (Array.isArray(v) ? v : []);
 
-    // Daftar tabel yang akan di-import (semua 12)
-    const tables = [
-      { store: db.workoutLogs,        rows: arr(d.workouts) },
-      { store: db.weightLogs,          rows: arr(d.weights) },
-      { store: db.sleepLogs,           rows: arr(d.sleeps) },
-      { store: db.mealChecks,          rows: arr(d.meals) },
-      { store: db.settings,            rows: arr(d.settings) },
-      { store: db.chatHistory,         rows: arr(d.chatHistory) },
-      { store: db.scheduleOverrides,   rows: arr(d.scheduleOverrides) },
-      { store: db.waterLogs,           rows: arr(d.water) },
-      { store: db.hungerLogs,          rows: arr(d.hunger) },
-      { store: db.abilityTests,        rows: arr(d.abilityTests) },
-      { store: db.weeklyNotes,         rows: arr(d.weeklyNotes) },
-      { store: db.milestones,          rows: arr(d.milestones) },
+    // Daftar tabel yang akan di-import (semua 12). Kunci `key` dipakai untuk
+    // mencocokkan skema validasi Zod di importSchema.ts.
+    const tables: { key: TableKey; store: any; rows: any[] }[] = [
+      { key: 'workouts',          store: db.workoutLogs,        rows: arr(d.workouts) },
+      { key: 'weights',           store: db.weightLogs,          rows: arr(d.weights) },
+      { key: 'sleeps',            store: db.sleepLogs,           rows: arr(d.sleeps) },
+      { key: 'meals',             store: db.mealChecks,          rows: arr(d.meals) },
+      { key: 'settings',          store: db.settings,            rows: arr(d.settings) },
+      { key: 'chatHistory',       store: db.chatHistory,         rows: arr(d.chatHistory) },
+      { key: 'scheduleOverrides', store: db.scheduleOverrides,   rows: arr(d.scheduleOverrides) },
+      { key: 'water',             store: db.waterLogs,           rows: arr(d.water) },
+      { key: 'hunger',            store: db.hungerLogs,          rows: arr(d.hunger) },
+      { key: 'abilityTests',      store: db.abilityTests,        rows: arr(d.abilityTests) },
+      { key: 'weeklyNotes',       store: db.weeklyNotes,         rows: arr(d.weeklyNotes) },
+      { key: 'milestones',        store: db.milestones,          rows: arr(d.milestones) },
     ];
 
     const totalRows = tables.reduce((sum, t) => sum + t.rows.length, 0);
@@ -341,27 +343,41 @@ export class RoutineRepository {
       return { success: false, message: 'Tidak ada data untuk diimpor.' };
     }
 
+    // Validasi ketat tiap baris dengan Zod. Baris cacat di-skip & dihitung,
+    // agar satu entri rusak tidak membatalkan seluruh pemulihan.
+    let totalSkipped = 0;
+    const prepared = tables.map((t) => {
+      const { valid, skipped } = validateRows(t.key, t.rows);
+      totalSkipped += skipped;
+      return { store: t.store, valid };
+    });
+
+    const validTotal = prepared.reduce((sum, p) => sum + p.valid.length, 0);
+    if (validTotal === 0) {
+      return {
+        success: false,
+        message: `Tidak ada baris valid untuk diimpor (${totalSkipped} baris rusak dilewati).`,
+      };
+    }
+
     try {
       await db.transaction(
         'rw',
         tables.map((t) => t.store),
         async () => {
-          for (const { store, rows } of tables) {
-            if (rows.length > 0) {
-              // Filter baris tanpa id (wajib untuk Dexie primary key)
-              const valid = rows.filter((r: any) => r && typeof r === 'object' && r.id != null);
-              if (valid.length > 0) {
-                await (store as any).bulkPut(valid);
-              }
+          for (const { store, valid } of prepared) {
+            if (valid.length > 0) {
+              await (store as any).bulkPut(valid);
             }
           }
         },
       );
 
-      const importedCount = tables.reduce((sum, t) => sum + t.rows.length, 0);
+      const importedCount = validTotal;
+      const skippedNote = totalSkipped > 0 ? ` ${totalSkipped} baris rusak dilewati.` : '';
       return {
         success: true,
-        message: `Impor berhasil! ${importedCount} data dipulihkan dari ${tables.filter((t) => t.rows.length > 0).length} tabel.`,
+        message: `Impor berhasil! ${importedCount} data dipulihkan dari ${prepared.filter((p) => p.valid.length > 0).length} tabel.${skippedNote}`,
       };
     } catch (e: any) {
       return { success: false, message: `Gagal impor: ${e?.message || 'Unknown error'}` };

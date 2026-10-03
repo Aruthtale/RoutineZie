@@ -163,4 +163,59 @@ describe('RoutineRepository Dexie DB Tests', () => {
     expect(all.find((w) => w.id === 'legit')).toBeTruthy();
     expect(all.find((w) => (w as any).noId)).toBeUndefined();
   });
+
+  it('rejects rows with corrupted value fields (Zod) instead of storing them', async () => {
+    const { db } = await import('./index');
+    await db.waterLogs.clear();
+    const bad = JSON.stringify({
+      app: 'CloverzRoutine',
+      data: {
+        water: [
+          { id: 'water_bad', dateISO: '2026-10-03', glasses: 'banyak' }, // nilai salah tipe
+          { id: 'water_bad2', dateISO: '2026-10-03', glasses: -3 },       // negatif
+          { id: 'water_ok', dateISO: '2026-10-03', glasses: 8 },          // sah
+        ],
+      },
+    });
+    const result = await RoutineRepository.importData(bad);
+    expect(result.success).toBe(true);
+    const all = await db.waterLogs.toArray();
+    expect(all.length).toBe(1);
+    expect(all[0].id).toBe('water_ok');
+    expect(all[0].glasses).toBe(8);
+    // Pesan menyebutkan baris rusak yang dilewati
+    expect(result.message).toContain('rusak');
+  });
+
+  it('rejects weight rows with non-numeric kg', async () => {
+    const { db } = await import('./index');
+    await db.weightLogs.clear();
+    const bad = JSON.stringify({
+      app: 'CloverzRoutine',
+      data: {
+        weights: [
+          { id: 'w_bad', dateISO: '2026-10-03', kg: null },
+          { id: 'w_bad2', dateISO: '2026-10-03', kg: 'berat' },
+          { id: 'w_ok', dateISO: '2026-10-03', kg: 42.5 },
+        ],
+      },
+    });
+    const result = await RoutineRepository.importData(bad);
+    expect(result.success).toBe(true);
+    const all = await db.weightLogs.toArray();
+    expect(all.length).toBe(1);
+    expect(all[0].kg).toBe(42.5);
+  });
+
+  it('rejects entire import when every row is corrupt', async () => {
+    const bad = JSON.stringify({
+      app: 'CloverzRoutine',
+      data: {
+        water: [{ id: 'x', dateISO: '2026-10-03', glasses: 'nope' }],
+      },
+    });
+    const result = await RoutineRepository.importData(bad);
+    expect(result.success).toBe(false);
+    expect(result.message.toLowerCase()).toContain('valid');
+  });
 });
