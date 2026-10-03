@@ -1,4 +1,5 @@
 import rawData from '@/data/jadwal_mingguan.json';
+import { applyPklOverride } from '@/lib/profile/override';
 
 export interface TimeSlot {
   startMinutes: number; // e.g. 05.00 -> 5*60 + 0 = 300
@@ -305,6 +306,9 @@ export function getScheduleForDay(dayName: string) {
 
   return {
     ...dayObj,
+    // T9 — jam PKL bisa di-override pengguna (mis. PKL pindah jam). Hari
+    // "Libur" tetap libur; lihat applyPklOverride.
+    pkl: applyPklOverride(dayObj.pkl),
     normalizedWorkout: normalizeWorkoutData(dayObj.workout),
   };
 }

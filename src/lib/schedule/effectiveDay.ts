@@ -10,6 +10,7 @@
 import rawData from '@/data/jadwal_mingguan.json';
 import { getScheduleForDay } from './parser';
 import { buildScheduleOverride, type ScheduleOverride, type SubstituteReason, type Workout } from './substitutions';
+import { applyPklOverride } from '@/lib/profile/override';
 
 export const DAY_NAMES = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
@@ -40,7 +41,7 @@ export function getDefaultDayInput(dateISO: string) {
   return {
     hari,
     tipe: d?.tipe ?? 'biasa',
-    pkl: raw?.pkl ?? '',
+    pkl: applyPklOverride(raw?.pkl),
     workout: (d?.workout ?? null) as Workout | null,
   };
 }

@@ -37,6 +37,7 @@ import {
   InkAssistant,
 } from '@/components/icons/InkIcons';
 import { dateToISO, DAY_NAMES, getEffectiveDay, applyOverride, clearOverride, getActiveNonExpiringOverrides } from '@/lib/schedule/effectiveDay';
+import { hydrateProfileOverride, subscribeProfileOverride, mergeProfile } from '@/lib/profile/override';
 import { setWidgetState, buildWidgetState } from '@/lib/widget';
 import { SubstitutionPanel, SubstitutionQuickButtons, AcuteInjuryNotice } from '@/components/SubstitutionPanel';
 import {
@@ -95,6 +96,15 @@ export default function RoutinePage() {
     };
   }, []);
   const dayPhase = useDayPhase(themePref);
+
+  // T9 — muat override profil (tinggi/berat/kemampuan + jam PKL) ke cache
+  // sinkron sekali saat boot, lalu re-render bila pengguna mengubahnya.
+  const [, forceProfileRerender] = useState(0);
+  useEffect(() => {
+    void hydrateProfileOverride();
+    const unsub = subscribeProfileOverride(() => forceProfileRerender((n) => n + 1));
+    return unsub;
+  }, []);
 
   useEffect(() => {
     const dayIndex = new Date().getDay();
@@ -226,7 +236,7 @@ export default function RoutinePage() {
       : dayData?.normalizedWorkout ?? null
     : dayData?.normalizedWorkout ?? null;
 
-  const profil = (jadwalRaw as any)?.profil;
+  const profil = mergeProfile((jadwalRaw as any)?.profil ?? {});
   const polaMakan = dayData?.pola_makan || [];
 
   // T8.1 — agregasi pola makan 7 hari untuk daftar belanja mingguan.
