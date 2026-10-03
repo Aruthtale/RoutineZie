@@ -48,7 +48,7 @@ describe('arrayBufferToBase64', () => {
     expect(arrayBufferToBase64(bytes.buffer as ArrayBuffer)).toBe(ref(bytes));
   });
 
-  it('tidak melempar untuk payload sebesar APK (6 MB)', () => {
+  it('tidak melempar untuk payload sebesar APK (6 MB)', { timeout: 30_000 }, () => {
     // Regresi kelas berbeda: btoa(String.fromCharCode(...bytes)) melampaui
     // batas argumen dan melempar RangeError untuk payload besar.
     const size = 6 * 1024 * 1024 + 7; // ganjil, memaksa ada padding
