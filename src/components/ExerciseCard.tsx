@@ -20,31 +20,31 @@ export default function ExerciseCard({ exercise, onStart, compact = true }: Exer
   const [expanded, setExpanded] = React.useState(false);
 
   return (
-    <div className="neo-box bg-[#ffffff] text-[#09090b] p-3 space-y-2 text-left w-full">
+    <div className="neo-box bg-paper text-ink p-3 space-y-2 text-left w-full">
       <div className="flex items-start justify-between gap-2">
         <div className="space-y-0.5 min-w-0">
-          <span className="text-[10px] font-black uppercase tracking-wider text-[#09090b]/60 block">
+          <span className="text-[10px] font-black uppercase tracking-wider text-ink/60 block">
             KARTU LATIHAN
           </span>
-          <h4 className="text-sm font-black uppercase text-[#09090b] truncate">
+          <h4 className="text-sm font-black uppercase text-ink truncate">
             {exercise.nama}
           </h4>
         </div>
         {exercise.peralatan && (
-          <span className="neo-box-sm bg-[#09090b]/5 text-[#09090b] px-1.5 py-0.5 text-[9px] font-black uppercase whitespace-nowrap">
+          <span className="neo-box-sm bg-ink/5 text-ink px-1.5 py-0.5 text-[9px] font-black uppercase whitespace-nowrap">
             {exercise.peralatan}
           </span>
         )}
       </div>
 
       <div className="flex items-center gap-1.5 flex-wrap">
-        <span className="neo-box-sm bg-[#09090b] text-[#ffffff] px-2 py-0.5 text-[10px] font-black font-mono">
+        <span className="neo-box-sm bg-ink text-paper px-2 py-0.5 text-[10px] font-black font-mono">
           {exercise.tipe === 'durasi'
             ? `${exercise.durasiMinutes ?? ''} MENIT`
             : `${exercise.setCount} SET`}
         </span>
         {exercise.ototTarget && (
-          <span className="neo-box-sm bg-[#09090b]/5 text-[#09090b] px-2 py-0.5 text-[10px] font-black uppercase">
+          <span className="neo-box-sm bg-ink/5 text-ink px-2 py-0.5 text-[10px] font-black uppercase">
             {exercise.ototTarget}
           </span>
         )}
@@ -54,7 +54,7 @@ export default function ExerciseCard({ exercise, onStart, compact = true }: Exer
       {exercise.cara.length > 0 && (
         <div className="space-y-1">
           {exercise.cara.slice(0, expanded ? undefined : 1).map((langkah, i) => (
-            <p key={i} className="text-[11px] font-medium text-[#09090b]/80 leading-relaxed">
+            <p key={i} className="text-[11px] font-medium text-ink/80 leading-relaxed">
               <span className="font-black font-mono mr-1">{i + 1}.</span>
               {langkah}
             </p>
@@ -63,7 +63,7 @@ export default function ExerciseCard({ exercise, onStart, compact = true }: Exer
             <button
               type="button"
               onClick={() => setExpanded((v) => !v)}
-              className="flex items-center gap-1 text-[10px] font-black uppercase text-[#09090b]/60 hover:text-[#09090b]"
+              className="flex items-center gap-1 text-[10px] font-black uppercase text-ink/60 hover:text-ink"
             >
               {expanded ? (
                 <>Tutup <ChevronUp className="w-3 h-3" /></>
@@ -76,24 +76,24 @@ export default function ExerciseCard({ exercise, onStart, compact = true }: Exer
       )}
 
       {expanded && (
-        <div className="space-y-1.5 border-t-2 border-[#09090b]/15 pt-2">
+        <div className="space-y-1.5 border-t-2 border-ink/15 pt-2">
           {exercise.tipsForm && (
-            <p className="text-[11px] font-medium text-[#09090b]/80">
+            <p className="text-[11px] font-medium text-ink/80">
               <span className="font-black">Form:</span> {exercise.tipsForm}
             </p>
           )}
           {exercise.kesalahanUmum && (
-            <p className="text-[11px] font-medium text-[#09090b]/80">
+            <p className="text-[11px] font-medium text-ink/80">
               <span className="font-black">Hindari:</span> {exercise.kesalahanUmum}
             </p>
           )}
           {exercise.versiMudah && (
-            <p className="text-[11px] font-medium text-[#09090b]/80">
+            <p className="text-[11px] font-medium text-ink/80">
               <span className="font-black">Mudah:</span> {exercise.versiMudah}
             </p>
           )}
           {exercise.versiSulit && (
-            <p className="text-[11px] font-medium text-[#09090b]/80">
+            <p className="text-[11px] font-medium text-ink/80">
               <span className="font-black">Sulit:</span> {exercise.versiSulit}
             </p>
           )}

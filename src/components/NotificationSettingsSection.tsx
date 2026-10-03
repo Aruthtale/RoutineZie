@@ -95,13 +95,13 @@ export default function NotificationSettingsSection() {
   }).slice(0, 8);
 
   return (
-    <section className="neo-box p-3.5 bg-[#ffffff] space-y-3">
+    <section className="neo-box p-3.5 bg-paper space-y-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-black uppercase tracking-wider block text-[#09090b] flex items-center gap-1.5">
+        <span className="text-xs font-black uppercase tracking-wider block text-ink flex items-center gap-1.5">
           {settings.enabled ? (
-            <Bell className="w-4 h-4 text-[#09090b]" />
+            <Bell className="w-4 h-4 text-ink" />
           ) : (
-            <BellOff className="w-4 h-4 text-[#09090b]/60" />
+            <BellOff className="w-4 h-4 text-ink/60" />
           )}
           PENGINGAT JADWAL
         </span>
@@ -119,13 +119,13 @@ export default function NotificationSettingsSection() {
         disabled={status === 'loading'}
         aria-pressed={settings.enabled}
         className={`w-full text-left p-2.5 neo-box-sm transition-colors ${
-          settings.enabled ? 'bg-emerald-50' : 'bg-[#09090b]/5'
+          settings.enabled ? 'bg-emerald-50' : 'bg-ink/5'
         } ${status === 'loading' ? 'opacity-60' : ''}`}
       >
-        <span className="text-sm font-black text-[#09090b]">
+        <span className="text-sm font-black text-ink">
           {status === 'loading' ? 'MEMPROSES…' : settings.enabled ? 'NOTIFIKASI AKTIF' : 'AKTIFKAN NOTIFIKASI'}
         </span>
-        <span className="text-[11px] text-[#09090b]/70 block mt-0.5 font-medium">
+        <span className="text-[11px] text-ink/70 block mt-0.5 font-medium">
           Pengingat muncul tepat waktu walaupun aplikasi tertutup.
         </span>
       </button>
@@ -134,7 +134,7 @@ export default function NotificationSettingsSection() {
       {settings.enabled && (
         <>
           <div className="space-y-1.5">
-            <span className="text-[11px] font-bold text-[#09090b]/60 flex items-center gap-1">
+            <span className="text-[11px] font-bold text-ink/60 flex items-center gap-1">
               <Clock className="w-3 h-3" /> MUNCUL SEBELUM JADWAL
             </span>
             <div className="flex gap-1.5 flex-wrap">
@@ -146,8 +146,8 @@ export default function NotificationSettingsSection() {
                   aria-pressed={settings.offsetMinutes === m}
                   className={`text-[11px] font-mono font-black px-2.5 py-1 neo-box-sm transition-colors ${
                     settings.offsetMinutes === m
-                      ? 'bg-[#09090b] text-white'
-                      : 'bg-white text-[#09090b] hover:bg-[#09090b]/5'
+                      ? 'bg-ink text-white'
+                      : 'bg-white text-ink hover:bg-ink/5'
                   }`}
                 >
                   {m === 0 ? 'TEPAT' : `${m}M`}
@@ -161,7 +161,7 @@ export default function NotificationSettingsSection() {
             <button
               type="button"
               onClick={() => setShowItems(!showItems)}
-              className="text-[11px] font-bold text-[#09090b]/60 underline"
+              className="text-[11px] font-bold text-ink/60 underline"
             >
               {showItems ? 'SEMBUNYIKAN' : 'PILIH'} PENGINGAT HARI INI ({itemsHariIni.length})
             </button>
@@ -181,16 +181,16 @@ export default function NotificationSettingsSection() {
                       }`}
                     >
                       <span
-                        className={`w-4 h-4 flex-shrink-0 flex items-center justify-center border-2 border-[#09090b] ${
+                        className={`w-4 h-4 flex-shrink-0 flex items-center justify-center border-2 border-ink ${
                           on ? 'bg-emerald-400' : 'bg-white'
                         }`}
                       >
-                        {on && <CheckCircle2 className="w-3 h-3 text-[#09090b]" />}
+                        {on && <CheckCircle2 className="w-3 h-3 text-ink" />}
                       </span>
-                      <span className="text-[11px] font-mono font-black text-[#09090b] w-12 flex-shrink-0">
+                      <span className="text-[11px] font-mono font-black text-ink w-12 flex-shrink-0">
                         {item.waktu.split('-')[0]}
                       </span>
-                      <span className="text-[11px] font-medium text-[#09090b] truncate">
+                      <span className="text-[11px] font-medium text-ink truncate">
                         {item.kegiatan}
                       </span>
                     </button>
@@ -199,7 +199,7 @@ export default function NotificationSettingsSection() {
               </div>
             )}
             {settings.itemIds.length > 0 && (
-              <span className="text-[11px] text-[#09090b]/60 font-medium block">
+              <span className="text-[11px] text-ink/60 font-medium block">
                 Hanya {settings.itemIds.length} pengingat terpilih yang dijadwalkan.
               </span>
             )}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseWaktu, getPhaseFromTime, getNowAndNext, getScheduleForDay, normalizeWorkoutData, formatSisaWaktu } from './parser';
+import { parseWaktu, getPhaseFromTime, getNowAndNext, getScheduleForDay, normalizeWorkoutData, formatSisaWaktu, getDayPhase } from './parser';
 
 describe('Schedule Parser Utilities', () => {
   it('should correctly parse range time strings', () => {
@@ -89,6 +89,33 @@ describe('Schedule Parser Utilities', () => {
     it('returns empty string for zero or negative', () => {
       expect(formatSisaWaktu(0)).toBe('');
       expect(formatSisaWaktu(-5)).toBe('');
+    });
+  });
+
+  describe('getDayPhase (design.md §5)', () => {
+    const at = (h: number, m = 0) => h * 60 + m;
+    it('fajar 04.00–06.30', () => {
+      expect(getDayPhase(at(4))).toBe('fajar');
+      expect(getDayPhase(at(5, 30))).toBe('fajar');
+      expect(getDayPhase(at(6, 29))).toBe('fajar');
+    });
+    it('pagi 06.30–08.00', () => {
+      expect(getDayPhase(at(6, 30))).toBe('pagi');
+      expect(getDayPhase(at(7, 59))).toBe('pagi');
+    });
+    it('siang 08.00–17.00', () => {
+      expect(getDayPhase(at(8))).toBe('siang');
+      expect(getDayPhase(at(16, 59))).toBe('siang');
+    });
+    it('sore 17.00–20.30', () => {
+      expect(getDayPhase(at(17))).toBe('sore');
+      expect(getDayPhase(at(20, 29))).toBe('sore');
+    });
+    it('winddown 20.30–04.00 (inversi gelap)', () => {
+      expect(getDayPhase(at(20, 30))).toBe('winddown');
+      expect(getDayPhase(at(23))).toBe('winddown');
+      expect(getDayPhase(at(2))).toBe('winddown');
+      expect(getDayPhase(at(3, 59))).toBe('winddown');
     });
   });
 });

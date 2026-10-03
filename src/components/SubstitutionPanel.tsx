@@ -35,41 +35,41 @@ export function SubstitutionPanel({ proposal, onAccept, onReject }: Substitution
 
   return (
     <section
-      className="neo-box bg-[#ffffff] p-4 space-y-3 border-[3px]"
+      className="neo-box bg-paper p-4 space-y-3 border-[3px]"
       role="dialog"
       aria-label="Usulan ganti jadwal"
     >
       <div className="flex items-center justify-between">
-        <span className="text-xs font-black uppercase tracking-wider text-[#09090b]">
+        <span className="text-xs font-black uppercase tracking-wider text-ink">
           {rule.emoji} USUL GANTI
         </span>
         <button
           onClick={onReject}
           aria-label="Tutup usulan"
-          className="neo-box-sm bg-[#ffffff] p-1 hover:bg-[#09090b]/10 active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          className="neo-box-sm bg-paper p-1 hover:bg-ink/10 active:translate-x-0.5 active:translate-y-0.5 transition-all"
         >
-          <X className="w-4 h-4 text-[#09090b]" />
+          <X className="w-4 h-4 text-ink" />
         </button>
       </div>
 
-      <p className="text-xs font-bold text-[#09090b]/80 leading-relaxed">
+      <p className="text-xs font-bold text-ink/80 leading-relaxed">
         Alasan: {rule.label} — {rule.deskripsi}
       </p>
 
       <div className="flex items-center gap-2 text-center">
-        <div className="flex-1 border-2 border-dashed border-[#09090b]/40 p-2.5">
-          <span className="text-[10px] font-black uppercase text-[#09090b]/60 block">ASLI</span>
-          <span className="text-sm font-black text-[#09090b]/60 line-through">{origNama}</span>
+        <div className="flex-1 border-2 border-dashed border-ink/40 p-2.5">
+          <span className="text-[10px] font-black uppercase text-ink/60 block">ASLI</span>
+          <span className="text-sm font-black text-ink/60 line-through">{origNama}</span>
         </div>
-        <span className="text-lg font-black text-[#09090b]">→</span>
-        <div className="flex-1 border-2 border-[#09090b] bg-[#09090b]/5 p-2.5">
-          <span className="text-[10px] font-black uppercase text-[#09090b] block">PENGGANTI</span>
-          <span className="text-sm font-black text-[#09090b]">{newNama}</span>
+        <span className="text-lg font-black text-ink">→</span>
+        <div className="flex-1 border-2 border-ink bg-ink/5 p-2.5">
+          <span className="text-[10px] font-black uppercase text-ink block">PENGGANTI</span>
+          <span className="text-sm font-black text-ink">{newNama}</span>
         </div>
       </div>
 
       {proposal.replacement?.latihan && proposal.replacement.latihan.length > 0 && (
-        <ul className="text-[11px] font-bold text-[#09090b]/80 space-y-0.5 pl-3">
+        <ul className="text-[11px] font-bold text-ink/80 space-y-0.5 pl-3">
           {proposal.replacement.latihan.slice(0, 5).map((it, i) => (
             <li key={i} className="list-disc">{it.latihan}</li>
           ))}
@@ -79,13 +79,13 @@ export function SubstitutionPanel({ proposal, onAccept, onReject }: Substitution
       <div className="flex gap-2.5">
         <button
           onClick={onReject}
-          className="flex-1 neo-box bg-[#ffffff] text-[#09090b] py-2.5 text-xs font-black uppercase tracking-wide hover:bg-[#09090b]/5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          className="flex-1 neo-box bg-paper text-ink py-2.5 text-xs font-black uppercase tracking-wide hover:bg-ink/5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
         >
           TOLAK
         </button>
         <button
           onClick={onAccept}
-          className="flex-1 bg-[#09090b] text-[#ffffff] py-2.5 text-xs font-black uppercase tracking-wide border-[3px] border-[#09090b] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+          className="flex-1 bg-ink text-paper py-2.5 text-xs font-black uppercase tracking-wide border-[3px] border-ink active:translate-x-0.5 active:translate-y-0.5 transition-all"
         >
           TERIMA
         </button>
@@ -108,7 +108,7 @@ export function SubstitutionQuickButtons({ hidden, onSelect }: QuickButtonsProps
   if (hidden) return null;
   return (
     <section className="space-y-2" aria-label="Ganti latihan hari ini">
-      <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
+      <h3 className="text-sm font-black uppercase tracking-wider text-ink flex items-center gap-1.5">
         Tidak bisa latihan hari ini?
       </h3>
       <div className="grid grid-cols-2 gap-2">
@@ -116,10 +116,10 @@ export function SubstitutionQuickButtons({ hidden, onSelect }: QuickButtonsProps
           <button
             key={b.reason}
             onClick={() => onSelect(b.reason)}
-            className="neo-box bg-[#ffffff] p-2.5 text-left active:translate-x-0.5 active:translate-y-0.5 transition-all hover:bg-[#09090b]/5"
+            className="neo-box bg-paper p-2.5 text-left active:translate-x-0.5 active:translate-y-0.5 transition-all hover:bg-ink/5"
           >
             <span className="text-base block leading-none mb-0.5">{b.emoji}</span>
-            <span className="text-[11px] font-black uppercase text-[#09090b]">{b.label}</span>
+            <span className="text-[11px] font-black uppercase text-ink">{b.label}</span>
           </button>
         ))}
       </div>
@@ -133,13 +133,13 @@ export function SubstitutionQuickButtons({ hidden, onSelect }: QuickButtonsProps
 
 export function AcuteInjuryNotice() {
   return (
-    <section className="neo-box bg-[#ffffff] p-4 space-y-2 border-[3px]">
-      <span className="text-xs font-black uppercase tracking-wider text-[#09090b]">🩹 TERLIHAT SERIUS</span>
-      <p className="text-xs font-bold text-[#09090b]/80 leading-relaxed">
+    <section className="neo-box bg-paper p-4 space-y-2 border-[3px]">
+      <span className="text-xs font-black uppercase tracking-wider text-ink">🩹 TERLIHAT SERIUS</span>
+      <p className="text-xs font-bold text-ink/80 leading-relaxed">
         Gejalanya terdengar seperti cedera akut, bukan pegal biasa. Aplikasi tidak
         akan menawarkan pengganti latihan apa pun sekarang.
       </p>
-      <p className="text-xs font-bold text-[#09090b]">
+      <p className="text-xs font-bold text-ink">
         Istirahat total untuk bagian tubuh itu. Bila nyeri tidak reda, bengkak,
         atau tidak bisa ditumpangi — bicaralah dengan ortu/wali dan periksa ke
         tenaga kesehatan. Jangan ditunda.

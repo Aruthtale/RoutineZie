@@ -22,6 +22,34 @@
     --border-width: 2px;
   }
 
+  /*
+   * Tema fase hari (design.md §3.1 & §5).
+   * `data-theme="dark"` = inversi TOTAL, bukan "tema tambahan": tinta jadi
+   * putih, kertas jadi hitam. Karena semua utility Tailwind memakai token
+   * --color-ink / --color-paper (via @theme), satu override di sini membalik
+   * seluruh UI — termasuk opacity modifier (text-ink/60 → color-mix) — tanpa
+   * perlu menyentuh satu pun komponen.
+   *
+   * Dipicu otomatis oleh useDayPhase() saat masuk wind-down (20.30–04.00),
+   * atau saat pengguna memilih tema gelap di Pengaturan.
+   */
+  :root[data-theme='dark'] {
+    --color-ink: #fafaf7;
+    --color-paper: #0b0b0b;
+    --color-canvas: #0b0b0b;
+    --kuro: #fafaf7;
+    --shiro: #0b0b0b;
+    --haiiro: #c9c9c4;
+    color-scheme: dark;
+  }
+
+  /* Transisi antar fase: singkat (≤ 200 ms), hormati reduced-motion. */
+  :root {
+    transition:
+      background-color 180ms ease,
+      color 180ms ease;
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -29,7 +57,7 @@
   }
 
   body {
-    background-color: #f4f4f5;
+    background-color: var(--color-canvas, #f4f4f5);
     color: var(--kuro);
     font-family:
       var(--font-sans),

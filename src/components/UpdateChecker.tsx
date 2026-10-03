@@ -59,54 +59,54 @@ export default function UpdateChecker() {
   const sedangUnduh = status === 'downloading';
 
   return (
-    <section className="neo-box p-3.5 bg-[#ffffff] space-y-3">
+    <section className="neo-box p-3.5 bg-paper space-y-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-black uppercase tracking-wider block text-[#09090b] flex items-center gap-1.5">
-          <Download className="w-4 h-4 text-[#09090b]" /> PEMBARUAN APLIKASI
+        <span className="text-xs font-black uppercase tracking-wider block text-ink flex items-center gap-1.5">
+          <Download className="w-4 h-4 text-ink" /> PEMBARUAN APLIKASI
         </span>
-        <span className="text-[11px] font-mono font-black text-[#09090b]/60 bg-[#09090b]/5 px-2 py-0.5 neo-box-sm">
+        <span className="text-[11px] font-mono font-black text-ink/60 bg-ink/5 px-2 py-0.5 neo-box-sm">
           v{APP_VERSION}
         </span>
       </div>
 
       {status === 'idle' && (
-        <p className="text-[11px] text-[#09090b]/70 font-medium leading-relaxed">
+        <p className="text-[11px] text-ink/70 font-medium leading-relaxed">
           Cek apakah ada versi baru dari RoutineZie. Pembaruan diambil dari GitHub dan dipasang langsung dari aplikasi.
         </p>
       )}
 
       {status === 'checking' && (
-        <p className="text-[11px] text-[#09090b] font-bold flex items-center gap-1.5">
+        <p className="text-[11px] text-ink font-bold flex items-center gap-1.5">
           <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Mengecek rilis terbaru...
         </p>
       )}
 
       {status === 'up-to-date' && info && (
-        <div className="flex items-center gap-2 text-xs font-black text-[#09090b] bg-[#38E54D]/20 border-2 border-[#09090b] px-2.5 py-2 neo-box-sm">
+        <div className="flex items-center gap-2 text-xs font-black text-ink bg-[#38E54D]/20 border-2 border-ink px-2.5 py-2 neo-box-sm">
           <Check className="w-4 h-4" /> SUDAH TERBARU — v{info.latestVersion}
         </div>
       )}
 
       {status === 'available' && info && (
         <div className="space-y-2.5">
-          <div className="flex items-start gap-2 bg-[#FFE600]/30 border-2 border-[#09090b] px-2.5 py-2 neo-box-sm">
+          <div className="flex items-start gap-2 bg-[#FFE600]/30 border-2 border-ink px-2.5 py-2 neo-box-sm">
             <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
-            <div className="text-xs font-bold text-[#09090b]">
+            <div className="text-xs font-bold text-ink">
               Versi baru tersedia: <span className="font-mono">{info.latestVersion}</span>
               {info.apkSize ? <span className="font-mono"> ({formatBytes(info.apkSize)})</span> : null}
             </div>
           </div>
           {info.releaseNotes ? (
-            <div className="text-[11px] text-[#09090b]/80 leading-relaxed max-h-32 overflow-y-auto bg-[#09090b]/5 p-2 border border-[#09090b]/20">
+            <div className="text-[11px] text-ink/80 leading-relaxed max-h-32 overflow-y-auto bg-ink/5 p-2 border border-ink/20">
               <pre className="whitespace-pre-wrap font-sans">{info.releaseNotes.slice(0, 600)}{info.releaseNotes.length > 600 ? '...' : ''}</pre>
             </div>
           ) : (
-            <p className="text-[11px] text-[#09090b]/60 flex items-center gap-1">
+            <p className="text-[11px] text-ink/60 flex items-center gap-1">
               <Info className="w-3.3 h-3.3" /> {info.fallbackCDN ? 'Catatan rilis lihat di halaman GitHub Releases.' : 'Tanpa catatan rilis.'}
             </p>
           )}
           {perluIzin && (
-            <p className="text-[11px] font-bold text-[#09090b] bg-[#FF70A6]/20 border-2 border-[#09090b] px-2.5 py-2 neo-box-sm">
+            <p className="text-[11px] font-bold text-ink bg-[#FF70A6]/20 border-2 border-ink px-2.5 py-2 neo-box-sm">
               {pesan}
             </p>
           )}
@@ -114,13 +114,13 @@ export default function UpdateChecker() {
       )}
 
       {status === 'downloading' && (
-        <p className="text-[11px] text-[#09090b] font-bold flex items-center gap-1.5">
+        <p className="text-[11px] text-ink font-bold flex items-center gap-1.5">
           <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Mengunduh APK... mohon tunggu.
         </p>
       )}
 
       {status === 'error' && (
-        <p className="text-[11px] font-bold text-[#09090b] bg-[#FF70A6]/20 border-2 border-[#09090b] px-2.5 py-2 neo-box-sm">
+        <p className="text-[11px] font-bold text-ink bg-[#FF70A6]/20 border-2 border-ink px-2.5 py-2 neo-box-sm">
           {pesan}
         </p>
       )}
@@ -139,7 +139,7 @@ export default function UpdateChecker() {
             type="button"
             onClick={handleUnduh}
             disabled={sedangUnduh}
-            className="neo-btn flex-1 bg-[#09090b] text-[#ffffff] text-[11px] font-black uppercase tracking-wider py-2 flex items-center justify-center gap-1.5 disabled:opacity-50"
+            className="neo-btn flex-1 bg-ink text-paper text-[11px] font-black uppercase tracking-wider py-2 flex items-center justify-center gap-1.5 disabled:opacity-50"
           >
             <Download className="w-3.5 h-3.5" /> {sedangUnduh ? 'MENGUNDUH...' : 'PERBARUI SEKARANG'}
           </button>

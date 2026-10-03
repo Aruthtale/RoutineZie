@@ -78,23 +78,23 @@ export default function WorkoutStampGrid() {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between border-b-2 border-[#09090b] pb-2">
-        <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
+      <div className="flex items-center justify-between border-b-2 border-ink pb-2">
+        <h3 className="text-sm font-black uppercase tracking-wider text-ink flex items-center gap-1.5">
           <InkSchedule className="w-4 h-4" /> STAMEL LATIHAN
         </h3>
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setWeekOffset((v) => v - 1)}
-            className="neo-btn bg-[#ffffff] text-[#09090b] px-2 py-1 text-[11px] font-black"
+            className="neo-btn bg-paper text-ink px-2 py-1 text-[11px] font-black"
           >
             ←
           </button>
-          <span className="text-[10px] font-mono font-black uppercase text-[#09090b]/60">
+          <span className="text-[10px] font-mono font-black uppercase text-ink/60">
             {weekOffset === 0 ? 'MINGGU INI' : `${weekOffset} MGG LALU`}
           </span>
           <button
             onClick={() => setWeekOffset((v) => Math.min(0, v + 1))}
-            className="neo-btn bg-[#ffffff] text-[#09090b] px-2 py-1 text-[11px] font-black"
+            className="neo-btn bg-paper text-ink px-2 py-1 text-[11px] font-black"
             disabled={weekOffset >= 0}
           >
             →
@@ -111,16 +111,16 @@ export default function WorkoutStampGrid() {
             <div
               key={hari}
               className={`neo-box-sm p-1.5 flex flex-col items-center gap-1 ${
-                selesai ? 'bg-[#09090b]' : 'bg-[#ffffff]'
+                selesai ? 'bg-ink' : 'bg-paper'
               }`}
             >
-              <span className={`text-[9px] font-black uppercase ${selesai ? 'text-[#ffffff]/70' : 'text-[#09090b]/50'}`}>
+              <span className={`text-[9px] font-black uppercase ${selesai ? 'text-paper/70' : 'text-ink/50'}`}>
                 {hari.slice(0, 3)}
               </span>
-              <span className={`font-mono font-black text-sm ${selesai ? 'text-[#ffffff]' : 'text-[#09090b]/30'}`}>
+              <span className={`font-mono font-black text-sm ${selesai ? 'text-paper' : 'text-ink/30'}`}>
                 {iso.split('-')[2]}
               </span>
-              <span className={`text-[9px] font-black ${selesai ? 'text-[#ffffff]' : 'text-transparent'}`}>✓</span>
+              <span className={`text-[9px] font-black ${selesai ? 'text-paper' : 'text-transparent'}`}>✓</span>
             </div>
           );
         })}
@@ -128,13 +128,13 @@ export default function WorkoutStampGrid() {
 
       {/* Milestone */}
       <div className="space-y-2">
-        <span className="text-[11px] font-black uppercase text-[#09090b]/60 block tracking-wider flex items-center gap-1.5">
+        <span className="text-[11px] font-black uppercase text-ink/60 block tracking-wider flex items-center gap-1.5">
           <InkStamp className="w-3.5 h-3.5" /> MILESTONE TERCAPAI
         </span>
         {loading ? (
-          <p className="text-[11px] text-[#09090b]/50">Memuat…</p>
+          <p className="text-[11px] text-ink/50">Memuat…</p>
         ) : milestones.length === 0 ? (
-          <p className="text-[11px] text-[#09090b]/50 italic">
+          <p className="text-[11px] text-ink/50 italic">
             Belum ada milestone. Stempel muncul otomatis saat kondisi terpenuhi (mis. tidur ≤ 22.00 selama 5 hari).
           </p>
         ) : (
@@ -142,12 +142,12 @@ export default function WorkoutStampGrid() {
             {milestones.map((m) => (
               <div
                 key={m.id}
-                className="neo-box-sm p-2 flex items-center gap-2 bg-[#ffffff]"
+                className="neo-box-sm p-2 flex items-center gap-2 bg-paper"
               >
                 <span className="text-base">🏅</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-[#09090b] leading-tight">{m.label}</p>
-                  <p className="text-[10px] font-mono text-[#09090b]/50">{m.achievedAt}</p>
+                  <p className="text-xs font-bold text-ink leading-tight">{m.label}</p>
+                  <p className="text-[10px] font-mono text-ink/50">{m.achievedAt}</p>
                 </div>
               </div>
             ))}

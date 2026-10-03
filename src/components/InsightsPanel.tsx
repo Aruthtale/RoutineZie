@@ -74,23 +74,23 @@ export default function InsightsPanel() {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between border-b-2 border-[#09090b] pb-2">
-        <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
+      <div className="flex items-center justify-between border-b-2 border-ink pb-2">
+        <h3 className="text-sm font-black uppercase tracking-wider text-ink flex items-center gap-1.5">
           <Lightbulb className="w-4 h-4" /> WAWASAN MINGGUAN
         </h3>
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setWeekOffset((v) => v - 1)}
-            className="neo-btn bg-[#ffffff] text-[#09090b] px-2 py-1 text-[11px] font-black"
+            className="neo-btn bg-paper text-ink px-2 py-1 text-[11px] font-black"
           >
             ←
           </button>
-          <span className="text-[10px] font-mono font-black uppercase text-[#09090b]/60">
+          <span className="text-[10px] font-mono font-black uppercase text-ink/60">
             {weekOffset === 0 ? 'MINGGU INI' : `${weekOffset} MGG LALU`}
           </span>
           <button
             onClick={() => setWeekOffset((v) => Math.min(0, v + 1))}
-            className="neo-btn bg-[#ffffff] text-[#09090b] px-2 py-1 text-[11px] font-black"
+            className="neo-btn bg-paper text-ink px-2 py-1 text-[11px] font-black"
             disabled={weekOffset >= 0}
           >
             →
@@ -98,27 +98,27 @@ export default function InsightsPanel() {
         </div>
       </div>
 
-      <p className="text-[10px] font-mono font-bold text-[#09090b]/50 uppercase">
+      <p className="text-[10px] font-mono font-bold text-ink/50 uppercase">
         {getWeekLabel(weekStart)}
       </p>
 
       {/* Pola alasan substitusi */}
-      <div className="neo-box p-3 bg-[#ffffff] space-y-2">
-        <span className="text-[11px] font-black uppercase tracking-wider text-[#09090b]/70 block">
+      <div className="neo-box p-3 bg-paper space-y-2">
+        <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 block">
           POLA ALASAN SUBSTITUSI
         </span>
         {pola.length === 0 ? (
-          <p className="text-[11px] text-[#09090b]/60 italic">
+          <p className="text-[11px] text-ink/60 italic">
             Tidak ada substitusi minggu ini — bagus, semua sesi sesuai jadwal.
           </p>
         ) : (
           <div className="space-y-1.5">
             {pola.map(([reason, jumlah]) => (
               <div key={reason} className="flex items-center justify-between text-xs">
-                <span className="font-bold text-[#09090b]">
+                <span className="font-bold text-ink">
                   {REASON_LABELS[reason] ?? reason}
                 </span>
-                <span className="font-mono font-black text-[#09090b] bg-[#09090b]/5 px-1.5 py-0.5">
+                <span className="font-mono font-black text-ink bg-ink/5 px-1.5 py-0.5">
                   {jumlah}x
                 </span>
               </div>
@@ -126,11 +126,11 @@ export default function InsightsPanel() {
           </div>
         )}
         {overrideMinggu.length > 0 && (
-          <div className="space-y-1 pt-1 border-t border-[#09090b]/10">
+          <div className="space-y-1 pt-1 border-t border-ink/10">
             {overrideMinggu.map((o) => (
               <div key={o.id} className="flex items-center gap-2 text-[10px]">
-                <span className="font-mono font-bold text-[#09090b]/60">{o.dateISO}</span>
-                <span className="text-[#09090b]/70">
+                <span className="font-mono font-bold text-ink/60">{o.dateISO}</span>
+                <span className="text-ink/70">
                   {REASON_LABELS[o.reason] ?? o.reason}
                   {o.note ? ` — ${o.note}` : ''}
                 </span>
@@ -144,7 +144,7 @@ export default function InsightsPanel() {
       <button
         onClick={handleExport}
         disabled={busy}
-        className="neo-btn w-full bg-[#09090b] text-[#ffffff] py-2.5 text-xs font-black uppercase flex items-center justify-center gap-1.5 disabled:opacity-50"
+        className="neo-btn w-full bg-ink text-paper py-2.5 text-xs font-black uppercase flex items-center justify-center gap-1.5 disabled:opacity-50"
       >
         {busy ? (
           <>

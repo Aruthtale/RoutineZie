@@ -90,22 +90,22 @@ export default function ExportImportManager() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between border-b-2 border-[#09090b] pb-2">
-        <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-          <FileText className="w-4 h-4 text-[#09090b]" /> CADANGAN DATA (OFFLINE-FIRST)
+      <div className="flex items-center justify-between border-b-2 border-ink pb-2">
+        <h3 className="text-sm font-black uppercase tracking-wider text-ink flex items-center gap-1.5">
+          <FileText className="w-4 h-4 text-ink" /> CADANGAN DATA (OFFLINE-FIRST)
         </h3>
-        <span className="text-[11px] font-black uppercase text-[#09090b]/60 bg-[#09090b]/5 px-2 py-0.5 neo-box-sm">
+        <span className="text-[11px] font-black uppercase text-ink/60 bg-ink/5 px-2 py-0.5 neo-box-sm">
           JSON SYNC
         </span>
       </div>
 
-      <p className="text-xs text-[#09090b]/80 leading-relaxed font-medium">
+      <p className="text-xs text-ink/80 leading-relaxed font-medium">
         Seluruh data Anda disimpan secara lokal di perangkat. Gunakan ekspor secara berkala untuk mencadangkan catatan latihan, berat badan, tidur, dan makanan Anda.
       </p>
 
       {/* Export Section */}
-      <div className="neo-box p-3.5 bg-[#ffffff] space-y-2">
-        <span className="text-xs font-black uppercase tracking-wider block text-[#09090b]">
+      <div className="neo-box p-3.5 bg-paper space-y-2">
+        <span className="text-xs font-black uppercase tracking-wider block text-ink">
           EKSPOR CADANGAN
         </span>
         <button
@@ -118,13 +118,13 @@ export default function ExportImportManager() {
       </div>
 
       {/* Import Section */}
-      <div className="neo-box p-3.5 bg-[#ffffff] space-y-3">
-        <span className="text-xs font-black uppercase tracking-wider block text-[#09090b]">
+      <div className="neo-box p-3.5 bg-paper space-y-3">
+        <span className="text-xs font-black uppercase tracking-wider block text-ink">
           PULIHKAN DATA (IMPOR)
         </span>
 
         <div>
-          <label className="neo-btn bg-[#ffffff] hover:bg-[#09090b]/5 text-[#09090b] w-full py-2.5 text-xs font-black uppercase flex items-center justify-center gap-2 cursor-pointer">
+          <label className="neo-btn bg-paper hover:bg-ink/5 text-ink w-full py-2.5 text-xs font-black uppercase flex items-center justify-center gap-2 cursor-pointer">
             <Upload className="w-4 h-4" /> PILIH FILE BACKUP (.JSON)
             <input
               type="file"
@@ -137,11 +137,11 @@ export default function ExportImportManager() {
 
         {/* Import Preview */}
         {importPreview && (
-          <div className="neo-box-sm p-3 bg-[#09090b]/5 space-y-2">
-            <span className="text-[11px] font-black uppercase tracking-wider block text-[#09090b]">
+          <div className="neo-box-sm p-3 bg-ink/5 space-y-2">
+            <span className="text-[11px] font-black uppercase tracking-wider block text-ink">
               PRATINJAU DATA YANG AKAN DIPULIHKAN:
             </span>
-            <ul className="text-xs font-mono text-[#09090b] space-y-1">
+            <ul className="text-xs font-mono text-ink space-y-1">
               <li>• Log Latihan: {importPreview.workouts} sesi</li>
               <li>• Log Berat Badan: {importPreview.weights} entri</li>
               <li>• Log Tidur: {importPreview.sleeps} entri</li>
@@ -164,13 +164,13 @@ export default function ExportImportManager() {
       {statusMessage && (
         <div
           className={`neo-box p-3 flex items-start gap-2 ${
-            statusMessage.isError ? 'bg-[#09090b] text-[#ffffff]' : 'bg-[#ffffff] text-[#09090b]'
+            statusMessage.isError ? 'bg-ink text-paper' : 'bg-paper text-ink'
           }`}
         >
           {statusMessage.isError ? (
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           ) : (
-            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#09090b]" />
+            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-ink" />
           )}
           <p className="text-xs font-bold leading-relaxed">{statusMessage.text}</p>
         </div>

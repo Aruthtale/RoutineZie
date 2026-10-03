@@ -49,19 +49,19 @@ export default function WaterTracker({ dateISO, targetGelas = 8 }: WaterTrackerP
 
   if (loading) {
     return (
-      <div className="neo-box p-3.5 bg-[#ffffff]">
-        <p className="text-xs font-bold text-[#09090b]/60">Memuat tally air…</p>
+      <div className="neo-box p-3.5 bg-paper">
+        <p className="text-xs font-bold text-ink/60">Memuat tally air…</p>
       </div>
     );
   }
 
   return (
-    <div className="neo-box p-3.5 bg-[#ffffff] space-y-2.5">
+    <div className="neo-box p-3.5 bg-paper space-y-2.5">
       <div className="flex items-center justify-between">
-        <h4 className="text-xs font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-          <Droplets className="w-4 h-4 text-[#09090b]" /> AIR HARI INI
+        <h4 className="text-xs font-black uppercase tracking-wider text-ink flex items-center gap-1.5">
+          <Droplets className="w-4 h-4 text-ink" /> AIR HARI INI
         </h4>
-        <span className="font-mono text-sm font-black text-[#09090b]">
+        <span className="font-mono text-sm font-black text-ink">
           {glasses} / {targetGelas} gelas
         </span>
       </div>
@@ -77,8 +77,8 @@ export default function WaterTracker({ dateISO, targetGelas = 8 }: WaterTrackerP
             aria-pressed={i < glasses}
             className={`w-9 h-9 neo-box-sm flex items-center justify-center text-xs font-black transition-colors ${
               i < glasses
-                ? 'bg-[#09090b] text-[#ffffff]'
-                : 'bg-[#ffffff] text-[#09090b]/40 hover:bg-[#09090b]/5'
+                ? 'bg-ink text-paper'
+                : 'bg-paper text-ink/40 hover:bg-ink/5'
             }`}
           >
             {i < glasses ? '✓' : ''}
@@ -87,14 +87,14 @@ export default function WaterTracker({ dateISO, targetGelas = 8 }: WaterTrackerP
       </div>
 
       <div className="flex items-center gap-2">
-        <div className="flex-1 h-2.5 bg-[#09090b]/10 border border-[#09090b]/30 overflow-hidden">
+        <div className="flex-1 h-2.5 bg-ink/10 border border-ink/30 overflow-hidden">
           <div
-            className="h-full bg-[#09090b] transition-all"
+            className="h-full bg-ink transition-all"
             style={{ width: `${persen}%` }}
             aria-hidden
           />
         </div>
-        <span className="text-[10px] font-mono font-black text-[#09090b]/70 w-9 text-right">
+        <span className="text-[10px] font-mono font-black text-ink/70 w-9 text-right">
           {persen}%
         </span>
       </div>
@@ -104,7 +104,7 @@ export default function WaterTracker({ dateISO, targetGelas = 8 }: WaterTrackerP
           type="button"
           onClick={() => handleAdd(-1)}
           disabled={glasses === 0}
-          className="neo-btn-sm flex-1 bg-[#ffffff] text-[#09090b] py-2 text-[11px] font-black uppercase flex items-center justify-center gap-1.5 disabled:opacity-40"
+          className="neo-btn-sm flex-1 bg-paper text-ink py-2 text-[11px] font-black uppercase flex items-center justify-center gap-1.5 disabled:opacity-40"
         >
           <Minus className="w-3.5 h-3.5" /> 1 Gelas
         </button>

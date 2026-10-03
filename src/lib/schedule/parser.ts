@@ -54,6 +54,22 @@ export function getPhaseFromTime(timeInMinutes: number): 'pagi' | 'siang' | 'sor
   return 'malam';
 }
 
+/**
+ * Fase visual hari (design.md §5) — menentukan pola & inversi tema.
+ * Berbeda dari getPhaseFromTime() yang hanya 4 fase kasar untuk konten:
+ * ini 5 fase sesuai tabel desain, dengan wind-down malam yang menginversi
+ * seluruh UI jadi hitam (isyarat "waktunya tidur").
+ */
+export type DayPhase = 'fajar' | 'pagi' | 'siang' | 'sore' | 'winddown';
+
+export function getDayPhase(timeInMinutes: number): DayPhase {
+  if (timeInMinutes >= 240 && timeInMinutes < 390) return 'fajar';    // 04.00–06.30
+  if (timeInMinutes >= 390 && timeInMinutes < 480) return 'pagi';     // 06.30–08.00
+  if (timeInMinutes >= 480 && timeInMinutes < 1020) return 'siang';   // 08.00–17.00
+  if (timeInMinutes >= 1020 && timeInMinutes < 1230) return 'sore';   // 17.00–20.30
+  return 'winddown';                                                   // 20.30–04.00
+}
+
 export interface NowAndNextResult {
   nowItem: any | null;
   nextItem: any | null;

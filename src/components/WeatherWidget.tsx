@@ -73,33 +73,33 @@ export default function WeatherWidget({ selectedDay }: WeatherWidgetProps) {
 
   // Weather Icon picker
   const getWeatherIcon = (code?: number) => {
-    if (code === undefined) return <Sun className="w-5 h-5 text-[#09090b]" />;
-    if (code >= 95) return <CloudLightning className="w-5 h-5 text-[#09090b]" />;
-    if (code >= 51) return <CloudRain className="w-5 h-5 text-[#09090b]" />;
-    if (code === 1 || code === 2) return <CloudSun className="w-5 h-5 text-[#09090b]" />;
-    if (code === 3) return <Cloud className="w-5 h-5 text-[#09090b]" />;
-    return <Sun className="w-5 h-5 text-[#09090b]" />;
+    if (code === undefined) return <Sun className="w-5 h-5 text-ink" />;
+    if (code >= 95) return <CloudLightning className="w-5 h-5 text-ink" />;
+    if (code >= 51) return <CloudRain className="w-5 h-5 text-ink" />;
+    if (code === 1 || code === 2) return <CloudSun className="w-5 h-5 text-ink" />;
+    if (code === 3) return <Cloud className="w-5 h-5 text-ink" />;
+    return <Sun className="w-5 h-5 text-ink" />;
   };
 
   return (
     <div className="space-y-2">
       {/* Weather Header Card */}
-      <div className="neo-box p-3 bg-[#ffffff] space-y-2">
+      <div className="neo-box p-3 bg-paper space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-[#09090b]" />
-            <span className="text-[11px] font-mono font-black uppercase text-[#09090b]">
+            <MapPin className="w-3.5 h-3.5 text-ink" />
+            <span className="text-[11px] font-mono font-black uppercase text-ink">
               {location.cityName || 'Lokasi Terdeteksi'}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono text-[#09090b]/60">
+            <span className="text-[11px] font-mono text-ink/60">
               {updatedTime ? `Diperbarui ${updatedTime}${forecast?.isStale ? ' (Offline)' : ''}` : 'Memuat...'}
             </span>
             <button
               onClick={fetchWeather}
               disabled={loading}
-              className="neo-btn bg-[#ffffff] p-1 text-[#09090b] hover:bg-[#09090b]/5"
+              className="neo-btn bg-paper p-1 text-ink hover:bg-ink/5"
               title="Perbarui Cuaca"
               aria-label="Perbarui Cuaca"
             >
@@ -109,33 +109,33 @@ export default function WeatherWidget({ selectedDay }: WeatherWidgetProps) {
         </div>
 
         {displayWeather ? (
-          <div className="flex items-center justify-between pt-1 border-t border-[#09090b]/10">
+          <div className="flex items-center justify-between pt-1 border-t border-ink/10">
             <div className="flex items-center gap-2.5">
-              <div className="neo-box-sm p-1.5 bg-[#09090b]/5">
+              <div className="neo-box-sm p-1.5 bg-ink/5">
                 {getWeatherIcon(displayWeather.weatherCode)}
               </div>
               <div>
-                <span className="text-sm font-black uppercase block text-[#09090b] leading-tight">
+                <span className="text-sm font-black uppercase block text-ink leading-tight">
                   {displayWeather.condition}
                 </span>
-                <span className="text-[11px] text-[#09090b]/70 font-medium">
+                <span className="text-[11px] text-ink/70 font-medium">
                   {isOutdoorDay ? 'Perkiraan Jam Latihan Pagi (06.00)' : 'Saat ini'}
                 </span>
               </div>
             </div>
             <div className="text-right">
-              <span className="text-lg font-mono font-black text-[#09090b]">
+              <span className="text-lg font-mono font-black text-ink">
                 {displayWeather.tempC}°C
               </span>
               {displayWeather.precipProbPct !== undefined && displayWeather.precipProbPct > 0 && (
-                <span className="block text-[11px] font-mono font-bold text-[#09090b]/80">
+                <span className="block text-[11px] font-mono font-bold text-ink/80">
                   Hujan {displayWeather.precipProbPct}%
                 </span>
               )}
             </div>
           </div>
         ) : (
-          <div className="text-xs font-mono text-[#09090b]/60 py-1">
+          <div className="text-xs font-mono text-ink/60 py-1">
             Data cuaca belum tersedia. Klik refresh untuk memuat.
           </div>
         )}
@@ -143,14 +143,14 @@ export default function WeatherWidget({ selectedDay }: WeatherWidgetProps) {
 
       {/* T4.3 Adaptive Rain Advice for Outdoor Workout Days (Selasa / Sabtu) */}
       {isOutdoorDay && isRainLikely && (
-        <div className="neo-box p-3 bg-[#ffffff] border-dashed space-y-2">
+        <div className="neo-box p-3 bg-paper border-dashed space-y-2">
           <div className="flex items-start gap-2">
-            <Umbrella className="w-4 h-4 text-[#09090b] shrink-0 mt-0.5" />
+            <Umbrella className="w-4 h-4 text-ink shrink-0 mt-0.5" />
             <div>
-              <span className="text-[11px] font-black uppercase tracking-wider block text-[#09090b]">
+              <span className="text-[11px] font-black uppercase tracking-wider block text-ink">
                 SARAN LATIHAN CUACA HUJAN
               </span>
-              <p className="text-xs text-[#09090b]/85 leading-relaxed font-medium mt-0.5">
+              <p className="text-xs text-ink/85 leading-relaxed font-medium mt-0.5">
                 Peluang hujan tinggi ({displayWeather?.precipProbPct}%). Anda dapat beralih ke alternatif latihan indoor
                 (jalan di tempat berirama + kalistenik) tanpa perlu memaksakan lari di luar.
               </p>
@@ -162,8 +162,8 @@ export default function WeatherWidget({ selectedDay }: WeatherWidgetProps) {
               onClick={() => setIsIndoorSelected(!isIndoorSelected)}
               className={`neo-btn-sm py-1.5 px-3 text-[11px] font-black uppercase flex-1 ${
                 isIndoorSelected
-                  ? 'bg-[#09090b] text-[#ffffff]'
-                  : 'bg-[#ffffff] text-[#09090b] hover:bg-[#09090b]/5'
+                  ? 'bg-ink text-paper'
+                  : 'bg-paper text-ink hover:bg-ink/5'
               }`}
             >
               {isIndoorSelected ? '✓ OPSI INDOOR AKTIF' : 'PILIH OPSI INDOOR'}
@@ -171,7 +171,7 @@ export default function WeatherWidget({ selectedDay }: WeatherWidgetProps) {
           </div>
 
           {isIndoorSelected && (
-            <div className="neo-box-sm p-2 bg-[#09090b]/5 text-xs text-[#09090b] space-y-1 font-mono">
+            <div className="neo-box-sm p-2 bg-ink/5 text-xs text-ink space-y-1 font-mono">
               <span className="font-bold block text-[11px] uppercase">Rangkaian Indoor Pengganti:</span>
               <p className="text-[11px] leading-snug">
                 1. 10 Menit High Knees / Jalan Cepat di Tempat

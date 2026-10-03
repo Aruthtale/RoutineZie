@@ -34,8 +34,8 @@ export default function ProgressView() {
             onClick={() => setActiveTab(key)}
             className={`neo-btn flex-1 py-2 text-[10px] font-black uppercase flex items-center justify-center gap-1 transition-colors ${
               activeTab === key
-                ? 'bg-[#09090b] text-[#ffffff]'
-                : 'bg-[#ffffff] text-[#09090b] hover:bg-[#09090b]/5'
+                ? 'bg-ink text-paper'
+                : 'bg-paper text-ink hover:bg-ink/5'
             }`}
           >
             <Icon className="w-3.5 h-3.5" /> {label}

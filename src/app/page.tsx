@@ -26,6 +26,8 @@ import {
 } from '@/lib/schedule/substitutions';
 import { useDaySwipe } from '@/hooks/useDaySwipe';
 import { useBackHandler, registerBackHandler } from '@/hooks/useBackHandler';
+import { useDayPhase } from '@/hooks/useDayPhase';
+import { RoutineRepository } from '@/lib/db/repository';
 import {
   InkSchedule,
   InkMeal,
@@ -68,6 +70,31 @@ export default function RoutinePage() {
   const [chatAcuteInjury, setChatAcuteInjury] = useState<boolean>(false);
   const [overrideApplied, setOverrideApplied] = useState<string | null>(null); // dateISO
   const [showExitToast, setShowExitToast] = useState<boolean>(false);
+
+  // Tema fase hari (design.md §5): wind-down (20.30–04.00) menginversi UI jadi
+  // gelap otomatis. Pengguna dapat memaksa terang/gelap lewat Pengaturan.
+  const [themePref, setThemePref] = useState<'auto' | 'light' | 'dark'>('auto');
+  useEffect(() => {
+    let cancelled = false;
+    RoutineRepository.getSettings()
+      .then((s) => {
+        if (!cancelled) setThemePref(s.theme ?? 'auto');
+      })
+      .catch(() => {});
+    // Dengarkan perubahan tema dari tab Pengaturan agar langsung terasa.
+    const onThemeChange = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail === 'auto' || detail === 'light' || detail === 'dark') {
+        setThemePref(detail);
+      }
+    };
+    window.addEventListener('rz-theme-change', onThemeChange);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('rz-theme-change', onThemeChange);
+    };
+  }, []);
+  const dayPhase = useDayPhase(themePref);
 
   useEffect(() => {
     const dayIndex = new Date().getDay();
@@ -435,22 +462,22 @@ export default function RoutinePage() {
   };
 
   return (
-    <div className="h-[100dvh] bg-[#f4f4f5] flex justify-center text-[#09090b] font-sans antialiased overflow-hidden">
+    <div className="h-[100dvh] bg-canvas flex justify-center text-ink font-sans antialiased overflow-hidden">
       {/* Mobile Shell Wrapper */}
-      <div className="w-full max-w-md bg-[#ffffff] h-full flex flex-col shadow-2xl border-x-2 border-[#09090b] relative">
+      <div className="w-full max-w-md bg-paper h-full flex flex-col shadow-2xl border-x-2 border-ink relative">
         
         {/* App Bar / Header — sticky di bawah status bar (safe-area) */}
-        <header className="shrink-0 bg-[#ffffff] border-b-[3px] border-[#09090b] z-20">
+        <header className="shrink-0 bg-paper border-b-[3px] border-ink z-20">
           {/* Safe-area padding atas (status bar) — andal di Android 15 + iOS */}
           <div className="pt-[var(--safe-top)]" />
           <div className="px-4 pb-3 pt-2 flex items-center justify-between gap-3">
             <div className="min-w-0 flex-1">
-              <h1 className="font-display text-2xl leading-none tracking-tight uppercase text-[#09090b]">
+              <h1 className="font-display text-2xl leading-none tracking-tight uppercase text-ink">
                 RoutineZie
               </h1>
-              <p className="text-[11px] font-bold text-[#09090b]/70 mt-1 truncate">
+              <p className="text-[11px] font-bold text-ink/70 mt-1 truncate">
                 {selectedDay} · Fase:{' '}
-                <span className="uppercase font-black underline text-[#09090b]">
+                <span className="uppercase font-black underline text-ink">
                   {currentPhase}
                 </span>
               </p>
@@ -459,8 +486,8 @@ export default function RoutinePage() {
               aria-label={pklStatus}
               className={`shrink-0 neo-box-sm px-2.5 py-1 text-xs font-mono font-black tracking-wide ${
                 isPKL
-                  ? 'bg-[#09090b] text-[#ffffff]'
-                  : 'bg-[#ffffff] text-[#09090b]'
+                  ? 'bg-ink text-paper'
+                  : 'bg-paper text-ink'
               }`}
             >
               {pklStatus}
@@ -474,11 +501,11 @@ export default function RoutinePage() {
             <div {...daySwipe} className="space-y-5">
               {/* T7.5 — override "berlaku terus" yang belum dikonfirmasi hari ini */}
               {staleNonExpiring && (
-                <section className="neo-box bg-[#ffffff] p-3.5 space-y-2 border-[3px]">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-[#09090b]">
+                <section className="neo-box bg-paper p-3.5 space-y-2 border-[3px]">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-ink">
                     ⏰ MASIH BERLAKU?
                   </span>
-                  <p className="text-xs font-medium text-[#09090b]/80 leading-relaxed">
+                  <p className="text-xs font-medium text-ink/80 leading-relaxed">
                     Sejak{' '}
                     <span className="font-mono font-black">{staleNonExpiring.dateISO}</span> latihan kamu
                     diganti ({staleNonExpiring.reason.replace(/_/g, ' ')}). Mau lanjut diganti, atau
@@ -491,13 +518,13 @@ export default function RoutinePage() {
                         setStaleNonExpiring(null);
                         getEffectiveDay(todayISO).then((d) => setActiveOverride(d.override));
                       }}
-                      className="flex-1 bg-[#09090b] text-[#ffffff] py-2 text-[11px] font-black uppercase border-[3px] border-[#09090b] active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                      className="flex-1 bg-ink text-paper py-2 text-[11px] font-black uppercase border-[3px] border-ink active:translate-x-0.5 active:translate-y-0.5 transition-all"
                     >
                       Kembali Normal
                     </button>
                     <button
                       onClick={() => setStaleNonExpiring(null)}
-                      className="flex-1 neo-box bg-[#ffffff] text-[#09090b] py-2 text-[11px] font-black uppercase active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                      className="flex-1 neo-box bg-paper text-ink py-2 text-[11px] font-black uppercase active:translate-x-0.5 active:translate-y-0.5 transition-all"
                     >
                       Lanjut Diganti
                     </button>
@@ -517,15 +544,15 @@ export default function RoutinePage() {
                       aria-pressed={isSelected}
                       className={`neo-btn-sm min-h-[40px] text-[11px] px-4 py-2 whitespace-nowrap transition-colors font-black relative ${
                         isSelected
-                          ? 'bg-[#09090b] text-[#ffffff]'
-                          : 'bg-[#ffffff] text-[#09090b] hover:bg-[#09090b]/5'
+                          ? 'bg-ink text-paper'
+                          : 'bg-paper text-ink hover:bg-ink/5'
                       }`}
                     >
                       {day}
                       {isOverridden && (
                         <span
                           aria-label="Hari ini diganti"
-                          className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-[#ff5c00] border-2 border-[#ffffff]"
+                          className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-[#ff5c00] border-2 border-paper"
                         />
                       )}
                     </button>
@@ -534,12 +561,12 @@ export default function RoutinePage() {
               </div>
 
               {nowItem ? (
-                <section className="neo-box-thick bg-[#09090b] text-[#ffffff] p-5 relative overflow-hidden space-y-3">
+                <section className="neo-box-thick bg-ink text-paper p-5 relative overflow-hidden space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="bg-[#ffffff] text-[#09090b] px-2.5 py-1 text-[11px] font-black uppercase tracking-widest">
+                    <span className="bg-paper text-ink px-2.5 py-1 text-[11px] font-black uppercase tracking-widest">
                       SEKARANG
                     </span>
-                    <span className="text-xs font-mono font-black text-[#ffffff]/70">
+                    <span className="text-xs font-mono font-black text-paper/70">
                       {nowItem.waktu}
                     </span>
                   </div>
@@ -551,34 +578,34 @@ export default function RoutinePage() {
                     {nowItem.kegiatan}
                   </h2>
                   {nowItem.detail && (
-                    <p className="text-xs text-[#ffffff]/70 font-medium leading-relaxed border-l-2 border-[#ffffff]/30 pl-3">
+                    <p className="text-xs text-paper/70 font-medium leading-relaxed border-l-2 border-paper/30 pl-3">
                       {nowItem.detail}
                     </p>
                   )}
                   {/* Hitung mundur ke kegiatan berikutnya */}
                   {sisaMenitNext !== null && sisaMenitNext > 0 && nextItem && (
-                    <div className="flex items-center gap-2 pt-1 border-t border-[#ffffff]/20">
-                      <span className="text-[10px] font-black uppercase tracking-wider text-[#ffffff]/50">
+                    <div className="flex items-center gap-2 pt-1 border-t border-paper/20">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-paper/50">
                         {formatSisaWaktu(sisaMenitNext)} lagi
                       </span>
-                      <span className="text-[10px] font-black uppercase tracking-wider text-[#ffffff]/80 truncate">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-paper/80 truncate">
                         → {nextItem.kegiatan}
                       </span>
                     </div>
                   )}
                 </section>
               ) : (
-                <section className="neo-box-thick bg-[#ffffff] p-5 text-center space-y-2">
-                  <span className="text-[11px] font-black uppercase tracking-widest text-[#09090b]/50">SEKARANG</span>
+                <section className="neo-box-thick bg-paper p-5 text-center space-y-2">
+                  <span className="text-[11px] font-black uppercase tracking-widest text-ink/50">SEKARANG</span>
                   <p
-                    className="text-2xl font-black uppercase text-[#09090b] leading-tight"
+                    className="text-2xl font-black uppercase text-ink leading-tight"
                     style={{ fontFamily: 'var(--font-anton), sans-serif' }}
                   >
                     Waktu Bebas
                   </p>
-                  <p className="text-xs text-[#09090b]/60 font-medium">Diluar jadwal utama</p>
+                  <p className="text-xs text-ink/60 font-medium">Diluar jadwal utama</p>
                   {sisaMenitNext !== null && sisaMenitNext > 0 && nextItem && (
-                    <p className="text-[11px] font-bold uppercase text-[#09090b]/70 pt-1 border-t border-[#09090b]/10">
+                    <p className="text-[11px] font-bold uppercase text-ink/70 pt-1 border-t border-ink/10">
                       {formatSisaWaktu(sisaMenitNext)} lagi → {nextItem.kegiatan}
                     </p>
                   )}
@@ -586,32 +613,32 @@ export default function RoutinePage() {
               )}
 
               {nextItem && (
-                <section className="neo-box bg-[#ffffff] p-3.5 border-dashed space-y-1">
+                <section className="neo-box bg-paper p-3.5 border-dashed space-y-1">
                   <div className="flex items-center justify-between text-xs font-bold">
-                    <span className="text-[#09090b]/70 uppercase font-black tracking-wider">BERIKUTNYA (NEXT)</span>
-                    <span className="font-mono text-[#09090b] font-black">{nextItem.waktu}</span>
+                    <span className="text-ink/70 uppercase font-black tracking-wider">BERIKUTNYA (NEXT)</span>
+                    <span className="font-mono text-ink font-black">{nextItem.waktu}</span>
                   </div>
-                  <p className="text-sm font-extrabold uppercase text-[#09090b]">{nextItem.kegiatan}</p>
+                  <p className="text-sm font-extrabold uppercase text-ink">{nextItem.kegiatan}</p>
                 </section>
               )}
 
               {/* T8.5 — hitung mundur ke jam pulang PKL (pendukung, bukan hero) */}
               {sisaMenitPulang !== null && (
-                <section className="neo-box bg-[#ffffff] p-3 space-y-1">
+                <section className="neo-box bg-paper p-3 space-y-1">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="font-black uppercase tracking-wider text-[#09090b]/60">
+                    <span className="font-black uppercase tracking-wider text-ink/60">
                       {sisaMenitPulang > 0 ? 'PULANG PKL DALAM' : 'JAM PKL SUDAH LEWAT'}
                     </span>
-                    <span className="font-mono font-black text-[#09090b]/60">
+                    <span className="font-mono font-black text-ink/60">
                       {formatJam(pulangMinutes!)}
                     </span>
                   </div>
                   {sisaMenitPulang > 0 ? (
-                    <p className="text-lg font-black font-mono tracking-tight text-[#09090b]">
+                    <p className="text-lg font-black font-mono tracking-tight text-ink">
                       {Math.floor(sisaMenitPulang / 60)}j {sisaMenitPulang % 60}m
                     </p>
                   ) : (
-                    <p className="text-xs font-black uppercase text-[#09090b]/70">
+                    <p className="text-xs font-black uppercase text-ink/70">
                       Waktunya istirahat hari ini 🎉
                     </p>
                   )}
@@ -619,23 +646,23 @@ export default function RoutinePage() {
               )}
 
               {effectiveWorkout && (
-                <section className="neo-box bg-[#ffffff] p-4 space-y-3">
+                <section className="neo-box bg-paper p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="neo-box p-2 bg-[#09090b] text-[#ffffff]">
+                      <div className="neo-box p-2 bg-ink text-paper">
                         <InkRun className="w-5 h-5" />
                       </div>
                       <div>
-                        <span className="text-[11px] font-black uppercase tracking-wider text-[#09090b]/60 block">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-ink/60 block">
                           LATIHAN HARI INI
                         </span>
-                        <h3 className="text-base font-black uppercase text-[#09090b]">
+                        <h3 className="text-base font-black uppercase text-ink">
                           {effectiveWorkout.nama}
                         </h3>
                       </div>
                     </div>
                     {effectiveWorkout.durasi && (
-                      <span className="neo-box-sm bg-[#ffffff] text-xs font-mono font-black text-[#09090b] px-2 py-1">
+                      <span className="neo-box-sm bg-paper text-xs font-mono font-black text-ink px-2 py-1">
                         {effectiveWorkout.durasi}
                       </span>
                     )}
@@ -643,11 +670,11 @@ export default function RoutinePage() {
 
                   {/* T7.4 — indikator pengganti */}
                   {activeOverride && (
-                    <div className="border-2 border-[#09090b] bg-[#09090b]/5 p-2.5 space-y-1.5">
-                      <span className="text-[11px] font-black uppercase text-[#09090b]">
+                    <div className="border-2 border-ink bg-ink/5 p-2.5 space-y-1.5">
+                      <span className="text-[11px] font-black uppercase text-ink">
                         ⚡ DIGANTI ({activeOverride.reason.replace(/_/g, ' ')})
                       </span>
-                      <p className="text-[11px] font-medium text-[#09090b]/70">
+                      <p className="text-[11px] font-medium text-ink/70">
                         Jadwal asli:{' '}
                         <span className="font-black line-through">
                           {dayData?.normalizedWorkout?.nama ?? 'Istirahat'}
@@ -658,7 +685,7 @@ export default function RoutinePage() {
                       </p>
                       <button
                         onClick={handleCancelOverride}
-                        className="neo-box-sm bg-[#ffffff] text-[#09090b] px-2.5 py-1 text-[11px] font-black uppercase hover:bg-[#09090b]/10 active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                        className="neo-box-sm bg-paper text-ink px-2.5 py-1 text-[11px] font-black uppercase hover:bg-ink/10 active:translate-x-0.5 active:translate-y-0.5 transition-all"
                       >
                         Batalkan Pengganti
                       </button>
@@ -673,8 +700,8 @@ export default function RoutinePage() {
                       <Play className="w-4 h-4 fill-current" /> MULAI WORKOUT TERPANDU
                     </button>
                   ) : (
-                    <div className="p-2.5 bg-[#09090b]/5 border-2 border-dashed border-[#09090b] text-center">
-                      <p className="text-xs font-bold text-[#09090b]">Hari Istirahat Penuh (Full Rest) — Nikmati waktu santai!</p>
+                    <div className="p-2.5 bg-ink/5 border-2 border-dashed border-ink text-center">
+                      <p className="text-xs font-bold text-ink">Hari Istirahat Penuh (Full Rest) — Nikmati waktu santai!</p>
                     </div>
                   )}
 
@@ -698,33 +725,33 @@ export default function RoutinePage() {
               <WeatherWidget selectedDay={selectedDay} />
 
               <section className="space-y-3">
-                <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-                  <InkSchedule className="w-4 h-4 text-[#09090b]" /> AGENDA {selectedDay.toUpperCase()}
+                <h3 className="text-sm font-black uppercase tracking-wider text-ink flex items-center gap-1.5">
+                  <InkSchedule className="w-4 h-4 text-ink" /> AGENDA {selectedDay.toUpperCase()}
                 </h3>
                 <div className="space-y-2.5">
                   {dayData?.jadwal?.map((item: any, idx: number) => (
                     <div
                       key={idx}
                       onClick={() => setSelectedItemDetail(item)}
-                      className="neo-box bg-[#ffffff] p-3.5 flex items-start justify-between cursor-pointer hover:bg-[#09090b]/5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                      className="neo-box bg-paper p-3.5 flex items-start justify-between cursor-pointer hover:bg-ink/5 active:translate-x-0.5 active:translate-y-0.5 transition-all"
                     >
                       <div className="space-y-1 pr-2">
                         <div className="flex items-center gap-2">
-                          <span className="neo-box-sm bg-[#09090b] text-[#ffffff] px-2 py-0.5 text-[11px] font-mono font-black">
+                          <span className="neo-box-sm bg-ink text-paper px-2 py-0.5 text-[11px] font-mono font-black">
                             {item.waktu}
                           </span>
                           {item.opsional && (
-                            <span className="text-[11px] font-extrabold border-2 border-[#09090b] px-1.5 py-0.5 text-[#09090b] uppercase bg-[#ffffff]">
+                            <span className="text-[11px] font-extrabold border-2 border-ink px-1.5 py-0.5 text-ink uppercase bg-paper">
                               OPSIONAL
                             </span>
                           )}
                         </div>
-                        <h4 className="text-sm font-black uppercase text-[#09090b] leading-tight">{item.kegiatan}</h4>
+                        <h4 className="text-sm font-black uppercase text-ink leading-tight">{item.kegiatan}</h4>
                         {item.detail && (
-                          <p className="text-xs text-[#09090b]/75 font-medium line-clamp-1">{item.detail}</p>
+                          <p className="text-xs text-ink/75 font-medium line-clamp-1">{item.detail}</p>
                         )}
                       </div>
-                      <ChevronRight className="w-5 h-5 text-[#09090b] shrink-0 mt-1" />
+                      <ChevronRight className="w-5 h-5 text-ink shrink-0 mt-1" />
                     </div>
                   ))}
                 </div>
@@ -736,10 +763,10 @@ export default function RoutinePage() {
           {activeTab === 'meals' && (
             <section className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-                  <InkMeal className="w-4 h-4 text-[#09090b]" /> POLA MAKAN {selectedDay.toUpperCase()}
+                <h3 className="text-sm font-black uppercase tracking-wider text-ink flex items-center gap-1.5">
+                  <InkMeal className="w-4 h-4 text-ink" /> POLA MAKAN {selectedDay.toUpperCase()}
                 </h3>
-                <span className="text-[11px] font-black uppercase text-[#09090b]/60 bg-[#09090b]/5 px-2 py-0.5 neo-box-sm">
+                <span className="text-[11px] font-black uppercase text-ink/60 bg-ink/5 px-2 py-0.5 neo-box-sm">
                   {profil?.usia ? `${profil.usia} TAHUN` : 'INFO NUTRISI'}
                 </span>
               </div>
@@ -754,8 +781,8 @@ export default function RoutinePage() {
           {/* ====================== TAB: PROGRES ====================== */}
           {activeTab === 'progress' && (
             <section className="space-y-3">
-              <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-                <InkProgress className="w-4 h-4 text-[#09090b]" /> LOG & PROGRES MINGGUAN
+              <h3 className="text-sm font-black uppercase tracking-wider text-ink flex items-center gap-1.5">
+                <InkProgress className="w-4 h-4 text-ink" /> LOG & PROGRES MINGGUAN
               </h3>
               <ProgressView />
             </section>
@@ -765,32 +792,32 @@ export default function RoutinePage() {
           {activeTab === 'chat' && (
             <section className="space-y-3">
               {/* Chat Header */}
-              <div className="neo-box p-4 bg-[#09090b] text-[#ffffff] space-y-2">
+              <div className="neo-box p-4 bg-ink text-paper space-y-2">
                 <div className="flex items-center gap-2">
-                  <InkAssistant className="w-5 h-5 text-[#ffffff]" />
+                  <InkAssistant className="w-5 h-5 text-paper" />
                   <div>
                     <h3 className="text-sm font-black uppercase">Zenn Assistant</h3>
-                    <p className="text-[11px] font-mono text-[#ffffff]/60">
+                    <p className="text-[11px] font-mono text-paper/60">
                       {getChatProviderInfo().active
                         ? `AI • ${getChatProviderInfo().name === 'gemini' ? 'Gemini' : 'Proxy'} • Asisten Rutinitasmu`
                         : 'Mode Offline • Contoh Jawaban'}
                     </p>
                   </div>
                 </div>
-                <p className="text-[11px] font-medium text-[#ffffff]/70 leading-relaxed">
+                <p className="text-[11px] font-medium text-paper/70 leading-relaxed">
                   Bantuan untuk latihan, makan, tidur, dan motivasi. Berdasarkan konteks jadwal harianmu.
                 </p>
               </div>
 
               {/* Quick Actions */}
-              <div className="neo-box p-3 bg-[#ffffff] space-y-2">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#09090b]/60 block">Pertanyaan Cepat</span>
+              <div className="neo-box p-3 bg-paper space-y-2">
+                <span className="text-[11px] font-black uppercase tracking-wider text-ink/60 block">Pertanyaan Cepat</span>
                 <div className="flex flex-wrap gap-2">
                   {QUICK_ACTIONS.map((qa, i) => (
                     <button
                       key={i}
                       onClick={() => handleQuickAction(qa.action)}
-                      className="neo-btn-sm bg-[#ffffff] text-[#09090b] border-2 border-[#09090b] px-3 py-1.5 text-[11px] font-black uppercase hover:bg-[#09090b] hover:text-[#ffffff] transition-colors"
+                      className="neo-btn-sm bg-paper text-ink border-2 border-ink px-3 py-1.5 text-[11px] font-black uppercase hover:bg-ink hover:text-paper transition-colors"
                     >
                       {qa.label}
                     </button>
@@ -853,8 +880,8 @@ export default function RoutinePage() {
           {/* ====================== TAB: PENGATURAN ====================== */}
           {activeTab === 'settings' && (
             <section className="space-y-3">
-              <h3 className="text-sm font-black uppercase tracking-wider text-[#09090b] flex items-center gap-1.5">
-                <SettingsIcon className="w-4 h-4 text-[#09090b]" /> PENGATURAN
+              <h3 className="text-sm font-black uppercase tracking-wider text-ink flex items-center gap-1.5">
+                <SettingsIcon className="w-4 h-4 text-ink" /> PENGATURAN
               </h3>
               <SettingsView />
               <NotificationSettingsSection />
@@ -865,7 +892,7 @@ export default function RoutinePage() {
         {/* Bottom Tab Navigation — border atas 3px (sama dengan header) */}
         <nav
           aria-label="Navigasi utama"
-          className="shrink-0 bg-[#ffffff] border-t-[3px] border-[#09090b] flex z-30"
+          className="shrink-0 bg-paper border-t-[3px] border-ink flex z-30"
         >
           <div className="flex w-full pb-[var(--safe-bottom)]">
           {([
@@ -887,8 +914,8 @@ export default function RoutinePage() {
               aria-pressed={activeTab === tab.key}
               className={`flex-1 min-h-[52px] neo-btn-sm flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-black uppercase transition-colors ${
                 activeTab === tab.key
-                  ? 'bg-[#09090b] text-[#ffffff]'
-                  : 'bg-[#ffffff] text-[#09090b]/70 hover:bg-[#09090b]/5'
+                  ? 'bg-ink text-paper'
+                  : 'bg-paper text-ink/70 hover:bg-ink/5'
               }`}
             >
               <tab.icon className="w-5 h-5" aria-hidden="true" /> {tab.label}
@@ -899,24 +926,24 @@ export default function RoutinePage() {
 
         {/* Item Detail Modal */}
         {selectedItemDetail && (
-          <div className="fixed inset-0 bg-[#09090b]/75 z-50 flex items-end sm:items-center justify-center p-4">
-            <div className="neo-box-thick bg-[#ffffff] text-[#09090b] w-full max-w-md p-5 space-y-4 max-h-[80vh] overflow-y-auto">
-              <div className="flex items-center justify-between border-b-2 border-[#09090b] pb-3">
-                <span className="neo-box-sm bg-[#09090b] text-[#ffffff] px-2.5 py-1 text-xs font-mono font-black">
+          <div className="fixed inset-0 bg-ink/75 z-50 flex items-end sm:items-center justify-center p-4">
+            <div className="neo-box-thick bg-paper text-ink w-full max-w-md p-5 space-y-4 max-h-[80vh] overflow-y-auto">
+              <div className="flex items-center justify-between border-b-2 border-ink pb-3">
+                <span className="neo-box-sm bg-ink text-paper px-2.5 py-1 text-xs font-mono font-black">
                   {selectedItemDetail.waktu}
                 </span>
                 <button
                   onClick={() => setSelectedItemDetail(null)}
-                  className="neo-btn bg-[#ffffff] hover:bg-[#09090b]/5 text-[#09090b] p-1 text-xs font-black flex items-center justify-center"
+                  className="neo-btn bg-paper hover:bg-ink/5 text-ink p-1 text-xs font-black flex items-center justify-center"
                   aria-label="Tutup"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-black uppercase text-[#09090b]">{selectedItemDetail.kegiatan}</h3>
+                <h3 className="text-lg font-black uppercase text-ink">{selectedItemDetail.kegiatan}</h3>
                 {selectedItemDetail.detail && (
-                  <p className="text-xs font-medium text-[#09090b] leading-relaxed border-l-2 border-[#09090b] pl-3 py-1 bg-[#09090b]/5">
+                  <p className="text-xs font-medium text-ink leading-relaxed border-l-2 border-ink pl-3 py-1 bg-ink/5">
                     {selectedItemDetail.detail}
                   </p>
                 )}
@@ -941,7 +968,7 @@ export default function RoutinePage() {
             aria-live="polite"
             className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] pointer-events-none"
           >
-            <div className="neo-box bg-[#09090b] text-[#ffffff] px-4 py-2.5 shadow-2xl">
+            <div className="neo-box bg-ink text-paper px-4 py-2.5 shadow-2xl">
               <span className="text-xs font-black uppercase tracking-wide">
                 Tekan sekali lagi untuk keluar
               </span>

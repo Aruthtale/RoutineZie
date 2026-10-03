@@ -20,9 +20,9 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white flex items-center justify-center p-6">
+    <div className="min-h-screen bg-ink text-white flex items-center justify-center p-6">
       <div className="max-w-sm w-full text-center space-y-6">
-        <div className="inline-block bg-white text-[#09090b] border-4 border-white px-6 py-4 shadow-[8px_8px_0_0_rgba(255,255,255,0.2)]">
+        <div className="inline-block bg-white text-ink border-4 border-white px-6 py-4 shadow-[8px_8px_0_0_rgba(255,255,255,0.2)]">
           <h1 className="text-2xl font-black uppercase tracking-tight" style={{ fontFamily: 'var(--font-anton)' }}>
             Ada yang error
           </h1>
@@ -35,7 +35,7 @@ export default function Error({
         )}
         <button
           onClick={reset}
-          className="inline-flex items-center gap-2 bg-white text-[#09090b] font-bold px-6 py-3 border-2 border-white hover:bg-white/90 active:translate-x-[2px] active:translate-y-[2px] transition-transform"
+          className="inline-flex items-center gap-2 bg-white text-ink font-bold px-6 py-3 border-2 border-white hover:bg-white/90 active:translate-x-[2px] active:translate-y-[2px] transition-transform"
         >
           <RotateCcw className="w-4 h-4" />
           Muat Ulang

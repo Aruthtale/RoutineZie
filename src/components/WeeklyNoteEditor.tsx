@@ -38,12 +38,12 @@ export default function WeeklyNoteEditor({ dateISO }: { dateISO: string }) {
   if (!loaded) return null;
 
   return (
-    <form onSubmit={handleSave} className="neo-box p-3 bg-[#ffffff] space-y-2">
+    <form onSubmit={handleSave} className="neo-box p-3 bg-paper space-y-2">
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-black uppercase tracking-wider text-[#09090b]/70 flex items-center gap-1.5">
+        <span className="text-[11px] font-black uppercase tracking-wider text-ink/70 flex items-center gap-1.5">
           <NotebookPen className="w-3.5 h-3.5" /> CATATAN MINGGUAN
         </span>
-        <span className="text-[10px] font-mono font-bold text-[#09090b]/50 uppercase">
+        <span className="text-[10px] font-mono font-bold text-ink/50 uppercase">
           {getWeekLabel(weekStart)}
         </span>
       </div>
@@ -52,15 +52,15 @@ export default function WeeklyNoteEditor({ dateISO }: { dateISO: string }) {
         onChange={(e) => setNote(e.target.value)}
         placeholder="Contoh: minggu ujian, tidur kurang; atau habis banyak latihan…"
         rows={2}
-        className="neo-box-sm w-full p-2 text-xs font-medium bg-[#ffffff] text-[#09090b] resize-none"
+        className="neo-box-sm w-full p-2 text-xs font-medium bg-paper text-ink resize-none"
       />
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[10px] text-[#09090b]/50 font-medium">
+        <span className="text-[10px] text-ink/50 font-medium">
           Konteks untuk grafik — bukan penilaian.
         </span>
         <button
           type="submit"
-          className="neo-btn bg-[#09090b] text-[#ffffff] px-3 py-1.5 text-[11px] font-black uppercase flex items-center gap-1.5"
+          className="neo-btn bg-ink text-paper px-3 py-1.5 text-[11px] font-black uppercase flex items-center gap-1.5"
         >
           {saved ? (
             <>

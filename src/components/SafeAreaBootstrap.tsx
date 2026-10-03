@@ -36,19 +36,34 @@ export function SafeAreaBootstrap() {
           /* versi plugin tanpa API ini — abaikan */
         }
 
-        // 2. KUNCI: paksa ikon status bar jadi gelap. Ini satu-satunya hal yang
-        //    masih berpengaruh di Android 15 edge-to-edge — tanpa ini ikon
-        //    terang menghilang di atas latar putih.
-        try {
-          await StatusBar.setStyle({ style: Style.Dark });
-        } catch {
-          /* abaikan */
-        }
+        // 2. Ikon status bar mengikuti tema: Style.Dark = ikon gelap (untuk latar
+        //    terang), Style.Light = ikon terang (untuk latar gelap). Tanpa ini,
+        //    saat wind-down (latar hitam) ikon gelap menghilang.
+        const applyStatusBarStyle = async () => {
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          try {
+            await StatusBar.setStyle({ style: isDark ? Style.Light : Style.Dark });
+          } catch {
+            /* abaikan */
+          }
+        };
+        await applyStatusBarStyle();
+
+        // Ikuti perubahan tema (useDayPhase menulis data-theme saat fase berubah).
+        const observer = new MutationObserver(() => {
+          void applyStatusBarStyle();
+        });
+        observer.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ['data-theme'],
+        });
+        if (cancelled) observer.disconnect();
 
         // 3. Warna background status bar: hanya berlaku di Android < 15.
         //    Di Android 15 diabaikan OS — jangan bergantung padanya.
         try {
-          await StatusBar.setBackgroundColor({ color: '#ffffff' });
+          const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+          await StatusBar.setBackgroundColor({ color: isDark ? '#0b0b0b' : '#ffffff' });
         } catch {
           /* di-deprecate di Android 15 — abaikan */
         }

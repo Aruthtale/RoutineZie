@@ -18,12 +18,12 @@ export default function InkChart({ data, unit = 'kg', height = 180 }: InkChartPr
     return (
       <div
         style={{ height }}
-        className="neo-box bg-[#ffffff] flex flex-col items-center justify-center p-4 text-center border-dashed"
+        className="neo-box bg-paper flex flex-col items-center justify-center p-4 text-center border-dashed"
       >
-        <span className="text-xs font-mono font-bold text-[#09090b]/60">
+        <span className="text-xs font-mono font-bold text-ink/60">
           BELUM CUKUP DATA GRAFIK
         </span>
-        <p className="text-[11px] text-[#09090b]/50 mt-1">
+        <p className="text-[11px] text-ink/50 mt-1">
           Catat berat badan minimal 2 minggu untuk melihat garis tren tinta.
         </p>
       </div>
@@ -54,8 +54,8 @@ export default function InkChart({ data, unit = 'kg', height = 180 }: InkChartPr
   const polylinePoints = points.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
 
   return (
-    <div className="neo-box bg-[#ffffff] p-3 space-y-2">
-      <div className="flex items-center justify-between text-[11px] font-mono font-black text-[#09090b]/70 border-b-2 border-[#09090b] pb-1.5">
+    <div className="neo-box bg-paper p-3 space-y-2">
+      <div className="flex items-center justify-between text-[11px] font-mono font-black text-ink/70 border-b-2 border-ink pb-1.5">
         <span>TREN BERAT BADAN (INK CHART)</span>
         <span>
           RENTANG: {minVal} - {maxVal} {unit}
@@ -65,7 +65,7 @@ export default function InkChart({ data, unit = 'kg', height = 180 }: InkChartPr
       <div className="w-full overflow-x-auto">
         <svg
           viewBox={`0 0 ${svgWidth} ${height}`}
-          className="w-full select-none"
+          className="w-full select-none text-ink"
           style={{ height, minWidth: 260 }}
         >
           {/* Horizontal Grid lines */}
@@ -79,7 +79,7 @@ export default function InkChart({ data, unit = 'kg', height = 180 }: InkChartPr
                   y1={y}
                   x2={svgWidth - paddingRight}
                   y2={y}
-                  stroke="#09090b"
+                  stroke="currentColor"
                   strokeOpacity="0.15"
                   strokeDasharray="4 4"
                   strokeWidth="1.5"
@@ -89,7 +89,7 @@ export default function InkChart({ data, unit = 'kg', height = 180 }: InkChartPr
                   y={y + 3.5}
                   fontSize="9"
                   textAnchor="end"
-                  fill="#09090b"
+                  fill="currentColor"
                   fontWeight="bold"
                   fontFamily="monospace"
                 >
@@ -102,7 +102,7 @@ export default function InkChart({ data, unit = 'kg', height = 180 }: InkChartPr
           {/* Area fill / screentone effect underneath */}
           <polygon
             points={`${points[0].x},${paddingTop + chartHeight} ${polylinePoints} ${points[points.length - 1].x},${paddingTop + chartHeight}`}
-            fill="#09090b"
+            fill="currentColor"
             fillOpacity="0.04"
           />
 
@@ -110,7 +110,7 @@ export default function InkChart({ data, unit = 'kg', height = 180 }: InkChartPr
           <polyline
             points={polylinePoints}
             fill="none"
-            stroke="#09090b"
+            stroke="currentColor"
             strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -123,15 +123,15 @@ export default function InkChart({ data, unit = 'kg', height = 180 }: InkChartPr
                 cx={p.x}
                 cy={p.y}
                 r="6"
-                fill="#ffffff"
-                stroke="#09090b"
+                fill="var(--color-paper)"
+                stroke="currentColor"
                 strokeWidth="2.5"
               />
               <circle
                 cx={p.x}
                 cy={p.y}
                 r="2.5"
-                fill="#09090b"
+                fill="currentColor"
               />
               {/* Value label on dot */}
               <text
@@ -139,7 +139,7 @@ export default function InkChart({ data, unit = 'kg', height = 180 }: InkChartPr
                 y={p.y - 10}
                 fontSize="10"
                 textAnchor="middle"
-                fill="#09090b"
+                fill="currentColor"
                 fontWeight="900"
                 fontFamily="monospace"
               >
@@ -151,7 +151,7 @@ export default function InkChart({ data, unit = 'kg', height = 180 }: InkChartPr
                 y={height - 10}
                 fontSize="9"
                 textAnchor="middle"
-                fill="#09090b"
+                fill="currentColor"
                 fontWeight="bold"
                 fontFamily="monospace"
               >

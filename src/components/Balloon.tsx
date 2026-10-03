@@ -61,26 +61,26 @@ export default function Balloon({ messages, onSend, isLoading, exercises, onOpen
   };
 
   return (
-    <div className="neo-box p-4 bg-[#ffffff] space-y-3">
+    <div className="neo-box p-4 bg-paper space-y-3">
       {/* Chat header */}
-      <div className="flex items-center justify-between border-b border-[#09090b]/10 pb-2">
+      <div className="flex items-center justify-between border-b border-ink/10 pb-2">
         <div className="flex items-center gap-2">
-          <div className="neo-box-sm p-1.5 bg-[#09090b] text-[#ffffff]">
+          <div className="neo-box-sm p-1.5 bg-ink text-paper">
             <InkChat className="w-4 h-4" />
           </div>
-          <h3 className="text-sm font-black uppercase text-[#09090b]">Asisten AI</h3>
+          <h3 className="text-sm font-black uppercase text-ink">Asisten AI</h3>
         </div>
-        <span className="text-[11px] font-mono text-[#09090b]/60">Zenn AI</span>
+        <span className="text-[11px] font-mono text-ink/60">Zenn AI</span>
       </div>
 
       {/* Messages container */}
       <div className="space-y-2 max-h-64 overflow-y-auto custom-scrollbar">
         {messages.length === 0 && (
-          <div className="text-center py-6 space-y-3 border-2 border-dashed border-[#09090b]/25 p-4">
-            <p className="text-xs font-black uppercase text-[#09090b]/70 tracking-wider">
+          <div className="text-center py-6 space-y-3 border-2 border-dashed border-ink/25 p-4">
+            <p className="text-xs font-black uppercase text-ink/70 tracking-wider">
               Belum ada obrolan
             </p>
-            <p className="text-[11px] font-medium text-[#09090b]/60 leading-relaxed">
+            <p className="text-[11px] font-medium text-ink/60 leading-relaxed">
               Mulai dengan salah satu pertanyaan di bawah, atau ketik pertanyaanmu sendiri.
             </p>
             <div className="flex flex-col gap-2">
@@ -90,7 +90,7 @@ export default function Balloon({ messages, onSend, isLoading, exercises, onOpen
                   type="button"
                   onClick={() => onSend(p)}
                   disabled={isLoading}
-                  className="neo-btn-sm bg-[#ffffff] text-[#09090b] px-3 py-2 text-[11px] font-bold text-left hover:bg-[#09090b] hover:text-[#ffffff] transition-colors disabled:opacity-50"
+                  className="neo-btn-sm bg-paper text-ink px-3 py-2 text-[11px] font-bold text-left hover:bg-ink hover:text-paper transition-colors disabled:opacity-50"
                 >
                   {p}
                 </button>
@@ -106,8 +106,8 @@ export default function Balloon({ messages, onSend, isLoading, exercises, onOpen
             <div
                           className={`max-w-[80%] p-2.5 rounded-lg border-2 text-xs font-medium leading-relaxed ${
                 msg.role === 'user'
-                  ? 'bg-[#09090b] text-[#ffffff] border-[#09090b] rounded-tr-sm'
-                  : 'bg-[#f4f4f5] text-[#09090b] border-[#09090b]/20 rounded-tl-sm'
+                  ? 'bg-ink text-paper border-ink rounded-tr-sm'
+                  : 'bg-canvas text-ink border-ink/20 rounded-tl-sm'
               }`}
                         >
               {msg.text}
@@ -150,7 +150,7 @@ export default function Balloon({ messages, onSend, isLoading, exercises, onOpen
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Ketik pertanyaan Anda..."
-          className="flex-1 neo-box-sm px-3 py-2 text-xs font-medium bg-[#ffffff] border-[#09090b]/20 focus:border-[#09090b] focus:outline-none transition-colors"
+          className="flex-1 neo-box-sm px-3 py-2 text-xs font-medium bg-paper border-ink/20 focus:border-ink focus:outline-none transition-colors"
           disabled={isLoading}
         />
         <button
@@ -163,7 +163,7 @@ export default function Balloon({ messages, onSend, isLoading, exercises, onOpen
       </form>
 
       {/* Disclaimer */}
-      <div className="text-[11px] text-[#09090b]/60 font-medium leading-relaxed bg-[#09090b]/5 p-2 rounded border border-[#09090b]/10">
+      <div className="text-[11px] text-ink/60 font-medium leading-relaxed bg-ink/5 p-2 rounded border border-ink/10">
         • Asisten AI Zenn — bantuan untuk latihan, makan, tidur<br/>
         • Bukan pengganti dokter, ahli gizi, atau konselor<br/>
         • Jawaban berdasarkan konteks harian dan data lokal<br/>

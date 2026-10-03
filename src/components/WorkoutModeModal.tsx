@@ -205,46 +205,46 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
   };
 
   return (
-    <div className="fixed inset-0 bg-[#09090b]/80 z-50 flex items-center justify-center p-0 sm:p-4 font-sans">
-      <div className="bg-[#ffffff] text-[#09090b] w-full max-w-md h-full sm:h-[90vh] sm:max-h-[850px] neo-box-thick flex flex-col overflow-hidden relative">
+    <div className="fixed inset-0 bg-ink/80 z-50 flex items-center justify-center p-0 sm:p-4 font-sans">
+      <div className="bg-paper text-ink w-full max-w-md h-full sm:h-[90vh] sm:max-h-[850px] neo-box-thick flex flex-col overflow-hidden relative">
         {/* Header Bar */}
-        <header className="neo-box border-t-0 border-x-0 bg-[#ffffff] p-4 flex items-center justify-between z-10 shrink-0">
+        <header className="neo-box border-t-0 border-x-0 bg-paper p-4 flex items-center justify-between z-10 shrink-0">
           <button 
             onClick={onClose} 
-            className="neo-btn bg-[#ffffff] hover:bg-[#09090b]/5 p-2 flex items-center justify-center"
+            className="neo-btn bg-paper hover:bg-ink/5 p-2 flex items-center justify-center"
             aria-label="Kembali"
           >
-            <ArrowLeft className="w-5 h-5 text-[#09090b]" />
+            <ArrowLeft className="w-5 h-5 text-ink" />
           </button>
           <div className="text-center px-2">
-            <span className="text-[11px] font-black uppercase text-[#09090b]/60 block tracking-wider">MODE WORKOUT</span>
-            <h2 className="text-sm font-black uppercase text-[#09090b] truncate">{session.workoutName}</h2>
+            <span className="text-[11px] font-black uppercase text-ink/60 block tracking-wider">MODE WORKOUT</span>
+            <h2 className="text-sm font-black uppercase text-ink truncate">{session.workoutName}</h2>
           </div>
           <button
             onClick={() => setShowCaraModal(true)}
-            className="neo-btn bg-[#ffffff] hover:bg-[#09090b]/5 px-3 py-1.5 text-xs font-black flex items-center gap-1.5 text-[#09090b]"
+            className="neo-btn bg-paper hover:bg-ink/5 px-3 py-1.5 text-xs font-black flex items-center gap-1.5 text-ink"
           >
-            <HelpCircle className="w-4 h-4 text-[#09090b]" /> CARA
+            <HelpCircle className="w-4 h-4 text-ink" /> CARA
           </button>
         </header>
 
         {/* Main Content Area */}
         {session.isFinished ? (
           <main className="flex-1 p-6 flex flex-col items-center justify-center text-center space-y-6 overflow-y-auto">
-            <div className="neo-box-thick bg-[#09090b] text-[#ffffff] p-8 w-full">
-              <InkStamp className="w-16 h-16 mx-auto mb-3 text-[#ffffff]" />
+            <div className="neo-box-thick bg-ink text-paper p-8 w-full">
+              <InkStamp className="w-16 h-16 mx-auto mb-3 text-paper" />
               <h1 className="text-2xl font-black uppercase tracking-tight">WORKOUT SELESAI!</h1>
-              <p className="text-xs font-bold text-[#ffffff]/80 mt-2 leading-relaxed">
+              <p className="text-xs font-bold text-paper/80 mt-2 leading-relaxed">
                 Tubuhmu berkembang bertahap hari ini. Disiplin adalah kunci!
               </p>
             </div>
 
             {/* T8.6 — rating energi pasca-workout. Opsional, boleh dilewati. */}
-            <div className="neo-box bg-[#ffffff] p-5 w-full space-y-3">
-              <h3 className="text-xs font-black uppercase tracking-wider text-[#09090b]">
+            <div className="neo-box bg-paper p-5 w-full space-y-3">
+              <h3 className="text-xs font-black uppercase tracking-wider text-ink">
                 Bagaimana energimu sekarang?
               </h3>
-              <p className="text-[11px] font-bold text-[#09090b]/60">
+              <p className="text-[11px] font-bold text-ink/60">
                 Opsional — dipakai untuk lihat pola energi mingguan, bukan penilaian.
               </p>
               <div className="flex justify-between gap-2" role="radiogroup" aria-label="Rating energi 1 sampai 5">
@@ -257,7 +257,7 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
                     aria-checked={energyRating === n}
                     aria-label={`Energi ${n}`}
                     className={`neo-box-sm flex-1 h-12 flex items-center justify-center text-sm font-black transition-transform active:scale-95 ${
-                      energyRating === n ? 'bg-[#09090b] text-[#ffffff]' : 'bg-[#ffffff] text-[#09090b] hover:bg-[#09090b]/5'
+                      energyRating === n ? 'bg-ink text-paper' : 'bg-paper text-ink hover:bg-ink/5'
                     }`}
                   >
                     {n}
@@ -272,16 +272,16 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
         ) : session.isResting ? (
           /* Rest Timer Screen */
           <main className="flex-1 p-6 flex flex-col items-center justify-center text-center space-y-6 screentone-dot overflow-y-auto">
-            <div className="neo-box-thick bg-[#ffffff] p-8 w-full max-w-xs space-y-4">
-              <span className="neo-box-sm bg-[#09090b] text-[#ffffff] px-3 py-1 text-xs font-black uppercase tracking-wider inline-block">
+            <div className="neo-box-thick bg-paper p-8 w-full max-w-xs space-y-4">
+              <span className="neo-box-sm bg-ink text-paper px-3 py-1 text-xs font-black uppercase tracking-wider inline-block">
                 ISTIRAHAT ANTARESET
               </span>
-              <div className="text-6xl font-black font-mono text-[#09090b] tracking-tighter">
+              <div className="text-6xl font-black font-mono text-ink tracking-tighter">
                 {restRemainingSec}s
               </div>
-              <p className="text-xs font-bold text-[#09090b]/70">Ambil napas dalam & atur posisi untuk set selanjutnya.</p>
+              <p className="text-xs font-bold text-ink/70">Ambil napas dalam & atur posisi untuk set selanjutnya.</p>
             </div>
-            <button onClick={handleSkipRest} className="neo-btn bg-[#ffffff] hover:bg-[#09090b]/5 px-6 py-3 text-xs font-black uppercase text-[#09090b]">
+            <button onClick={handleSkipRest} className="neo-btn bg-paper hover:bg-ink/5 px-6 py-3 text-xs font-black uppercase text-ink">
               LEWATI ISTIRAHAT ➔
             </button>
           </main>
@@ -290,7 +290,7 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
           <main className="flex-1 p-4 flex flex-col justify-between overflow-y-auto w-full space-y-4">
             {/* Progress bar / Exercise Header */}
             <div className="space-y-3">
-              <div className="flex justify-between items-center text-xs font-extrabold text-[#09090b]/70 bg-[#09090b]/5 px-3 py-1.5 neo-box-sm">
+              <div className="flex justify-between items-center text-xs font-extrabold text-ink/70 bg-ink/5 px-3 py-1.5 neo-box-sm">
                 <span>GERAKAN {session.currentExerciseIndex + 1} / {exercises.length}</span>
                 <span>
                   {currentExercise?.tipe === 'durasi' 
@@ -299,27 +299,27 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
                 </span>
               </div>
               
-              <div className="neo-box bg-[#ffffff] p-4 space-y-2">
+              <div className="neo-box bg-paper p-4 space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="neo-box-sm bg-[#09090b] text-[#ffffff] px-2.5 py-0.5 text-[11px] font-black uppercase">
+                  <span className="neo-box-sm bg-ink text-paper px-2.5 py-0.5 text-[11px] font-black uppercase">
                     {currentExercise?.peralatan || 'TANPA ALAT'}
                   </span>
                   {currentExercise?.tipe === 'durasi' && (
-                    <span className="neo-box-sm bg-[#ffffff] text-[#09090b] px-2 py-0.5 text-[11px] font-mono font-black uppercase">
+                    <span className="neo-box-sm bg-paper text-ink px-2 py-0.5 text-[11px] font-mono font-black uppercase">
                       KARDIO / WAKTU
                     </span>
                   )}
                 </div>
-                <h1 className="text-2xl font-black uppercase text-[#09090b] leading-tight">
+                <h1 className="text-2xl font-black uppercase text-ink leading-tight">
                   {currentExercise?.nama || 'Latihan'}
                 </h1>
                 {currentExercise?.ototTarget && (
-                  <p className="text-xs font-bold text-[#09090b]/70">
-                    Target: <span className="text-[#09090b] font-black">{currentExercise.ototTarget}</span>
+                  <p className="text-xs font-bold text-ink/70">
+                    Target: <span className="text-ink font-black">{currentExercise.ototTarget}</span>
                   </p>
                 )}
                 {currentExercise?.catatan && (
-                  <p className="text-xs font-medium text-[#09090b]/80 border-l-2 border-[#09090b] pl-2.5 py-0.5 bg-[#09090b]/5">
+                  <p className="text-xs font-medium text-ink/80 border-l-2 border-ink pl-2.5 py-0.5 bg-ink/5">
                     {currentExercise.catatan}
                   </p>
                 )}
@@ -327,19 +327,19 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
             </div>
 
             {/* Current Set / Duration Execution Card */}
-            <div className="neo-box-thick bg-[#ffffff] p-5 space-y-4">
-              <div className="flex items-center justify-between border-b-2 border-[#09090b] pb-2">
-                <span className="text-xs font-black uppercase text-[#09090b]">
+            <div className="neo-box-thick bg-paper p-5 space-y-4">
+              <div className="flex items-center justify-between border-b-2 border-ink pb-2">
+                <span className="text-xs font-black uppercase text-ink">
                   {currentExercise?.tipe === 'durasi' ? 'TARGET WAKTU' : 'TARGET REPETISI'}
                 </span>
-                <span className="text-xl font-black font-mono text-[#09090b]">
+                <span className="text-xl font-black font-mono text-ink">
                   {currentSetLog?.target || (currentExercise?.tipe === 'durasi' ? 'Waktu Selesai' : '8-12')}
                 </span>
               </div>
 
               {currentExercise?.tipe === 'reps' ? (
                 <div className="space-y-1.5">
-                  <label className="text-[11px] font-black uppercase text-[#09090b]/70 block">
+                  <label className="text-[11px] font-black uppercase text-ink/70 block">
                     REPETISI AKTUAL (OPSIONAL)
                   </label>
                   <input
@@ -347,12 +347,12 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
                     placeholder={currentSetLog?.target || '10'}
                     value={repsInputValue}
                     onChange={(e) => setRepsInputValue(e.target.value)}
-                    className="neo-box bg-[#ffffff] w-full p-2.5 text-base font-black font-mono text-[#09090b] focus:outline-none"
+                    className="neo-box bg-paper w-full p-2.5 text-base font-black font-mono text-ink focus:outline-none"
                   />
                 </div>
               ) : (
-                <div className="p-3 bg-[#09090b]/5 border-2 border-dashed border-[#09090b] text-center">
-                  <p className="text-xs font-bold text-[#09090b]">
+                <div className="p-3 bg-ink/5 border-2 border-dashed border-ink text-center">
+                  <p className="text-xs font-bold text-ink">
                     Lakukan gerakan sesuai target waktu. Tekan tombol di bawah jika selesai!
                   </p>
                 </div>
@@ -370,23 +370,23 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
 
         {/* Panel CARA Modal */}
         {showCaraModal && currentExercise && (
-          <div className="fixed inset-0 bg-[#09090b]/80 z-60 flex items-center justify-center p-4">
-            <div className="neo-box-thick bg-[#ffffff] text-[#09090b] w-full max-w-md p-5 space-y-4 max-h-[85vh] overflow-y-auto">
-              <div className="flex items-center justify-between border-b-2 border-[#09090b] pb-2">
-                <span className="text-xs font-black uppercase text-[#09090b]">PETUNJUK GERAKAN</span>
+          <div className="fixed inset-0 bg-ink/80 z-60 flex items-center justify-center p-4">
+            <div className="neo-box-thick bg-paper text-ink w-full max-w-md p-5 space-y-4 max-h-[85vh] overflow-y-auto">
+              <div className="flex items-center justify-between border-b-2 border-ink pb-2">
+                <span className="text-xs font-black uppercase text-ink">PETUNJUK GERAKAN</span>
                 <button
                   onClick={() => setShowCaraModal(false)}
-                  className="neo-btn bg-[#ffffff] hover:bg-[#09090b]/5 px-2.5 py-1 text-xs font-black text-[#09090b]"
+                  className="neo-btn bg-paper hover:bg-ink/5 px-2.5 py-1 text-xs font-black text-ink"
                 >
                   TUTUP
                 </button>
               </div>
-              <h3 className="text-lg font-black uppercase text-[#09090b]">{currentExercise.nama}</h3>
+              <h3 className="text-lg font-black uppercase text-ink">{currentExercise.nama}</h3>
               
               {currentExercise.cara && currentExercise.cara.length > 0 && (
                 <div className="space-y-1.5">
-                  <h4 className="text-xs font-black uppercase text-[#09090b]">CARA MELAKUKAN:</h4>
-                  <ul className="space-y-1 text-xs font-medium text-[#09090b]/90 bg-[#09090b]/5 p-3 neo-box-sm list-disc list-inside">
+                  <h4 className="text-xs font-black uppercase text-ink">CARA MELAKUKAN:</h4>
+                  <ul className="space-y-1 text-xs font-medium text-ink/90 bg-ink/5 p-3 neo-box-sm list-disc list-inside">
                     {currentExercise.cara.map((step, idx) => (
                       <li key={idx} className="leading-relaxed">{step}</li>
                     ))}
@@ -396,8 +396,8 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
 
               {currentExercise.tipsForm && (
                 <div className="space-y-1">
-                  <h4 className="text-xs font-black uppercase text-[#09090b]">TIPS TEKNIK:</h4>
-                  <p className="text-xs font-medium text-[#09090b]/90 leading-relaxed bg-[#09090b]/5 p-2.5 neo-box-sm">
+                  <h4 className="text-xs font-black uppercase text-ink">TIPS TEKNIK:</h4>
+                  <p className="text-xs font-medium text-ink/90 leading-relaxed bg-ink/5 p-2.5 neo-box-sm">
                     {currentExercise.tipsForm}
                   </p>
                 </div>
@@ -405,8 +405,8 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
 
               {currentExercise.kesalahanUmum && (
                 <div className="space-y-1">
-                  <h4 className="text-xs font-black uppercase text-[#09090b]">KESALAHAN UMUM:</h4>
-                  <p className="text-xs font-medium text-[#09090b]/90 leading-relaxed bg-[#09090b]/5 p-2.5 neo-box-sm">
+                  <h4 className="text-xs font-black uppercase text-ink">KESALAHAN UMUM:</h4>
+                  <p className="text-xs font-medium text-ink/90 leading-relaxed bg-ink/5 p-2.5 neo-box-sm">
                     {currentExercise.kesalahanUmum}
                   </p>
                 </div>
@@ -414,8 +414,8 @@ export default function WorkoutModeModal({ dayName, workoutData, onClose }: Work
 
               {currentExercise.versiMudah && currentExercise.versiMudah !== '-' && (
                 <div className="space-y-1">
-                  <h4 className="text-xs font-black uppercase text-[#09090b]">VERSI LEBIH MUDAH:</h4>
-                  <p className="text-xs font-medium text-[#09090b]/90 leading-relaxed bg-[#09090b]/5 p-2.5 neo-box-sm">
+                  <h4 className="text-xs font-black uppercase text-ink">VERSI LEBIH MUDAH:</h4>
+                  <p className="text-xs font-medium text-ink/90 leading-relaxed bg-ink/5 p-2.5 neo-box-sm">
                     {currentExercise.versiMudah}
                   </p>
                 </div>
